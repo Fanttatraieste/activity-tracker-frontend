@@ -1,0 +1,83 @@
+<div class="timetable-wrapper-2">
+
+  <div class="hours-column">
+    <div class="hour"></div>
+    <div class="hour">8 AM</div>
+    <div class="hour">9 AM</div>
+    <div class="hour">10 AM</div>
+    <div class="hour">11 AM</div>
+    <div class="hour">12 PM</div>
+    <div class="hour">1 PM</div>
+    <div class="hour">2 PM</div>
+    <div class="hour">3 PM</div>
+    <div class="hour">4 PM</div>
+    <div class="hour">5 PM</div>
+    <div class="hour">6 PM</div>
+    <div class="hour">7 PM</div>
+    <div class="hour">8 PM</div>
+  </div>
+
+  <div class="grid-area">
+
+    <div class="time-line"
+         *ngIf="currentDayIndex > 0"
+         [style.gridColumn]="currentDayIndex + ' / ' + (currentDayIndex + 1)"
+         [style.top.px]="currentLinePosition">
+    </div>
+
+    <div class="day">Luni</div>
+    <div class="day">Marti</div>
+    <div class="day">Miercuri</div>
+    <div class="day">Joi</div>
+    <div class="day">Vineri</div>
+
+    <!-- CELULELE -->
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+
+    <div *ngFor="let event of displayEvents"
+         class="event"
+         [ngClass]="event.type"
+         [style.gridColumn]="event.dayIndex"
+         [style.gridRow]="event.startRow + ' / span ' + event.span"
+         [style.width.%]="event.width"
+         [style.marginLeft.%]="event.marginLeft"
+         (click)="onEventClick(event)">
+
+      <div class="event-title"
+           (click)="openLink('https://www.google.com/search?q=UBB fisa disciplinei pdf +' + event.title + '&btnI=1')">
+        {{ event.title }}
+      </div>
+
+      <div class="event-professor"
+           (click)="openLink('https://www.google.com/search?q=UBB+' + event.professor + '&btnI=1')">
+        {{ event.professor }}
+      </div>
+
+      <div class="event-room"
+           (click)="openLink('https://maps.google.com/?q=Universitatea Babes Bolyai Cluj ' + event.room)">
+        {{ event.room }}
+      </div>
+
+      <app-event-attendance
+        [present]="event.attendanceCount || 0"
+        [total]="14"
+        [isOpen]="event.isAttendanceOpen || false"
+        (attendanceChange)="updateAttendance(event, $event)"
+        (toggle)="toggleAttendance(event)">
+      </app-event-attendance>
+    </div>
+
+
+  </div>
+</div>

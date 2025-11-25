@@ -1,0 +1,101 @@
+/* ——— contorizarea prezentelor ——————————————————— */
+.event-attendance-box {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  height: 28px;
+  min-width: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 20px;
+  padding: 0;
+
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  cursor: pointer;
+  z-index: 20;
+
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+}
+
+/* cand e deschis butonul */
+.event-attendance-box.expanded {
+  padding: 0 4px;
+  background: rgba(255, 255, 255, 0.45);
+  border-color: rgba(255,255,255,0.8);
+  min-width: 90px;
+}
+
+.event-attendance-box:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
+}
+
+/* 1) starea inchisa */
+.att-icon-trigger {
+  font-size: 14px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  width: 100%;
+  height: 100%;
+}
+
+.mini-count {
+  font-size: 15px;
+  font-weight: 700;
+  margin-left: -2px;
+}
+
+/* 2) starea deschisa */
+.att-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* butoanele + si - */
+.att-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.65);
+  font-weight: 900;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #2a5a7f;
+  padding: 0;
+  line-height: 1;
+}
+
+.att-btn:hover {
+  background: #fff;
+  transform: scale(1.1);
+}
+
+.att-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+  min-width: 30px;
+  text-align: center;
+}
+
+/* animatie aparitie */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,78 @@
+/* ——— FONT GLOBAL (Roboto Bold / Regular) —————————————— */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+.sidebar {
+  width: 200px;
+  min-height: 100vh;
+  background: #eef5ff;
+  border-right: 2px solid #d3dff0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.user-info {
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #b5cae3;
+}
+
+.user-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #2a5a7f;
+}
+
+.user-email {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.sidebar-separator {
+  height: 2px;
+  background: #d3dff0;
+}
+
+.menu-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #2a5a7f;
+}
+
+.menu-item {
+  width: 100%;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #cddbef;
+  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.menu-item:hover {
+  background: #dbefff;
+}

@@ -1,0 +1,20 @@
+<div class="header-section">
+
+  <!-- partea stanga a header-ului -->
+  <app-header-tools
+    (filtersChange)="filtersChange.emit($event)">
+  </app-header-tools>
+
+  <!-- partea dreapta a header-ului -->
+  <app-header-selectors
+    [groups]="groups"
+    [selectedGroup]="selectedGroup"
+    [specializations]="specializations"
+    [selectedSpecialization]="selectedSpecialization"
+    [selectedWeek]="selectedWeek"
+    (groupChange)="groupChange.emit($event)"
+    (specializationChange)="specializationChange.emit($event)"
+    (weekChange)="weekChange.emit($event)">
+  </app-header-selectors>
+
+</div>
