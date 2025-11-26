@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* layout local */
+.left-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.faculty-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.label {
+  font-weight: 700;
+  font-size: 14px;
+  color: #444;
+}
+
+/* blockul de Orarul Meu */
+.my-schedule-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.my-schedule-btn {
+  width: 55px;
+  height: 55px;
+  border-radius: 16px;
+  border: 2px solid #d3dff0;
+  background: #eef5ff;
+  font-size: 26px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.my-schedule-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.28);
+}
+
+/* filtrare dupa cursuri/laburi/seminarii */
+.filter-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  background: #eef5ff;
+  padding: 4px 8px;
+  border-radius: 16px;
+  border: 2px solid #d3dff0;
+  height: 43px;
+  align-items: center;
+}
+
+.filter-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  background: transparent;
+  color: #a0a0a0;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-btn:hover {
+  background: rgba(0,0,0,0.05);
+  transform: translateY(-1px);
+}
+
+/* culori active */
+.filter-btn.curs.active {
+  background-color: #FF2C2C;
+  color: white;
+  box-shadow: 0 2px 6px rgba(255, 44, 44, 0.4);
+}
+
+.filter-btn.sem.active {
+  background-color: #56B900;
+  color: white;
+  box-shadow: 0 2px 6px rgba(86, 185, 0, 0.4);
+}
+
+.filter-btn.lab.active {
+  background-color: #E0C600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(224, 198, 0, 0.4);
+}

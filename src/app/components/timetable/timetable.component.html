@@ -1,0 +1,29 @@
+<div class="page-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="content-wrapper">
+    <app-header
+      [groups]="groups"
+      [specializations]="specializations"
+      [selectedGroup]="selectedGroup"
+      [selectedSpecialization]="selectedSpecialization"
+      [selectedWeek]="selectedWeek"
+      (groupChange)="selectGroup($event)"
+      (specializationChange)="selectSpecialization($event)"
+      (weekChange)="selectWeek($event)"
+    ></app-header>
+
+    <app-timetable-grid
+      [currentDayIndex]="currentDayIndex"
+      [currentLinePosition]="currentLinePosition"
+      (eventClicked)="onEventSelected($event)"
+    ></app-timetable-grid>
+  </div>
+
+  <app-right-panel
+    *ngIf="selectedEvent"
+    [event]="selectedEvent"
+    (closePanel)="closeNotes()">
+  </app-right-panel>
+
+</div>
