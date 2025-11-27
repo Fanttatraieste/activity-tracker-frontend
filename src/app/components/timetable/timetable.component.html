@@ -7,12 +7,14 @@
       [selectedGroup]="selectedGroup"
       [selectedWeek]="selectedWeek"
       (groupChange)="selectGroup($event)"
-      (weekChange)="selectWeek($event)">
+      (weekChange)="selectWeek($event)"
+      (filtersChange)="onFiltersChanged($event)">
     </app-header>
 
     <app-timetable-grid
       [selectedGroup]="selectedGroup"
       [selectedWeek]="selectedWeek"
+      [activeFilters]="currentFilters"
       [currentDayIndex]="currentDayIndex"
       [currentLinePosition]="currentLinePosition"
       (eventClicked)="onEventSelected($event)">

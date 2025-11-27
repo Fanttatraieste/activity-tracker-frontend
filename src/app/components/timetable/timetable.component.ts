@@ -27,7 +27,7 @@ export class TimetableComponent implements OnInit {
   selectedGroup = 333;
   specializations = ["Mate-Info – anul I", "Mate-Info – anul II", "Mate-Info – anul III"];
   selectedSpecialization = this.specializations[0];
-
+  currentFilters = { curs: true, sem: true, lab: true };
   currentDayIndex = 0;
   currentLinePosition = 0;
 
@@ -56,5 +56,12 @@ export class TimetableComponent implements OnInit {
 
   closeNotes() {
     this.selectedEvent = null;
+  }
+  onFiltersChanged(newFilters: {curs: boolean, sem: boolean, lab: boolean}) {
+    console.log('Filtre primite in parinte:', newFilters);
+
+    // Actualizăm variabila locală
+    // Deoarece HeaderTools trimite deja un obiect nou, e suficient:
+    this.currentFilters = newFilters;
   }
 }

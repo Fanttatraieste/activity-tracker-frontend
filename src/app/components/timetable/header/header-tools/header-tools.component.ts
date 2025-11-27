@@ -20,7 +20,17 @@ export class HeaderToolsComponent {
   };
 
   toggleFilter(type: 'curs' | 'sem' | 'lab') {
-    this.filters[type] = !this.filters[type];
+    // VARIANTA VECHE (GREȘITĂ pentru change detection):
+    // this.filters[type] = !this.filters[type];
+
+    // VARIANTA CORECTĂ:
+    // Creăm un obiect NOU folosind {...} (spread operator)
+    // Astfel Angular vede că s-a schimbat adresa din memorie a obiectului
+    this.filters = {
+      ...this.filters,
+      [type]: !this.filters[type]
+    };
+
     this.filtersChange.emit(this.filters);
   }
 }
