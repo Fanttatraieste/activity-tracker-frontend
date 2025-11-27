@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 export class HeaderToolsComponent {
   // Emitem starea filtrelor către părinte
   @Output() filtersChange = new EventEmitter<{curs: boolean, sem: boolean, lab: boolean}>();
-
+  @Output() myScheduleClick = new EventEmitter<void>();
   // Starea internă a filtrelor
   filters = {
     curs: true,
@@ -32,5 +32,9 @@ export class HeaderToolsComponent {
     };
 
     this.filtersChange.emit(this.filters);
+  }
+  // 3. Funcția apelată când dai click pe cartea albastră
+  triggerMySchedule() {
+    this.myScheduleClick.emit();
   }
 }

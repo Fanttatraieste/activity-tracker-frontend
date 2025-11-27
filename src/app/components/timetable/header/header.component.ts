@@ -27,4 +27,9 @@ export class HeaderComponent {
   onToolsFilterChange(filters: any) {
     this.filtersChange.emit(filters);
   }
+  onMyScheduleClicked() {
+    // Emitem grupa ta preferată (331 sau 331.1, cum ai definit folderul)
+    // Deoarece în CSV-uri folderele erau "assets/331/...", presupun că ID-ul e 331
+    this.groupChange.emit(333.1);
+  }
 }
