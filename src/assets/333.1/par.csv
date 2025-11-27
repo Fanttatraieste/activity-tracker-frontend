@@ -1,0 +1,19 @@
+id,title,type,professor,room,dayIndex,startRow,span
+1,Astronomie,curs,BLAGA Cristina,7/I,1,4,2
+2,Software matematic,curs,PARAJDI LORAND,C310,1,4,2
+3,Ecuatii cu derivate partiale,sem,ARON Mihai Alexandru,C310,1,6,2
+4,Astronomie,lab,BLAGA Cristina,Obs,1,12,2
+5,Software matematic,lab,PARAJDI LORAND,MOS-S15,2,2,2
+6,Interactiunea om-calculator,lab,GURAN Adriana,MOS-S16,2,4,2
+7,Statistica matematica,curs,ROSCA Natalia,6/II,2,6,2
+8,Statistica matematica,sem,ROSCA Natalia,A312,2,8,2
+9,Limbaje formale si tehnici de compilare,curs,GURAN Adriana,6/II,3,8,2
+10,Analiza functionala,curs,BRECKNER Brigitte,7/I,3,10,2
+11,Analiza functionala,sem,BRECKNER Brigitte,7/I,3,12,2
+12,Principiile retelelor de calculatoare,curs,DRAGOS Radu,C310,4,4,2
+13,Instrumente CASE,lab,CHIOREAN Dan,L001,4,4,2
+14,Instrumente CASE,curs,CHIOREAN Dan,L001,4,8,2
+15,Interactiunea om-calculator,curs,GURAN Adriana,6/II,4,8,2
+16,Limbaje formale si tehnici de compilare,lab,POP Ioan Daniel,L320,4,12,2
+17,Ecuatii cu derivate partiale,curs,BUICA Adriana,StEur-Ferdinand,5,2,2
+18,Proiect colectiv,lab,Mentor Proiect,L404,5,8,2

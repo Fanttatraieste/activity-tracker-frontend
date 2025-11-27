@@ -22,5 +22,9 @@ export class HeaderComponent {
   @Output() groupChange = new EventEmitter<number>();
   @Output() specializationChange = new EventEmitter<string>();
   @Output() weekChange = new EventEmitter<1 | 2>();
-  @Output() filtersChange = new EventEmitter<{curs: boolean, sem: boolean, lab: boolean}>();
+  @Output() filtersChange = new EventEmitter<any>();
+
+  onToolsFilterChange(filters: any) {
+    this.filtersChange.emit(filters);
+  }
 }

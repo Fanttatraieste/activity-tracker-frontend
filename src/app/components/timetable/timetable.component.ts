@@ -23,7 +23,7 @@ import { RightPanelComponent } from './right-panel/right-panel.component';
 export class TimetableComponent implements OnInit {
 
   selectedWeek: 1 | 2 = 1;
-  groups = [331, 332, 333];
+  groups = [331.1, 331.2, 332.1, 332.2, 333.1, 333.2];
   selectedGroup = 333;
   specializations = ["Mate-Info – anul I", "Mate-Info – anul II", "Mate-Info – anul III"];
   selectedSpecialization = this.specializations[0];

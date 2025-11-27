@@ -4,20 +4,19 @@
   <div class="content-wrapper">
     <app-header
       [groups]="groups"
-      [specializations]="specializations"
       [selectedGroup]="selectedGroup"
-      [selectedSpecialization]="selectedSpecialization"
       [selectedWeek]="selectedWeek"
       (groupChange)="selectGroup($event)"
-      (specializationChange)="selectSpecialization($event)"
-      (weekChange)="selectWeek($event)"
-    ></app-header>
+      (weekChange)="selectWeek($event)">
+    </app-header>
 
     <app-timetable-grid
+      [selectedGroup]="selectedGroup"
+      [selectedWeek]="selectedWeek"
       [currentDayIndex]="currentDayIndex"
       [currentLinePosition]="currentLinePosition"
-      (eventClicked)="onEventSelected($event)"
-    ></app-timetable-grid>
+      (eventClicked)="onEventSelected($event)">
+    </app-timetable-grid>
   </div>
 
   <app-right-panel
