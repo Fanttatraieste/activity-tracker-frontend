@@ -1,1 +1,34 @@
-<p>login-page works!</p>
+<div class="login-page-container">
+
+  <div class="login-content-wrapper">
+    <!--Ctrl+ / -for making comment  -->
+    <!-- Title -->
+    <h1 class="login-title">Autentificare</h1>
+
+    <!--Google Login -->
+
+    <div class="google-login-box">
+      <button class="google-btn">
+        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google-logo" />
+        Continua cu Google
+      </button>
+    </div>
+
+    <!--Login -->
+    <div class="login-card">
+      <input type="email" placeholder="E-mail" class="input"/>
+      <input type="password" placeholder="Parolă" class="input"/>
+    </div>
+
+    <!--Login button-->
+    <button class="login-btn" (click)="onLogin()">Autentificare</button>
+
+
+
+    <!-- Register-Button-->
+
+    <a class="signup-link" routerLink="/register">Creeaza cont nou</a>
+
+  </div>
+
+</div>
