@@ -1,14 +1,16 @@
 /* ——— FONT GLOBAL —————————————— */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+
+
 
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .login-page-container {
   width: 100%;
   height: 100vh;
-  background-color: #f3e5d0;
+  background-color: #ecd8c0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,7 +20,7 @@
 
 .login-content-wrapper {
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,22 +46,22 @@
 
 }
 
-.google-button{
+.google-btn {
   background: white;
-  padding: 14px 20px;
-  width: 100%;
-  border-radius: 50px;
+  padding: 12px 20px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
   border: none;
   cursor: pointer;
-  box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.12);
   font-size: 18px;
   font-weight: 500;
   transition: 0.2s ease;
 }
+
 
 .google-btn img {
   width: 22px;
@@ -68,10 +70,12 @@
 }
 
 .google-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 
 
 }
+
+
 
 .login-card {
   width: 100%;
@@ -82,6 +86,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+
 }
 
 .input{
@@ -96,6 +101,8 @@
 .input:focus {
   border-bottom-color: #a67a58;
 }
+
+
 .login-btn {
   width: 100%;
   background: #d8a26c;
@@ -103,7 +110,9 @@
   font-size: 20px;
   font-weight: 600;
   padding: 14px;
-  border-radius: 20px;
+  border-radius: 14px;
+  letter-spacing: 0.5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   border: none;
   cursor: pointer;
   transition: 0.2s ease;
@@ -111,7 +120,7 @@
 
 .login-btn:hover {
   background: #c48e56;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 /* ——— SIGNUP LINK —————————————— */

@@ -3,15 +3,16 @@
   <div class="login-content-wrapper">
     <!--Ctrl+ / -for making comment  -->
     <!-- Title -->
-    <h1 class="login-title">Autentificare</h1>
+    <h1 class="login-title">Login</h1>
 
     <!--Google Login -->
 
     <div class="google-login-box">
-      <button class="google-btn">
-        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google-logo" />
+      <button class="google-btn" (click)="onGoogleLogin()">
+        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" />
         Continua cu Google
       </button>
+
     </div>
 
     <!--Login -->
@@ -20,8 +21,10 @@
       <input type="password" placeholder="Parolă" class="input"/>
     </div>
 
+
+
     <!--Login button-->
-    <button class="login-btn" (click)="onLogin()">Autentificare</button>
+    <button class="login-btn" (click)="onLogin()">LOGIN</button>
 
 
 
