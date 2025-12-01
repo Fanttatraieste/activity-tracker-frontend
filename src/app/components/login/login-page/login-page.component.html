@@ -17,11 +17,25 @@
 
     <!--Login -->
     <div class="login-card">
-      <input type="email" placeholder="E-mail" class="input"/>
-      <input type="password" placeholder="Parolă" class="input"/>
+      <input
+        [(ngModel)]="email"
+        type="email"
+        placeholder="E-mail"
+        class="input"
+      />
+
+      <input
+        [(ngModel)]="password"
+        type="password"
+        placeholder="Parolă"
+        class="input"
+      />
+
+
+
     </div>
 
-
+    <p class="error-message" *ngIf="loginError">{{ loginError }}</p>
 
     <!--Login button-->
     <button class="login-btn" (click)="onLogin()">LOGIN</button>

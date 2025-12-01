@@ -123,6 +123,14 @@
   transform: translateY(-3px);
 }
 
+.error-message {
+  color: #b4442a;
+  font-size: 15px;
+  margin-top: -8px;
+  margin-bottom: -5px;
+}
+
+
 /* ——— SIGNUP LINK —————————————— */
 .signup-link {
   color: #6f4b2b;
