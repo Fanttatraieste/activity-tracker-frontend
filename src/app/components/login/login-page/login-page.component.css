@@ -1,8 +1,6 @@
 /* ——— FONT GLOBAL —————————————— */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
 
-
-
 * {
   font-family: 'Nunito', sans-serif;
 }
@@ -11,11 +9,60 @@
   width: 100%;
   height: 100vh;
   background-color: #ecd8c0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
+  transition: background-image 0.45s ease-in-out, background-position 0.3s ease;
+  position: relative;
+}
 
+/* Controls to choose background (located above, centered) */
+.bg-controls {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  background: rgb(255, 255, 255, 0.85);
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+  font-size: 14px;
+}
+
+.bg-controls label {
+  color: #5a3318;
+  font-weight: 600;
+}
+
+.bg-controls select {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #d9cbb8;
+  background: transparent;
+  outline: none;
+}
+
+.reset-bg {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #d8a26c;
+  color: #4b2b15;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.reset-bg:hover {
+  color: #000;
+  background: #c96d24;
 }
 
 .login-content-wrapper {
@@ -25,6 +72,7 @@
   flex-direction: column;
   align-items: center;
   gap: 26px;
+  z-index: 10;
 }
 
 /*Title*/
@@ -42,8 +90,6 @@
   display: flex;
   justify-content: center;
   border-radius: 50px;
-
-
 }
 
 .google-btn {
@@ -62,20 +108,14 @@
   transition: 0.2s ease;
 }
 
-
 .google-btn img {
   width: 22px;
   border-radius: 50px;
-
 }
 
 .google-btn:hover {
   transform: translateY(-3px);
-
-
 }
-
-
 
 .login-card {
   width: 100%;
@@ -86,7 +126,6 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-
 }
 
 .input{
@@ -98,10 +137,10 @@
   outline: none;
   transition: 0.2s ease-in-out;
 }
+
 .input:focus {
   border-bottom-color: #a67a58;
 }
-
 
 .login-btn {
   width: 100%;
@@ -129,7 +168,6 @@
   margin-top: -8px;
   margin-bottom: -5px;
 }
-
 
 /* ——— SIGNUP LINK —————————————— */
 .signup-link {

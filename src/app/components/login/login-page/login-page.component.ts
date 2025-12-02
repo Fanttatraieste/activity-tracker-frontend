@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
@@ -13,15 +13,47 @@ import {CommonModule} from '@angular/common';
   ],
   standalone: true
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
   constructor(private router: Router) {}
   email: string = "";
   password: string = "";
 
   loginError: string | null = null;
 
-  onLogin() {
+  // background selector
+  selectedBackground: string | null = null;
 
+  ngOnInit(): void {
+    // try to load saved background
+    const saved = localStorage.getItem('login_bg');
+    if (saved) {
+      this.selectedBackground = saved || null;
+    }
+  }
+
+  // getter returns style for the binding [style.background-image]
+  get backgroundStyle(): string | null {
+    if (this.selectedBackground) {
+      return `url('${this.selectedBackground}')`;
+    }
+    return null;
+  }
+
+  onBackgroundChange() {
+    if (this.selectedBackground) {
+      localStorage.setItem('login_bg', this.selectedBackground);
+    } else {
+      localStorage.removeItem('login_bg');
+    }
+    // If you want to do other actions when changing, add them here.
+  }
+
+  resetBackground() {
+    this.selectedBackground = null;
+    localStorage.removeItem('login_bg');
+  }
+
+  onLogin() {
     this.loginError = null;
 
     if (!this.email.includes("@")) {
@@ -31,9 +63,9 @@ export class LoginPageComponent {
     // temporary redirect
     this.router.navigate(['/timetable']);
   }
+
   onGoogleLogin() {
     const clientId = "295063293016-gb5su3e8r9607m4ivbl8hqipth5n5d8t.apps.googleusercontent.com";
-
     const redirectUri = "http://localhost:4200";
 
     const googleAuthUrl =
@@ -47,7 +79,4 @@ export class LoginPageComponent {
     window.location.href = googleAuthUrl;
     this.router.navigate(['/timetable']);
   }
-
-
-
 }
