@@ -1,18 +1,19 @@
+
 import { Component, OnInit } from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-login-page',
+  standalone:true,
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css'],
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink
   ],
-  standalone: true
+
 })
 export class LoginPageComponent implements OnInit {
   constructor(private router: Router) {}
@@ -21,7 +22,7 @@ export class LoginPageComponent implements OnInit {
 
   loginError: string | null = null;
 
-  // background selector
+
   selectedBackground: string | null = null;
 
   ngOnInit(): void {
@@ -32,7 +33,7 @@ export class LoginPageComponent implements OnInit {
     }
   }
 
-  // getter returns style for the binding [style.background-image]
+
   get backgroundStyle(): string | null {
     if (this.selectedBackground) {
       return `url('${this.selectedBackground}')`;
@@ -79,5 +80,11 @@ export class LoginPageComponent implements OnInit {
 
     window.location.href = googleAuthUrl;
     this.router.navigate(['/timetable']);
+
+
   }
+  goToSignup() {
+    this.router.navigate(['/sign-up']);
+  }
+
 }
