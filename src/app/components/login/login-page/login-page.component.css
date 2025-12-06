@@ -23,9 +23,8 @@
 /* Controls to choose background (located above, centered) */
 .bg-controls {
   position: absolute;
-  top: 18px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 20px;
+  left: 20px;
   display: flex;
   gap: 10px;
   background: rgb(255, 255, 255, 0.85);
@@ -36,10 +35,12 @@
   font-size: 14px;
 }
 
+/*
 .bg-controls label {
   color: #5a3318;
   font-weight: 600;
 }
+*/
 
 .bg-controls select {
   padding: 6px 8px;
