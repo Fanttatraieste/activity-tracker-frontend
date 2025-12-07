@@ -39,6 +39,10 @@
 
   <div class="weather">
     <div class="label">Vremea</div>
-    <button class="weather-btn">⛅</button>
+    <button class="weather-btn"
+            [class.active]="isWeatherActive"
+            (click)="toggleWeather()">
+      ⛅
+    </button>
   </div>
 </div>

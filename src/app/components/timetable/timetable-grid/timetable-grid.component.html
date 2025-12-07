@@ -32,50 +32,61 @@
     <div class="day">Vineri</div>
 
     <!-- CELULELE -->
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
     <div *ngFor="let event of displayEvents"
-         class="event"
-         [ngClass]="event.type"
+         class="event-wrapper"
          [style.gridColumn]="event.dayIndex"
          [style.gridRow]="event.startRow + ' / span ' + event.span"
          [style.width.%]="event.width"
-         [style.marginLeft.%]="event.marginLeft"
-         (click)="onEventClick(event)">
+         [style.marginLeft.%]="event.marginLeft">
 
-      <div class="event-title"
-           (click)="openLink('https://www.google.com/search?q=UBB fisa disciplinei pdf +' + event.title + '&btnI=1')">
-        {{ event.title }}
+      <div class="weather-cell"
+           *ngIf="showWeather && (!event.marginLeft || event.marginLeft == 0)">
+
+        <img src="weather-icon.png" class="weather-icon">
+
+        <span class="weather-temp">22°</span>
+      </div>
+      <div class="event"
+           [ngClass]="event.type"
+           (click)="onEventClick(event)">
+
+        <div class="event-title"
+             (click)="openLink('https://www.google.com/search?q=UBB fisa disciplinei pdf +' + event.title + '&btnI=1'); $event.stopPropagation()">
+          {{ event.title }}
+        </div>
+
+        <div class="event-professor"
+             (click)="openLink('https://www.google.com/search?q=UBB+' + event.professor + '&btnI=1'); $event.stopPropagation()">
+          {{ event.professor }}
+        </div>
+
+        <div class="event-room"
+             (click)="openLink('https://maps.google.com/?q=Universitatea Babes Bolyai Cluj ' + event.room); $event.stopPropagation()">
+          {{ event.room }}
+        </div>
+
+        <app-event-attendance
+          [present]="event.attendanceCount || 0"
+          [total]="14"
+          [isOpen]="event.isAttendanceOpen || false"
+          (attendanceChange)="updateAttendance(event, $event)"
+          (toggle)="toggleAttendance(event)">
+        </app-event-attendance>
       </div>
 
-      <div class="event-professor"
-           (click)="openLink('https://www.google.com/search?q=UBB+' + event.professor + '&btnI=1')">
-        {{ event.professor }}
-      </div>
-
-      <div class="event-room"
-           (click)="openLink('https://maps.google.com/?q=Universitatea Babes Bolyai Cluj ' + event.room)">
-        {{ event.room }}
-      </div>
-
-      <app-event-attendance
-        [present]="event.attendanceCount || 0"
-        [total]="14"
-        [isOpen]="event.isAttendanceOpen || false"
-        (attendanceChange)="updateAttendance(event, $event)"
-        (toggle)="toggleAttendance(event)">
-      </app-event-attendance>
     </div>
 
 

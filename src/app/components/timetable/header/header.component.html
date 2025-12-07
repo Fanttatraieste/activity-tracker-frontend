@@ -3,7 +3,8 @@
   <!-- partea stanga a header-ului -->
   <app-header-tools
     (filtersChange)="onToolsFilterChange($event)"
-    (myScheduleClick)="onMyScheduleClicked()">
+    (myScheduleClick)="onMyScheduleClicked()"
+    (weatherToggle)="onWeatherToggle($event)">
   </app-header-tools>
 
   <!-- partea dreapta a header-ului -->

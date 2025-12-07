@@ -8,7 +8,8 @@
       [selectedWeek]="selectedWeek"
       (groupChange)="selectGroup($event)"
       (weekChange)="selectWeek($event)"
-      (filtersChange)="onFiltersChanged($event)">
+      (filtersChange)="onFiltersChanged($event)"
+      (weatherToggle)="onWeatherToggle($event)">
     </app-header>
 
     <app-timetable-grid
@@ -17,7 +18,9 @@
       [activeFilters]="currentFilters"
       [currentDayIndex]="currentDayIndex"
       [currentLinePosition]="currentLinePosition"
+      [showWeather]="weatherEnabled"
       (eventClicked)="onEventSelected($event)">
+
     </app-timetable-grid>
   </div>
 

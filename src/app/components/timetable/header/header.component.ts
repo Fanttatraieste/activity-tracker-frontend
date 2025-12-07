@@ -17,12 +17,14 @@ export class HeaderComponent {
   @Input() specializations!: string[];
   @Input() selectedSpecialization!: string;
   @Input() selectedWeek!: 1 | 2;
+  @Input() showWeather: boolean = false;
 
   // outputs ce merg spre app
   @Output() groupChange = new EventEmitter<number>();
   @Output() specializationChange = new EventEmitter<string>();
   @Output() weekChange = new EventEmitter<1 | 2>();
   @Output() filtersChange = new EventEmitter<any>();
+  @Output() weatherToggle = new EventEmitter<boolean>();
 
   onToolsFilterChange(filters: any) {
     this.filtersChange.emit(filters);
@@ -31,5 +33,12 @@ export class HeaderComponent {
     // Emitem grupa ta preferată (331 sau 331.1, cum ai definit folderul)
     // Deoarece în CSV-uri folderele erau "assets/331/...", presupun că ID-ul e 331
     this.groupChange.emit(333.1);
+  }
+  weatherEnabled = false;
+
+  // 2. Modificăm funcția să emită valoarea, nu doar să o salveze local
+  onWeatherToggle(isActive: boolean) {
+    // this.weatherEnabled = isActive; // Asta nu ajută cu nimic aici
+    this.weatherToggle.emit(isActive); // TRIMITE MAI DEPARTE!
   }
 }

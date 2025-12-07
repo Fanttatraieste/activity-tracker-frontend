@@ -33,6 +33,8 @@ export class TimetableComponent implements OnInit {
 
   selectedEvent: CalendarEvent | null = null;
 
+  weatherEnabled = false;
+
   ngOnInit(): void {
     this.updateTimeLine();
     setInterval(() => this.updateTimeLine(), 60 * 1000);
@@ -63,5 +65,9 @@ export class TimetableComponent implements OnInit {
     // Actualizăm variabila locală
     // Deoarece HeaderTools trimite deja un obiect nou, e suficient:
     this.currentFilters = newFilters;
+  }
+
+  onWeatherToggle(isActive: boolean) {
+    this.weatherEnabled = isActive;
   }
 }

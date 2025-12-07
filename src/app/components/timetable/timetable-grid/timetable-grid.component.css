@@ -5,7 +5,6 @@
   font-family: 'Roboto', sans-serif;
 }
 
-
 .timetable-wrapper-2 {
   display: flex;
   gap: 15px;
@@ -51,20 +50,73 @@
   border: 1px solid #818181;
 }
 
+/* Stil pentru celulele goale din spate */
 .cell {
-  position: relative;
-  overflow: visible;
   background: #fafafa;
   border: 1px solid #e1e1e1;
   border-radius: 6px;
 }
 
-.event {
+/* --- WRAPPER EVENIMENT --- */
+.event-wrapper {
+  display: flex;        /* Pune Vremea + Evenimentul pe orizontală */
+  gap: 5px;             /* Spațiu între vreme și card */
+  align-items: stretch; /* Se întind pe toată înălțimea */
   z-index: 5;
-  width: 100%;
+  pointer-events: none; /* Permite click prin spațiile goale ale wrapperului */
+
+  /* Când weather-cell dispare (la al 2-lea event), flex va face ca
+     .event să ocupe tot spațiul automat */
+}
+
+/* Reactivăm click-ul pe elementele interne */
+.event-wrapper > * {
+  pointer-events: auto;
+}
+
+/* --- CELULA VREME --- */
+.weather-cell {
+  width: 40px;
+  min-width: 40px; /* IMPORTANT: Să nu se micșoreze */
+  flex-shrink: 0;  /* Previne strivirea */
+
+  background: #fff;
+  border: 1px solid #818181;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px; /* Puțin mai mic să încapă textul */
+  font-weight: bold;
+  gap: 2px;
+  color: #555;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.weather-icon {
+  width: 26px;  /* Ajustează mărimea (recomandat între 16px și 24px) */
+  height: 26px;
+  object-fit: contain; /* Păstrează proporțiile imaginii */
+}
+
+.weather-temp {
+  font-size: 15px; /* Text puțin mai mic să încapă bine sub iconiță */
+  font-weight: 700;
+  color: #555;
+  line-height: 1;
+}
+
+/* --- CARD EVENIMENT --- */
+.event {
+  flex: 1; /* Ocupă tot spațiul disponibil în wrapper */
+
+  width: auto !important; /* Suprascrie width-ul inline pentru a lucra cu flex */
+  height: 100%;
+
   font-weight: 700;
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: 8px 10px; /* Padding puțin mai mic pentru a încăpea conținutul */
   display: flex;
   flex-direction: column;
   position: relative;
@@ -72,53 +124,46 @@
   border: 1px solid #818181;
   text-shadow: 0px 1px 5px rgba(0,0,0,0.35);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  align-self: start;
-  height: 100%;
   box-sizing: border-box;
 }
 
 .event:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: 0 12px 24px rgba(0,0,0,0.28);
 }
 
+/* Culori Evenimente */
+.event.lab { background-color: #E0C600; color: white; z-index: 10; }
+.event.curs { background-color: #FF2C2C; color: white; }
+.event.sem { background-color: #56B900; color: white; }
 
-.event.lab {
-  background-color: #E0C600;
-  color: white;
-  z-index: 10;
-}
-
-.event.curs {
-  background-color: #FF2C2C;
-  color: white;
-}
-
-.event.sem {
-  background-color: #56B900;
-  color: white;
-}
-
+/* Typography intern eveniment */
 .event-title {
-  font-size: 15px;
+  font-size: 14px; /* Ajustat ușor */
   font-weight: 700;
+  cursor: pointer;
+  line-height: 1.2;
 }
 
 .event-professor {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   opacity: 0.9;
-  margin-bottom: 18px;
+  margin-bottom: auto; /* Împinge camera jos dacă e spațiu */
+  cursor: pointer;
+  margin-top: 4px;
 }
 
 .event-room {
   position: absolute;
-  right: 3px;
+  right: 6px;
   bottom: 6px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
+  cursor: pointer;
 }
 
+/* Linii de timp */
 .time-line {
   position: absolute;
   left: 0;
@@ -126,77 +171,5 @@
   height: 3px;
   background: darkorange;
   border-radius: 4px;
-}
-
-.current-time-line {
-  position: absolute;
-  top: 50px;
-  bottom: 0;
-  width: 3px;
-  background: red;
-  z-index: 50;
-  border-radius: 2px;
-  pointer-events: none;
-  transition: left 0.2s ease-in-out;
-}
-
-.current-time-dot {
-  position: absolute;
-  top: 42px;
-  width: 12px;
-  height: 12px;
-  background: red;
-  border-radius: 50%;
-  z-index: 60;
-  transform: translateX(-5px);
-  transition: left 0.2s ease-in-out;
-}
-
-.event.past {
-  opacity: 0.45;
-  filter: grayscale(30%);
-  transition: 0.4s ease;
-}
-
-.time-indicator {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: red;
-  z-index: 999;
-  box-shadow: 0 0 6px rgba(255,0,0,0.7);
-}
-
-.time-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: darkorange;
-  z-index: 10;
-  border-radius: 4px;
-  pointer-events: none;
-}
-
-.event-title {
-  cursor: pointer;
-}
-
-.event-room {
-  cursor: pointer;
-}
-
-.event-professor {
-  cursor: pointer;
-}
-
-.prof-link {
-  color: white;
-  text-decoration: underline;
-  cursor: pointer;
-  font-weight: 600;
-}
-.prof-link:hover {
-  opacity: 0.8;
+  z-index: 2;
 }

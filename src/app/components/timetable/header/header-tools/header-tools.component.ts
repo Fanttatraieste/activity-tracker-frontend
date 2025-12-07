@@ -12,12 +12,15 @@ export class HeaderToolsComponent {
   // Emitem starea filtrelor către părinte
   @Output() filtersChange = new EventEmitter<{curs: boolean, sem: boolean, lab: boolean}>();
   @Output() myScheduleClick = new EventEmitter<void>();
+  @Output() weatherToggle = new EventEmitter<boolean>();
   // Starea internă a filtrelor
   filters = {
     curs: true,
     sem: true,
     lab: true
   };
+
+  isWeatherActive = false;
 
   toggleFilter(type: 'curs' | 'sem' | 'lab') {
     // VARIANTA VECHE (GREȘITĂ pentru change detection):
@@ -36,5 +39,10 @@ export class HeaderToolsComponent {
   // 3. Funcția apelată când dai click pe cartea albastră
   triggerMySchedule() {
     this.myScheduleClick.emit();
+  }
+  // 3. Funcția pentru butonul de vreme
+  toggleWeather() {
+    this.isWeatherActive = !this.isWeatherActive;
+    this.weatherToggle.emit(this.isWeatherActive);
   }
 }

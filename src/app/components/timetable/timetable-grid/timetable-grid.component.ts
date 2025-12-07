@@ -44,6 +44,10 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   @Input() currentDayIndex!: number;
   @Input() currentLinePosition!: number;
 
+  // Weather
+  @Input() showWeather: boolean = false;
+
+
   @Output() eventClicked = new EventEmitter<CalendarEvent>();
 
   private http = inject(HttpClient);
