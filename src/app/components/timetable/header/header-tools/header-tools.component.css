@@ -108,3 +108,29 @@
   text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   box-shadow: 0 2px 6px rgba(224, 198, 0, 0.4);
 }
+
+/* weather buttons design */
+
+.weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+}
+
+.weather-btn {
+  width: 55px;
+  height: 55px;
+  border-radius: 16px;
+  border: 2px solid #d3dff0;
+  background: #eef5ff;
+  font-size: 26px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.weather-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.28);
+}
