@@ -43,7 +43,7 @@ export class TimetableComponent implements OnInit {
     const day = now.getDay();
     this.currentDayIndex = day >= 1 && day <= 5 ? day : 0;
     const hour = now.getHours() + now.getMinutes() / 60;
-    this.currentLinePosition = (hour - 8) * 50;
+    this.currentLinePosition = (hour - 6) * 52;
   }
 
   selectWeek(w: 1 | 2) { this.selectedWeek = w; }
