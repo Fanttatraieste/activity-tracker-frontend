@@ -19,15 +19,22 @@
       [currentDayIndex]="currentDayIndex"
       [currentLinePosition]="currentLinePosition"
       [showWeather]="weatherEnabled"
-      (eventClicked)="onEventSelected($event)">
+      (eventClicked)="onEventSelected($event)"
+      (triggerGrades)="openGrades($event)">
 
     </app-timetable-grid>
   </div>
 
-  <app-right-panel
+  <app-notes-panel
     *ngIf="selectedEvent"
     [event]="selectedEvent"
     (closePanel)="closeNotes()">
-  </app-right-panel>
+  </app-notes-panel>
+
+  <app-grades-panel
+    *ngIf="currentGradeEvent"
+    [event]="currentGradeEvent"
+    (closePanel)="closeGrades()">
+  </app-grades-panel>
 
 </div>

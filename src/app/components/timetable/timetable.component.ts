@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import { TimetableGridComponent, CalendarEvent } from './timetable-grid/timetable-grid.component';
-import { RightPanelComponent } from './right-panel/right-panel.component';
+import { NotesPanelComponent } from './notes-panel/notes-panel.component';
+import { GradesPanelComponent } from './grades-panel/grades-panel.component';
 
 @Component({
   selector: 'app-timetable',
@@ -15,12 +16,14 @@ import { RightPanelComponent } from './right-panel/right-panel.component';
     SidebarComponent,
     HeaderComponent,
     TimetableGridComponent,
-    RightPanelComponent
+    NotesPanelComponent,
+    GradesPanelComponent,
   ],
   templateUrl: './timetable.component.html',
   styleUrls: ['./timetable.component.css']
 })
 export class TimetableComponent implements OnInit {
+
 
   selectedWeek: 1 | 2 = 1;
   groups = [331.1, 331.2, 332.1, 332.2, 333.1, 333.2];
@@ -34,6 +37,8 @@ export class TimetableComponent implements OnInit {
   selectedEvent: CalendarEvent | null = null;
 
   weatherEnabled = false;
+
+  currentGradeEvent: CalendarEvent | null = null;
 
   ngOnInit(): void {
     this.updateTimeLine();
@@ -69,5 +74,12 @@ export class TimetableComponent implements OnInit {
 
   onWeatherToggle(isActive: boolean) {
     this.weatherEnabled = isActive;
+  }
+  openGrades(event: CalendarEvent) {
+    this.currentGradeEvent = event; // Asta va face panel-ul să apară
+  }
+
+  closeGrades() {
+    this.currentGradeEvent = null; // Asta va ascunde panel-ul
   }
 }

@@ -2,6 +2,9 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, Output, Eve
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { EventAttendanceComponent } from './event-attendance/event-attendance.component';
+import { EventGradesComponent } from './event-grades/event-grades.component';
+import { NotesPanelComponent } from '../notes-panel/notes-panel.component';
+
 
 export interface CalendarEvent {
   id: number;
@@ -27,7 +30,7 @@ export interface CalendarEvent {
 @Component({
   selector: 'app-timetable-grid',
   standalone: true,
-  imports: [CommonModule, EventAttendanceComponent],
+  imports: [CommonModule, EventAttendanceComponent, EventGradesComponent],
   templateUrl: './timetable-grid.component.html',
   styleUrls: ['./timetable-grid.component.css']
 })
@@ -47,8 +50,9 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   // Weather
   @Input() showWeather: boolean = false;
 
-
+  @Output() triggerGrades = new EventEmitter<CalendarEvent>();
   @Output() eventClicked = new EventEmitter<CalendarEvent>();
+  @Output() gradesOpenRequested = new EventEmitter<CalendarEvent>();
 
   private http = inject(HttpClient);
 
@@ -57,6 +61,8 @@ export class TimetableGridComponent implements OnInit, OnChanges {
 
   // displayEvents = CE SE VEDE pe ecran (Filtrate si cu latimi calculate)
   displayEvents: CalendarEvent[] = [];
+
+  selectedEvent: CalendarEvent | null = null;
 
   ngOnInit() {
     this.loadEventsFromCsv();
@@ -198,4 +204,13 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     event.attendanceCount = newCount;
     // Logica pentru salvare backend...
   }
+  onGradesClick(event: CalendarEvent) {
+    // Emitem evenimentul în sus, către componenta părinte
+    this.gradesOpenRequested.emit(event);
+  }
+  handleGradesClick(event: CalendarEvent) {
+    console.log('S-a cerut deschiderea notelor pentru:', event.title);
+    this.triggerGrades.emit(event);
+  }
+
 }

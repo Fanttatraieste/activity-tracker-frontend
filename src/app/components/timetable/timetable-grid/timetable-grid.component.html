@@ -78,6 +78,10 @@
           {{ event.room }}
         </div>
 
+        <app-event-grades
+          [ngClass]="event.type"
+          (openGrades)="handleGradesClick(event)">
+        </app-event-grades>
         <app-event-attendance
           [present]="event.attendanceCount || 0"
           [total]="14"

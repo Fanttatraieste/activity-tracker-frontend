@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { CalendarEvent } from '../timetable-grid/timetable-grid.component';
 
 @Component({
-  selector: 'app-right-panel',
+  selector: 'app-notes-panel',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './right-panel.component.html',
-  styleUrls: ['./right-panel.component.css']
+  templateUrl: './notes-panel.component.html',
+  styleUrls: ['./notes-panel.component.css']
 })
-export class RightPanelComponent implements OnChanges {
+export class NotesPanelComponent implements OnChanges {
 
   // Primim evenimentul selectat de la părinte
   @Input() event!: CalendarEvent;
