@@ -62,7 +62,7 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   // displayEvents = CE SE VEDE pe ecran (Filtrate si cu latimi calculate)
   displayEvents: CalendarEvent[] = [];
 
-  selectedEvent: CalendarEvent | null = null;
+  focusedDayIndex: number | null = null;
 
   ngOnInit() {
     this.loadEventsFromCsv();
@@ -211,6 +211,16 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   handleGradesClick(event: CalendarEvent) {
     console.log('S-a cerut deschiderea notelor pentru:', event.title);
     this.triggerGrades.emit(event);
+  }
+
+  toggleDayFocus(dayIndex: number) {
+    if (this.focusedDayIndex === dayIndex) {
+      // Dacă dau click pe ziua deja selectată, resetez (arată tot)
+      this.focusedDayIndex = null;
+    } else {
+      // Altfel, setez ziua curentă ca focus
+      this.focusedDayIndex = dayIndex;
+    }
   }
 
 }

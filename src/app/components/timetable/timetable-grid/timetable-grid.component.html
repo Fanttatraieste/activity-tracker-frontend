@@ -25,11 +25,11 @@
          [style.top.px]="currentLinePosition">
     </div>
 
-    <div class="day">Luni</div>
-    <div class="day">Marti</div>
-    <div class="day">Miercuri</div>
-    <div class="day">Joi</div>
-    <div class="day">Vineri</div>
+    <div class="day" (click)="toggleDayFocus(1)" [class.active-header]="focusedDayIndex === 1">Luni</div>
+    <div class="day" (click)="toggleDayFocus(2)" [class.active-header]="focusedDayIndex === 2">Marti</div>
+    <div class="day" (click)="toggleDayFocus(3)" [class.active-header]="focusedDayIndex === 3">Miercuri</div>
+    <div class="day" (click)="toggleDayFocus(4)" [class.active-header]="focusedDayIndex === 4">Joi</div>
+    <div class="day" (click)="toggleDayFocus(5)" [class.active-header]="focusedDayIndex === 5">Vineri</div>
 
     <!-- CELULELE -->
 
@@ -47,6 +47,7 @@
     <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
     <div *ngFor="let event of displayEvents"
          class="event-wrapper"
+         [class.dimmed]="focusedDayIndex !== null && event.dayIndex !== focusedDayIndex"
          [style.gridColumn]="event.dayIndex"
          [style.gridRow]="event.startRow + ' / span ' + event.span"
          [style.width.%]="event.width"

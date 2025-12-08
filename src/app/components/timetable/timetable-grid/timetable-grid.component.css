@@ -48,6 +48,21 @@
   justify-content: center;
   align-items: center;
   border: 1px solid #818181;
+  cursor: pointer; /* Arată mânuța la hover */
+  transition: background-color 0.2s, transform 0.2s;
+  user-select: none; /* Să nu se selecteze textul la dublu click */
+}
+
+.day:hover {
+  background: #cceeff; /* Un mic efect de hover */
+}
+
+.day.active-header {
+  background: #2a5a7f;
+  color: white;
+  border-color: #1a3a5f;
+  transform: scale(1.05); /* O facem puțin mai mare */
+  z-index: 20;
 }
 
 /* Stil pentru celulele goale din spate */
@@ -67,11 +82,24 @@
 
   /* Când weather-cell dispare (la al 2-lea event), flex va face ca
      .event să ocupe tot spațiul automat */
+  transition: filter 0.3s ease, opacity 0.3s ease;
 }
 
 /* Reactivăm click-ul pe elementele interne */
 .event-wrapper > * {
   pointer-events: auto;
+}
+
+.event-wrapper.dimmed {
+  /* Aici controlezi "puterea" efectului */
+
+  /* Varianta 1: Exact 30% alb-negru (dar e un efect subtil) */
+  /* filter: grayscale(30%); */
+
+  /* Varianta 2 (Recomandată): Alb-negru complet și puțin transparent
+     pentru a scoate în evidență ziua colorată */
+  filter: grayscale(100%);
+  opacity: 0.6; /* Evenimentele inactive devin mai șterse */
 }
 
 /* --- CELULA VREME --- */
