@@ -1,78 +1,296 @@
-/* ——— FONT GLOBAL (Roboto Bold / Regular) —————————————— */
+/* ——— FONT GLOBAL —————————————— */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 * {
   font-family: 'Roboto', sans-serif;
+  box-sizing: border-box; /* Esențial pentru layout corect */
 }
 
+/* ——— SIDEBAR CONTAINER —————————————— */
 .sidebar {
-  width: 200px;
+  width: 250px; /* Putin mai lat pentru a incapea emailurile lungi */
   min-height: 100vh;
-  background: #eef5ff;
-  border-right: 2px solid #d3dff0;
-  padding: 20px;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef6fc 100%); /* Gradient subtil */
+  border-right: 1px solid #dae4f0;
+  padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 30px;
   position: fixed;
   top: 0;
   left: 0;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.02); /* Umbra fina in dreapta */
+  z-index: 1000;
 }
 
+/* ——— USER PROFILE —————————————— */
 .user-profile {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
+.avatar-container {
+  position: relative;
+}
+
+.profile-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff; /* Bordura alba pentru contrast */
+  box-shadow: 0 4px 10px rgba(42, 90, 127, 0.15); /* Umbra avatar */
+}
 
 .user-info {
   text-align: center;
 }
 
-.profile-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #b5cae3;
-}
-
 .user-name {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
-  color: #2a5a7f;
+  color: #1a3c5a; /* Albastru inchis elegant */
+  margin-bottom: 4px;
 }
 
 .user-email {
   font-size: 13px;
-  opacity: 0.7;
+  color: #647a8e;
+  font-weight: 500;
 }
 
+/* ——— SEPARATOR —————————————— */
 .sidebar-separator {
-  height: 2px;
-  background: #d3dff0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d3dff0, transparent);
+  width: 100%;
+}
+
+/* ——— MENU —————————————— */
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .menu-title {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8fa6b8;
   font-weight: 700;
-  font-size: 15px;
-  color: #2a5a7f;
+  margin-bottom: 10px;
+  padding-left: 5px;
 }
 
+/* ——— BUTTON STYLE —————————————— */
 .menu-item {
   width: 100%;
-  padding: 10px 12px;
+  padding: 14px 16px;
   background: #ffffff;
-  border: 1px solid #cddbef;
+  border: 1px solid transparent; /* Transparent default */
   border-radius: 12px;
   text-align: left;
   cursor: pointer;
-  font-weight: 700;
-  transition: 0.2s ease;
+  font-weight: 600;
+  color: #4a657e;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02); /* Umbra foarte fina */
 }
 
+.menu-icon {
+  font-size: 16px;
+  color: #a0b4cc;
+  transition: color 0.2s;
+}
+
+/* Hover State */
 .menu-item:hover {
-  background: #dbefff;
+  background: #ffffff;
+  border-color: #dbefff;
+  color: #2a5a7f;
+  box-shadow: 0 4px 12px rgba(42, 90, 127, 0.08);
+  transform: translateY(-1px);
+}
+
+.menu-item:hover .menu-icon {
+  color: #2a5a7f;
+}
+
+/* Active State (Cand e deschis) */
+.menu-item.active {
+  background: #ebf5ff;
+  color: #1a3c5a;
+  border-color: #cee5ff;
+  box-shadow: none;
+}
+
+.menu-item.active .menu-icon {
+  color: #007bff;
+}
+
+/* ——— INFO BOX (Sub-meniu) —————————————— */
+.info-box {
+  width: 100%;
+  background: transparent;
+  padding: 5px 0 10px 20px; /* Indentare spre dreapta */
+  margin-top: 0;
+  box-sizing: border-box;
+  animation: slideDown 0.3s ease-out; /* Animatie de aparitie */
+  border-left: 2px solid #e1eaf5; /* Linie verticala ghidaj */
+  margin-left: 15px; /* Aliniere cu textul butonului */
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ——— LISTA MATERII & CHECKBOX —————————————— */
+.materii-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.checkbox-container:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.checkmark-text {
+  font-size: 13.5px;
+  color: #556b7f;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.checkbox-container input[type="checkbox"] {
+  appearance: none; /* Ascunde checkbox-ul default */
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cbd5e1;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0; /* Sa nu se turteasca */
+}
+
+/* Cand e bifat */
+.checkbox-container input[type="checkbox"]:checked {
+  background: #2a5a7f;
+  border-color: #2a5a7f;
+}
+
+/* Bifa alba (folosind pseudo-element) */
+.checkbox-container input[type="checkbox"]:checked::after {
+  content: '✔';
+  font-size: 12px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.checkbox-container:hover input[type="checkbox"] {
+  border-color: #2a5a7f;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 10px; /* Putin spatiu in dreapta */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Etichetele mici de deasupra dropdown-urilor */
+.form-group label {
+  font-size: 11px;
+  color: #8fa6b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: 2px;
+}
+
+/* Stilul Dropdown-urilor (SELECT) */
+.form-group select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #334e68;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+
+  /* Resetare stil default browser pentru a arata clean */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a657e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.form-group select:hover {
+  border-color: #a0b4cc;
+}
+
+.form-group select:focus {
+  border-color: #2a5a7f;
+  box-shadow: 0 0 0 3px rgba(42, 90, 127, 0.1);
+}
+
+/* Butonul 'Schimba Ora' */
+.btn-action {
+  margin-top: 5px;
+  width: 100%;
+  padding: 10px;
+  background-color: #2a5a7f; /* Albastru principal */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(42, 90, 127, 0.2);
+}
+
+.btn-action:hover {
+  background-color: #1a3c5a; /* Putin mai inchis la hover */
+  transform: translateY(-1px);
+}
+
+.btn-action:active {
+  transform: translateY(1px);
+  box-shadow: none;
 }
