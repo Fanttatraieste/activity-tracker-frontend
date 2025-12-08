@@ -2,19 +2,20 @@
 
   <div class="hours-column">
     <div class="hour"></div>
-    <div class="hour">8 AM</div>
-    <div class="hour">9 AM</div>
-    <div class="hour">10 AM</div>
-    <div class="hour">11 AM</div>
-    <div class="hour">12 PM</div>
-    <div class="hour">1 PM</div>
-    <div class="hour">2 PM</div>
-    <div class="hour">3 PM</div>
-    <div class="hour">4 PM</div>
-    <div class="hour">5 PM</div>
-    <div class="hour">6 PM</div>
-    <div class="hour">7 PM</div>
-    <div class="hour">8 PM</div>
+
+    <div class="hour" (click)="toggleHourFocus(2)" [class.active-hour]="focusedRow === 2">8 AM</div>
+    <div class="hour" (click)="toggleHourFocus(3)" [class.active-hour]="focusedRow === 3">9 AM</div>
+    <div class="hour" (click)="toggleHourFocus(4)" [class.active-hour]="focusedRow === 4">10 AM</div>
+    <div class="hour" (click)="toggleHourFocus(5)" [class.active-hour]="focusedRow === 5">11 AM</div>
+    <div class="hour" (click)="toggleHourFocus(6)" [class.active-hour]="focusedRow === 6">12 PM</div>
+    <div class="hour" (click)="toggleHourFocus(7)" [class.active-hour]="focusedRow === 7">1 PM</div>
+    <div class="hour" (click)="toggleHourFocus(8)" [class.active-hour]="focusedRow === 8">2 PM</div>
+    <div class="hour" (click)="toggleHourFocus(9)" [class.active-hour]="focusedRow === 9">3 PM</div>
+    <div class="hour" (click)="toggleHourFocus(10)" [class.active-hour]="focusedRow === 10">4 PM</div>
+    <div class="hour" (click)="toggleHourFocus(11)" [class.active-hour]="focusedRow === 11">5 PM</div>
+    <div class="hour" (click)="toggleHourFocus(12)" [class.active-hour]="focusedRow === 12">6 PM</div>
+    <div class="hour" (click)="toggleHourFocus(13)" [class.active-hour]="focusedRow === 13">7 PM</div>
+    <div class="hour" (click)="toggleHourFocus(14)" [class.active-hour]="focusedRow === 14">8 PM</div>
   </div>
 
   <div class="grid-area">
@@ -47,7 +48,7 @@
     <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
     <div *ngFor="let event of displayEvents"
          class="event-wrapper"
-         [class.dimmed]="focusedDayIndex !== null && event.dayIndex !== focusedDayIndex"
+         [class.dimmed]="isEventDimmed(event)"
          [style.gridColumn]="event.dayIndex"
          [style.gridRow]="event.startRow + ' / span ' + event.span"
          [style.width.%]="event.width"

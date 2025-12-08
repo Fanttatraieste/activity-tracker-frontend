@@ -27,6 +27,23 @@
   align-items: center;
   font-weight: 700;
   border: 1px solid #818181;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.hour:hover {
+  background: #cceeff;
+  border-color: #2a5a7f;
+}
+
+.active-hour {
+  background: #2a5a7f; /* Albastru inchis */
+  color: white;
+  border-color: #1a3a5f;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transform: scale(1.05);
+  font-weight: 900;
+  z-index: 20;
 }
 
 .grid-area {
@@ -99,7 +116,7 @@
   /* Varianta 2 (Recomandată): Alb-negru complet și puțin transparent
      pentru a scoate în evidență ziua colorată */
   filter: grayscale(100%);
-  opacity: 0.6; /* Evenimentele inactive devin mai șterse */
+  opacity: 0.4; /* Evenimentele inactive devin mai șterse */
 }
 
 /* --- CELULA VREME --- */

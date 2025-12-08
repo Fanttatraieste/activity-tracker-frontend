@@ -63,6 +63,7 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   displayEvents: CalendarEvent[] = [];
 
   focusedDayIndex: number | null = null;
+  focusedRow: number | null = null;
 
   ngOnInit() {
     this.loadEventsFromCsv();
@@ -221,6 +222,40 @@ export class TimetableGridComponent implements OnInit, OnChanges {
       // Altfel, setez ziua curentă ca focus
       this.focusedDayIndex = dayIndex;
     }
+  }
+
+  toggleHourFocus(rowIndex: number) {
+    // Dacă dau click pe ora deja selectată, resetez
+    if (this.focusedRow === rowIndex) {
+      this.focusedRow = null;
+    } else {
+      this.focusedRow = rowIndex;
+    }
+  }
+
+  isEventDimmed(event: CalendarEvent): boolean {
+    // 1. Verificare Zi (dacă e selectată o zi)
+    if (this.focusedDayIndex !== null && event.dayIndex !== this.focusedDayIndex) {
+      return true; // E în altă zi -> fă-l gri
+    }
+
+    // 2. Verificare Oră (dacă e selectată o oră)
+    if (this.focusedRow !== null) {
+      // Calculăm unde se termină evenimentul
+      const eventEndRow = event.startRow + event.span;
+
+      // Verificăm dacă ora selectată (focusedRow) se află în interiorul evenimentului
+      // Evenimentul trebuie să înceapă înainte sau fix la ora selectată
+      // ȘI să se termine DUPĂ ora selectată (ex: ora 2 este rândul 8. Event 2-4 e [8, 10). 8 e in [8, 10))
+      const coversSelectedHour = (this.focusedRow >= event.startRow && this.focusedRow < eventEndRow);
+
+      if (!coversSelectedHour) {
+        return true; // Nu acoperă ora selectată -> fă-l gri
+      }
+    }
+
+    // Dacă a trecut de verificări, rămâne colorat
+    return false;
   }
 
 }
