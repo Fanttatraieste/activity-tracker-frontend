@@ -18,7 +18,7 @@
 }
 
 .hour {
-  height: 48px;
+  height: 46px;
   background: #dbefff;
   color: #2a5a7f;
   border-radius: 8px;
@@ -26,7 +26,7 @@
   justify-content: center;
   align-items: center;
   font-weight: 700;
-  border: 1px solid #818181;
+  border: 2px solid #d3dff0;
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
@@ -64,7 +64,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #818181;
+  border: 2px solid #d3dff0;
   cursor: pointer; /* Arată mânuța la hover */
   transition: background-color 0.2s, transform 0.2s;
   user-select: none; /* Să nu se selecteze textul la dublu click */
@@ -121,35 +121,58 @@
 
 /* --- CELULA VREME --- */
 .weather-cell {
-  width: 40px;
-  min-width: 40px; /* IMPORTANT: Să nu se micșoreze */
-  flex-shrink: 0;  /* Previne strivirea */
+  width: 48px; /* O idee mai lat pentru a nu părea înghesuit */
+  min-width: 48px;
+  flex-shrink: 0;
 
-  background: #fff;
-  border: 1px solid #818181;
-  border-radius: 8px;
+  /* SCHIMBARE MAJORĂ: Fundal mai vizibil, nu alb simplu */
+  background-color: #eef6ff;
+  /* Un albastru foarte deschis, dar saturat, să se distingă de fundalul paginii */
+
+  /* Bordură mai accentuată */
+  border: 1px solid #b8d0e8;
+  border-radius: 10px; /* Puțin mai rotund */
+
+  /* Umbră și dispunere */
+  box-shadow: 0 2px 4px rgba(42, 90, 127, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 14px; /* Puțin mai mic să încapă textul */
-  font-weight: bold;
-  gap: 2px;
-  color: #555;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 5px 0;
+  margin-right: 4px; /* Un pic de spațiu față de cursul de lângă */
+}
+
+/* Efect opțional de plutire la mouse over */
+.weather-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(42, 90, 127, 0.15);
+  border-color: #b5cae3;
 }
 
 .weather-icon {
-  width: 26px;  /* Ajustează mărimea (recomandat între 16px și 24px) */
-  height: 26px;
-  object-fit: contain; /* Păstrează proporțiile imaginii */
+  width: 28px; /* Un pic mai mare pentru vizibilitate */
+  height: 28px;
+  object-fit: contain;
+  /* Această linie ajută dacă iconițele tale sunt png-uri simple */
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+  margin-bottom: 2px;
 }
 
 .weather-temp {
-  font-size: 15px; /* Text puțin mai mic să încapă bine sub iconiță */
-  font-weight: 700;
-  color: #555;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 800; /* Bold puternic */
+  color: #1a4a75; /* Albastru închis (Navy) - mult mai vizibil decât gri-ul */
   line-height: 1;
+}
+
+/* Mic detaliu pentru simbolul de grad */
+.weather-temp span {
+  font-weight: 500;
+  font-size: 12px;
+  vertical-align: top; /* Ridică simbolul puțin */
+  margin-left: 1px;
 }
 
 /* --- CARD EVENIMENT --- */
