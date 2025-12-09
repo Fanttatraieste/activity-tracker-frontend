@@ -31,6 +31,7 @@ export class TimetableComponent implements OnInit {
   specializations = ["Mate-Info – anul I", "Mate-Info – anul II", "Mate-Info – anul III"];
   selectedSpecialization = this.specializations[0];
   currentFilters = { curs: true, sem: true, lab: true };
+  currentOptionals: string[] = [];
   currentDayIndex = 0;
   currentLinePosition = 0;
 
@@ -70,6 +71,11 @@ export class TimetableComponent implements OnInit {
     // Actualizăm variabila locală
     // Deoarece HeaderTools trimite deja un obiect nou, e suficient:
     this.currentFilters = newFilters;
+  }
+
+  onOptionalsChanged(selectedMaterii: string[]) {
+    console.log('Materii opționale selectate:', selectedMaterii);
+    this.currentOptionals = selectedMaterii;
   }
 
   onWeatherToggle(isActive: boolean) {

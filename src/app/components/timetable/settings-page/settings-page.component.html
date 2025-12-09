@@ -2,64 +2,98 @@
 
   <div class="profile-header">
     <div class="profile-picture">
-      <img src="profile.png" alt="cont">
+      <img src="profile.png" alt="Profile Avatar">
     </div>
-    <div class="profile-info">
-      <h2>Cont</h2>
+    <div class="user-info-header">
+      <h2 style="margin: 0; color: #1a3c5a;">{{ userData.nume }} {{ userData.prenume }}</h2>
+      <p style="margin: 0; color: #647a8e;">{{ userData.emailAcademic }}</p>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">Date Personale
-    </div>
+    <div class="section-title">Date Personale</div>
+
     <div class="section-content">
+
       <div class="field">
-        <label>Nume</label>
-        <input type="text">
+        <label>Nume de familie</label>
+        <input type="text"
+               [(ngModel)]="userData.nume"
+               placeholder="Ex: Priala">
       </div>
+
       <div class="field">
         <label>Prenume</label>
-        <input type="text">
+        <input type="text"
+               [(ngModel)]="userData.prenume"
+               placeholder="Ex: Radu">
       </div>
+
       <div class="field">
         <label>Email Personal</label>
-        <input type="text">
+        <input type="email"
+               [(ngModel)]="userData.emailPersonal"
+               placeholder="exemplu@gmail.com">
       </div>
+
       <div class="field">
         <label>Telefon</label>
-        <input type="text">
+        <input type="tel"
+               [(ngModel)]="userData.telefon"
+               placeholder="07xx xxx xxx">
       </div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">Date Academice
-    </div>
+    <div class="section-title">Date Academice</div>
+
     <div class="section-content">
+
       <div class="field">
         <label>Specializare</label>
-        <select id="specializare">
-          <option value="">...</option>
+        <select [(ngModel)]="userData.specializare">
+          <option *ngFor="let spec of specializari" [value]="spec">
+            {{ spec }}
+          </option>
         </select>
       </div>
+
       <div class="field">
         <label>Grupa</label>
-        <select id="grupa">
-          <option value="">...</option>
+        <select [(ngModel)]="userData.grupa">
+          <option *ngFor="let gr of grupe" [value]="gr">
+            {{ gr }}
+          </option>
         </select>
       </div>
+
       <div class="field">
         <label>Nr. Matricol</label>
-        <input type="text">
+        <input type="text"
+               [(ngModel)]="userData.nrMatricol"
+               placeholder="Ex: 12345">
       </div>
+
       <div class="field">
         <label>Cod Student</label>
-        <input type="text">
+        <input type="text"
+               [(ngModel)]="userData.codStudent"
+               placeholder="Ex: 331100">
       </div>
+
       <div class="field">
         <label>Email academic</label>
-        <input type="text">
+        <input type="email"
+               [(ngModel)]="userData.emailAcademic"
+               readonly
+               style="background-color: #f0f0f0; color: #888; cursor: not-allowed;"
+               title="Emailul academic nu poate fi schimbat">
       </div>
+
     </div>
+
+    <button class="save-btn" (click)="saveSettings()">Salvează Modificările</button>
   </div>
+
 </div>

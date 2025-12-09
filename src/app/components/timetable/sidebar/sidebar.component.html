@@ -24,7 +24,9 @@
     <div class="info-box" *ngIf="activeMenu === 'materie'">
       <div class="materii-list">
         <label class="checkbox-container" *ngFor="let materie of materii">
-          <input type="checkbox" [(ngModel)]="materie.selectat">
+          <input type="checkbox"
+                 [(ngModel)]="materie.selectat"
+                 (ngModelChange)="onMaterieToggle()">
           <span class="checkmark-text">{{ materie.nume }}</span>
         </label>
       </div>
@@ -71,13 +73,9 @@
     </div>
 
     <button class="menu-item"
-            [class.active]="activeMenu === 'setari'"
-            (click)="toggleMenu('setari')">
+            (click)="goToSettings()">
       <span class="menu-icon">⦿</span> Setări cont
     </button>
-    <div class="info-box" *ngIf="activeMenu === 'setari'">
-      <p>Opțiuni generale cont.</p>
-    </div>
 
   </div>
 </div>

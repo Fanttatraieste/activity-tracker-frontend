@@ -1,5 +1,5 @@
 <div class="page-container">
-  <app-sidebar></app-sidebar>
+  <app-sidebar (optionaleSchimbate)="onOptionalsChanged($event)"></app-sidebar>
 
   <div class="content-wrapper">
     <app-header
@@ -17,6 +17,7 @@
       [selectedWeek]="selectedWeek"
       [activeFilters]="currentFilters"
       [currentDayIndex]="currentDayIndex"
+      [optionals]="currentOptionals"
       [currentLinePosition]="currentLinePosition"
       [showWeather]="weatherEnabled"
       (eventClicked)="onEventSelected($event)"

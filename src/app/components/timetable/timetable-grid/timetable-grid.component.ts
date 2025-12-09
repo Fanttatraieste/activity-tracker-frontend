@@ -3,9 +3,20 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { EventAttendanceComponent } from './event-attendance/event-attendance.component';
 import { EventGradesComponent } from './event-grades/event-grades.component';
-import { NotesPanelComponent } from '../notes-panel/notes-panel.component';
 
+// --- ATENȚIE: ACESTE NUME TREBUIE SĂ FIE IDENTICE CU CELE DIN CSV ȘI DIN SIDEBAR ---
+// Am actualizat lista conform codului tau din Sidebar (fara diacritice)
+const KNOWN_OPTIONALS = [
+  'Instruire asistata de calculator',
+  'Software matematic',
+  'Astronomie',
+  'Analiza functionala',
+  'Principiile retelelor de calculatoare', // Atentie: In CSV trebuie sa fie exact asa!
+  'Instrumente CASE',
+  'Interactiunea om-calculator'
+];
 
+// ... (Interface CalendarEvent ramane la fel) ...
 export interface CalendarEvent {
   id: number;
   title: string;
@@ -15,12 +26,8 @@ export interface CalendarEvent {
   dayIndex: number;
   startRow: number;
   span: number;
-
-  // Proprietati vizuale
   width?: number;
   marginLeft?: number;
-
-  // Proprietati functionale
   isAttendanceOpen?: boolean;
   notes?: string;
   weeklyNotes: { [week: number]: string };
@@ -36,18 +43,13 @@ export interface CalendarEvent {
 })
 export class TimetableGridComponent implements OnInit, OnChanges {
 
-  // --- INPUT-URI PENTRU SELECTIE ---
   @Input() selectedGroup: number = 331;
   @Input() selectedWeek: 1 | 2 = 1;
-
-  // --- INPUT PENTRU FILTRARE (NOU) ---
   @Input() activeFilters = { curs: true, sem: true, lab: true };
+  @Input() optionals: string[] = []; // Lista numelor selectate
 
-  // --- INPUT-URI VIZUALE ---
   @Input() currentDayIndex!: number;
   @Input() currentLinePosition!: number;
-
-  // Weather
   @Input() showWeather: boolean = false;
 
   @Output() triggerGrades = new EventEmitter<CalendarEvent>();
@@ -56,12 +58,8 @@ export class TimetableGridComponent implements OnInit, OnChanges {
 
   private http = inject(HttpClient);
 
-  // rawEvents = TOATE datele din CSV (Sursa de adevar)
   rawEvents: CalendarEvent[] = [];
-
-  // displayEvents = CE SE VEDE pe ecran (Filtrate si cu latimi calculate)
   displayEvents: CalendarEvent[] = [];
-
   focusedDayIndex: number | null = null;
   focusedRow: number | null = null;
 
@@ -70,59 +68,76 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // CAZUL 1: Se schimba grupa sau saptamana -> Trebuie incarcat fisier nou
     if (changes['selectedGroup'] || changes['selectedWeek']) {
       this.loadEventsFromCsv();
     }
-
-    // CAZUL 2: Se schimba DOAR filtrele -> Nu incarcam CSV, doar refacem calculele pe datele existente
-    if (changes['activeFilters']) {
-      console.log('Grid a detectat schimbarea filtrelor!');
+    if (changes['activeFilters'] || changes['optionals']) {
       if (this.rawEvents.length > 0) {
         this.processEventsForDisplay();
       }
     }
   }
 
-  // --- LOGICA DE INCARCARE ---
   loadEventsFromCsv() {
     const parity = this.selectedWeek === 1 ? 'impar' : 'par';
     const path = `assets/${this.selectedGroup}/${parity}.csv`;
 
-    console.log(`Incarc orar: ${path}`);
-
     this.http.get(path, { responseType: 'text' }).subscribe({
       next: (data) => {
-        // 1. Parsam tot fisierul si salvam in rawEvents
         this.rawEvents = this.parseCsvData(data);
-
-        // 2. Aplicam filtrele initiale si calculam pozitiile
         this.processEventsForDisplay();
       },
       error: (err) => {
-        console.error(`Eroare la incarcarea fisierului CSV: ${path}`, err);
+        console.error(`Eroare CSV: ${path}`, err);
         this.rawEvents = [];
         this.displayEvents = [];
       }
     });
   }
 
-  // --- LOGICA DE FILTRARE SI CALCUL ---
-  // Aceasta functie ia datele brute, aplica filtrele active, apoi calculeaza suprapunerile
   private processEventsForDisplay() {
-    // 1. Filtrare
+    // Debugging: Sa vedem ce optionale au venit
+    // console.log('Optionale Selectate:', this.optionals);
+
     const filteredEvents = this.rawEvents.filter(ev => {
+
+      // 1. Filtrare Tip
       if (ev.type === 'curs' && !this.activeFilters.curs) return false;
       if (ev.type === 'sem' && !this.activeFilters.sem) return false;
       if (ev.type === 'lab' && !this.activeFilters.lab) return false;
+
+      // 2. Filtrare Optionale
+
+      // Verificăm dacă titlul din CSV există în lista noastră de opționale cunoscute
+      const isOptionalSubject = KNOWN_OPTIONALS.includes(ev.title);
+
+      if (isOptionalSubject) {
+        // Aici verificam daca userul a bifat materia
+        const isSelected = this.optionals.includes(ev.title);
+
+        // --- DEBUGGING: Arată-mi de ce nu merge ---
+        if (!isSelected) {
+          console.log(`Ascund materia: "${ev.title}" (Nu am gasit-o in lista bifata)`);
+          // Verificare caracter cu caracter daca pare ca ar trebui sa fie acolo
+          this.optionals.forEach(opt => {
+            if (opt.includes(ev.title.substring(0, 5))) {
+              console.log(`   -> ATENTIE: Ai selectat "${opt}", dar in CSV este "${ev.title}". NU SUNT IDENTICE!`);
+              console.log(`   -> Lungime CSV: ${ev.title.length}, Lungime Sidebar: ${opt.length}`);
+            }
+          });
+        }
+        // ------------------------------------------
+
+        return isSelected;
+      }
+
+      // Daca nu e in lista KNOWN_OPTIONALS, inseamna ca e materie obligatorie
       return true;
     });
 
-    // 2. Calcul Suprapuneri pe lista filtrata
     this.calculateOverlaps(filteredEvents);
   }
 
-  // --- PARSER CSV ---
   private parseCsvData(csvText: string): CalendarEvent[] {
     const lines = csvText.split('\n');
     const events: CalendarEvent[] = [];
@@ -130,15 +145,21 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i].trim();
       if (line) {
-        // Regex pentru a separa la virgula DOAR daca nu e intre ghilimele
         const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
         const clean = (txt: string) => txt ? txt.replace(/^"|"$/g, '').trim() : '';
 
         if (cols.length < 8) continue;
 
+        const title = clean(cols[1]);
+
+        // --- DEBUGGING CRITIC ---
+        // Daca o materie nu se filtreaza, decomenteaza linia de mai jos
+        // si vezi in consola cum e scrisa exact in CSV vs cum e scrisa in KNOWN_OPTIONALS
+        // console.log(`CSV Title: "${title}"`);
+
         events.push({
           id: parseInt(cols[0]),
-          title: clean(cols[1]),
+          title: title,
           type: clean(cols[2]) as 'lab' | 'curs' | 'sem',
           professor: clean(cols[3]),
           room: clean(cols[4]),
@@ -146,116 +167,49 @@ export class TimetableGridComponent implements OnInit, OnChanges {
           startRow: parseInt(cols[6]),
           span: parseInt(cols[7]),
           weeklyNotes: {},
-          width: 100,      // Default
-          marginLeft: 0    // Default
+          width: 100,
+          marginLeft: 0
         });
       }
     }
     return events;
   }
 
-  // --- CALCUL SUPRAPUNERI ---
-  // Primeste o lista (deja filtrata) si updateaza displayEvents
   calculateOverlaps(eventsToProcess: CalendarEvent[]) {
-    // Facem o copie (map) pentru a putea modifica width/marginLeft fara a altera rawEvents permanent
-    // Resetam width la 100% inainte de recalculare
-    let events = eventsToProcess.map(e => ({
-      ...e,
-      width: 100,
-      marginLeft: 0
-    }));
-
+    let events = eventsToProcess.map(e => ({ ...e, width: 100, marginLeft: 0 }));
+    // ... logica ta de overlap ramane neschimbata ...
     for (let i = 0; i < events.length; i++) {
       for (let j = i + 1; j < events.length; j++) {
         const ev1 = events[i];
         const ev2 = events[j];
-
         if (ev1.dayIndex === ev2.dayIndex) {
           const ev1End = ev1.startRow + ev1.span;
           const ev2End = ev2.startRow + ev2.span;
-
-          // Daca se suprapun
           if (ev1.startRow < ev2End && ev2.startRow < ev1End) {
-            ev1.width = 50;
-            ev2.width = 50;
-            ev1.marginLeft = 0;
-            ev2.marginLeft = 50;
+            ev1.width = 50; ev2.width = 50; ev1.marginLeft = 0; ev2.marginLeft = 50;
           }
         }
       }
     }
-    // Salvam rezultatul final pentru afisare in HTML
     this.displayEvents = events;
   }
 
-  // --- Metode UI ---
-  openLink(url: string) {
-    if(url) window.open(url, "_blank");
-  }
-
-  toggleAttendance(event: CalendarEvent) {
-    event.isAttendanceOpen = !event.isAttendanceOpen;
-  }
-
-  onEventClick(event: CalendarEvent) {
-    this.eventClicked.emit(event);
-  }
-
-  updateAttendance(event: CalendarEvent, newCount: number) {
-    event.attendanceCount = newCount;
-    // Logica pentru salvare backend...
-  }
-  onGradesClick(event: CalendarEvent) {
-    // Emitem evenimentul în sus, către componenta părinte
-    this.gradesOpenRequested.emit(event);
-  }
-  handleGradesClick(event: CalendarEvent) {
-    console.log('S-a cerut deschiderea notelor pentru:', event.title);
-    this.triggerGrades.emit(event);
-  }
-
-  toggleDayFocus(dayIndex: number) {
-    if (this.focusedDayIndex === dayIndex) {
-      // Dacă dau click pe ziua deja selectată, resetez (arată tot)
-      this.focusedDayIndex = null;
-    } else {
-      // Altfel, setez ziua curentă ca focus
-      this.focusedDayIndex = dayIndex;
-    }
-  }
-
-  toggleHourFocus(rowIndex: number) {
-    // Dacă dau click pe ora deja selectată, resetez
-    if (this.focusedRow === rowIndex) {
-      this.focusedRow = null;
-    } else {
-      this.focusedRow = rowIndex;
-    }
-  }
-
+  // ... restul metodelor UI (openLink, toggleAttendance, etc)
+  openLink(url: string) { if(url) window.open(url, "_blank"); }
+  toggleAttendance(event: CalendarEvent) { event.isAttendanceOpen = !event.isAttendanceOpen; }
+  onEventClick(event: CalendarEvent) { this.eventClicked.emit(event); }
+  updateAttendance(event: CalendarEvent, newCount: number) { event.attendanceCount = newCount; }
+  onGradesClick(event: CalendarEvent) { this.gradesOpenRequested.emit(event); }
+  handleGradesClick(event: CalendarEvent) { this.triggerGrades.emit(event); }
+  toggleDayFocus(dayIndex: number) { this.focusedDayIndex = this.focusedDayIndex === dayIndex ? null : dayIndex; }
+  toggleHourFocus(rowIndex: number) { this.focusedRow = this.focusedRow === rowIndex ? null : rowIndex; }
   isEventDimmed(event: CalendarEvent): boolean {
-    // 1. Verificare Zi (dacă e selectată o zi)
-    if (this.focusedDayIndex !== null && event.dayIndex !== this.focusedDayIndex) {
-      return true; // E în altă zi -> fă-l gri
-    }
-
-    // 2. Verificare Oră (dacă e selectată o oră)
+    if (this.focusedDayIndex !== null && event.dayIndex !== this.focusedDayIndex) return true;
     if (this.focusedRow !== null) {
-      // Calculăm unde se termină evenimentul
       const eventEndRow = event.startRow + event.span;
-
-      // Verificăm dacă ora selectată (focusedRow) se află în interiorul evenimentului
-      // Evenimentul trebuie să înceapă înainte sau fix la ora selectată
-      // ȘI să se termine DUPĂ ora selectată (ex: ora 2 este rândul 8. Event 2-4 e [8, 10). 8 e in [8, 10))
       const coversSelectedHour = (this.focusedRow >= event.startRow && this.focusedRow < eventEndRow);
-
-      if (!coversSelectedHour) {
-        return true; // Nu acoperă ora selectată -> fă-l gri
-      }
+      if (!coversSelectedHour) return true;
     }
-
-    // Dacă a trecut de verificări, rămâne colorat
     return false;
   }
-
 }
