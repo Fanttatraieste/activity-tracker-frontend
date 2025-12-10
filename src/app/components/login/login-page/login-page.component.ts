@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -15,7 +16,7 @@ import {CommonModule} from '@angular/common';
   standalone: true
 })
 export class LoginPageComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
   email: string = "";
   password: string = "";
 
@@ -58,19 +59,29 @@ export class LoginPageComponent implements OnInit {
   onLogin() {
     this.loginError = null;
 
-    // Simulare validare simplă
-    if (!this.email.includes("@")) {
-      this.loginError = "Adresa de email nu este validă.";
+    if (!this.email || !this.password) {
+      this.loginError = "Introdu email și parolă.";
       return;
     }
 
-    // AICI SALVĂM EMAILUL (Optional - ca sa il vedem in Settings mai tarziu)
-    // Putem folosi un Service sau localStorage pentru simplitate acum
-    localStorage.setItem('userEmail', this.email);
-    localStorage.setItem('userName', 'Utilizator Logat'); // Nume placeholder
+    // APELAM BACKEND-UL JAVA
+    this.authService.login({ email: this.email, password: this.password })
+      .subscribe({
+        next: (token) => {
+          console.log("Login reusit! Token:", token);
 
-    // NAVIGARE CATRE ORAR
-    this.router.navigate(['/timetable']);
+          // Salvam email-ul pentru UI (Sidebar/Settings)
+          localStorage.setItem('userEmail', this.email);
+          // Putem seta un nume generic pana cand Backend-ul va returna si numele userului
+          localStorage.setItem('userName', 'Utilizator');
+
+          this.router.navigate(['/timetable']);
+        },
+        error: (err) => {
+          console.error(err);
+          this.loginError = "Email sau parolă incorectă!";
+        }
+      });
   }
 
   onGoogleLogin() {

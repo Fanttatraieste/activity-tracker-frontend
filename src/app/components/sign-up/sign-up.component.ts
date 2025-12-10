@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -23,7 +24,7 @@ export class SignUpComponent implements OnInit {
 
   selectedBackground: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     const saved = localStorage.getItem('signup_bg');
@@ -56,25 +57,43 @@ export class SignUpComponent implements OnInit {
   onSignup() {
     this.signupError = null;
 
-    if (!this.name || !this.surname || !this.email || !this.password) {
-      this.signupError = "Te rugăm să completezi toate câmpurile.";
+    if (!this.email || !this.password || !this.name) {
+      this.signupError = "Toate câmpurile sunt obligatorii.";
+      return;
+    }
+    if (this.password !== this.confirmPassword) {
+      this.signupError = "Parolele nu coincid.";
       return;
     }
 
-    if (!this.email.includes('@')) {
-      this.signupError = "Adresa de e-mail nu este validă.";
-      return;
-    }
+    // Construim obiectul pentru Java
+    // Nota: Java UserRequestDto nu are nume/prenume, deci le salvam doar local
+    const registerData = {
+      email: this.email,
+      password: this.password,
+      userType: 'Student' as const, // Java cere UserType
+      groupUUID: null,
+      subjectUUID: null
+    };
 
-    localStorage.setItem('userName', `${this.name} ${this.surname}`);
-    localStorage.setItem('userEmail', this.email);
-    localStorage.setItem('userFirstName', this.surname);
-    localStorage.setItem('userLastName', this.name);
+    // APELAM BACKEND-UL
+    this.authService.register(registerData).subscribe({
+      next: (response) => {
+        console.log("Inregistrare reusita:", response);
 
-    alert('Cont creat cu succes!');
+        // Salvam numele local pentru UI (Sidebar)
+        localStorage.setItem('userName', `${this.name} ${this.surname}`);
 
-    // Temporary redirect (matching login behavior)
-    this.router.navigate(['/timetable']);
+        // Putem loga userul automat sau il trimitem la login
+        // Varianta 1: Trimite la Login
+        alert('Cont creat! Te rugăm să te autentifici.');
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error(err);
+        this.signupError = "Eroare la înregistrare (posibil email existent).";
+      }
+    });
   }
 
   onGoogleSignup() {
