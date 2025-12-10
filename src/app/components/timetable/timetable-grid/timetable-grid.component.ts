@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { EventAttendanceComponent } from './event-attendance/event-attendance.component';
 import { EventGradesComponent } from './event-grades/event-grades.component';
+import { WeatherResponse, WeatherService } from '../../../services/weather.service';
 
 const KNOWN_OPTIONALS = [
   'Instruire asistata de calculator',
@@ -29,6 +30,12 @@ export interface CalendarEvent {
   notes?: string;
   weeklyNotes: { [week: number]: string };
   attendanceCount?: number;
+
+  weatherInfo?: {
+    temp: number;
+    condition: string;
+    iconUrl: string;
+  };
 }
 
 @Component({
@@ -47,11 +54,15 @@ export class TimetableGridComponent implements OnInit, OnChanges {
 
   @Input() currentDayIndex!: number;
   @Input() currentLinePosition!: number;
-  @Input() showWeather: boolean = false;
 
+  @Input() showWeather: boolean = false;
+  private weatherService = inject(WeatherService);
+  private cdr = inject(ChangeDetectorRef);
   @Output() triggerGrades = new EventEmitter<CalendarEvent>();
   @Output() eventClicked = new EventEmitter<CalendarEvent>();
   @Output() gradesOpenRequested = new EventEmitter<CalendarEvent>();
+
+
 
   private http = inject(HttpClient);
 
@@ -59,6 +70,10 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   displayEvents: CalendarEvent[] = [];
   focusedDayIndex: number | null = null;
   focusedRow: number | null = null;
+
+  private dayMapping: { [key: string]: number } = {
+    'Luni': 1, 'Marti': 2, 'Miercuri': 3, 'Joi': 4, 'Vineri': 5, 'Sambata': 6, 'Duminica': 0
+  };
 
   ngOnInit() {
     this.loadEventsFromCsv();
@@ -73,6 +88,75 @@ export class TimetableGridComponent implements OnInit, OnChanges {
         this.processEventsForDisplay();
       }
     }
+    if (changes['showWeather'] && this.showWeather) {
+      this.fetchAndMapWeather();
+    }
+
+    if (changes['showWeather']) {
+      console.log('Grid: showWeather s-a schimbat in', this.showWeather);
+
+      if (this.showWeather) {
+        this.fetchAndMapWeather();
+      } else {
+        this.displayEvents.forEach(ev => ev.weatherInfo = undefined);
+      }
+    }
+  }
+
+  fetchAndMapWeather() {
+    this.weatherService.getWeather().subscribe({
+      next: (data: WeatherResponse) => {
+        console.log('Date vreme primite:', data);
+        this.mapWeatherToEvents(data);
+
+        this.cdr.markForCheck();
+      },
+      error: (err) => console.error('Eroare weather:', err)
+    });
+  }
+
+  private mapWeatherToEvents(weatherData: WeatherResponse) {
+    const weatherLookup = new Map<string, { temp: number, condition: string }>();
+
+    Object.keys(weatherData).forEach(dateKey => {
+      const dayData = weatherData[dateKey];
+      const dayIdx = this.dayMapping[dayData.day_name]; // Convertim "Luni" -> 1
+
+      if (dayIdx !== undefined) {
+        dayData.hours.forEach(h => {
+          const key = `${dayIdx}-${h.hour}`;
+          weatherLookup.set(key, { temp: h.temp, condition: h.condition });
+        });
+      }
+    });
+
+    this.displayEvents.forEach(event => {
+      const eventHour = event.startRow + 6;
+
+      const lookupKey = `${event.dayIndex}-${eventHour}`;
+      const weather = weatherLookup.get(lookupKey);
+
+      if (weather) {
+        event.weatherInfo = {
+          temp: Math.round(weather.temp),
+          condition: weather.condition,
+          iconUrl: this.getIconForCondition(weather.condition)
+        };
+      }
+    });
+  }
+
+  private getIconForCondition(condition: string): string {
+    const cond = condition.toLowerCase();
+
+    if (cond.includes('sun') || cond.includes('clear')) return 'assets/icons/sunny.png';
+    if (cond.includes('cloud') || cond.includes('overcast')) return 'assets/icons/cloudy.png';
+    if (cond.includes('rain') || cond.includes('drizzle')) return 'assets/icons/rain.png';
+    if (cond.includes('snow')) return 'assets/icons/snow.png';
+    if (cond.includes('thunder')) return 'assets/icons/storm.png';
+    if (cond.includes('fog') || cond.includes('mist')) return 'assets/icons/fog.png';
+
+    return 'assets/icons/cloudy.png'; // Default
   }
 
   loadEventsFromCsv() {
@@ -124,7 +208,6 @@ export class TimetableGridComponent implements OnInit, OnChanges {
         return isSelected;
       }
 
-      // Daca nu e in lista KNOWN_OPTIONALS, inseamna ca e materie obligatorie
       return true;
     });
 
@@ -173,7 +256,11 @@ export class TimetableGridComponent implements OnInit, OnChanges {
           const ev1End = ev1.startRow + ev1.span;
           const ev2End = ev2.startRow + ev2.span;
           if (ev1.startRow < ev2End && ev2.startRow < ev1End) {
-            ev1.width = 50; ev2.width = 50; ev1.marginLeft = 0; ev2.marginLeft = 50;
+            ev1.width = 50;
+            ev1.marginLeft = 0;
+
+            ev2.width = 50;
+            ev2.marginLeft = 50;
           }
         }
       }

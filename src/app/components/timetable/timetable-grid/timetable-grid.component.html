@@ -55,11 +55,11 @@
          [style.marginLeft.%]="event.marginLeft">
 
       <div class="weather-cell"
-           *ngIf="showWeather && (!event.marginLeft || event.marginLeft == 0)">
+           *ngIf="showWeather && event.weatherInfo && event.marginLeft === 0"
+           [title]="event.weatherInfo.condition">
 
-        <img src="weather-icon.png" class="weather-icon">
-
-        <span class="weather-temp">22°</span>
+        <img [src]="event.weatherInfo.iconUrl" class="weather-icon" alt="weather">
+        <span class="weather-temp">{{ event.weatherInfo.temp }}°</span>
       </div>
       <div class="event"
            [ngClass]="event.type"
@@ -84,6 +84,7 @@
           [ngClass]="event.type"
           (openGrades)="handleGradesClick(event)">
         </app-event-grades>
+
         <app-event-attendance
           [present]="event.attendanceCount || 0"
           [total]="14"
