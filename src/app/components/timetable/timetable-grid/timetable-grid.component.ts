@@ -1,7 +1,18 @@
-import {Component, Input, OnInit, inject, Output, EventEmitter} from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { EventAttendanceComponent } from './event-attendance/event-attendance.component';
+import { EventGradesComponent } from './event-grades/event-grades.component';
+
+const KNOWN_OPTIONALS = [
+  'Instruire asistata de calculator',
+  'Software matematic',
+  'Astronomie',
+  'Analiza functionala',
+  'Principiile retelelor de calculatoare',
+  'Instrumente CASE',
+  'Interactiunea om-calculator'
+];
 
 export interface CalendarEvent {
   id: number;
@@ -23,44 +34,103 @@ export interface CalendarEvent {
 @Component({
   selector: 'app-timetable-grid',
   standalone: true,
-  imports: [CommonModule, EventAttendanceComponent],
+  imports: [CommonModule, EventAttendanceComponent, EventGradesComponent],
   templateUrl: './timetable-grid.component.html',
   styleUrls: ['./timetable-grid.component.css']
 })
-export class TimetableGridComponent implements OnInit {
+export class TimetableGridComponent implements OnInit, OnChanges {
+
+  @Input() selectedGroup: number = 331;
+  @Input() selectedWeek: 1 | 2 = 1;
+  @Input() activeFilters = { curs: true, sem: true, lab: true };
+  @Input() optionals: string[] = []; // Lista numelor selectate
 
   @Input() currentDayIndex!: number;
   @Input() currentLinePosition!: number;
+  @Input() showWeather: boolean = false;
+
+  @Output() triggerGrades = new EventEmitter<CalendarEvent>();
   @Output() eventClicked = new EventEmitter<CalendarEvent>();
+  @Output() gradesOpenRequested = new EventEmitter<CalendarEvent>();
 
-  // injectam httpclient
   private http = inject(HttpClient);
-
 
   rawEvents: CalendarEvent[] = [];
   displayEvents: CalendarEvent[] = [];
+  focusedDayIndex: number | null = null;
+  focusedRow: number | null = null;
 
   ngOnInit() {
-
     this.loadEventsFromCsv();
   }
 
-  loadEventsFromCsv() {
-    this.http.get('assets/331/par.csv', { responseType: 'text' })
-      .subscribe({
-        next: (data) => {
-          // parsare text si populare rawevents
-          this.rawEvents = this.parseCsvData(data);
-
-          // calcul suprapuneri
-          this.calculateOverlaps();
-        },
-        error: (err) => console.error('Nu s-a putut citi fisierul CSV', err)
-      });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedGroup'] || changes['selectedWeek']) {
+      this.loadEventsFromCsv();
+    }
+    if (changes['activeFilters'] || changes['optionals']) {
+      if (this.rawEvents.length > 0) {
+        this.processEventsForDisplay();
+      }
+    }
   }
 
-  // transformare CSV -> json
-  // asta este facuta doar pt ca nu am legat inca cu backend, cand legam cu backend nu o vom mai folosi
+  loadEventsFromCsv() {
+    const parity = this.selectedWeek === 1 ? 'impar' : 'par';
+    const path = `assets/${this.selectedGroup}/${parity}.csv`;
+
+    this.http.get(path, { responseType: 'text' }).subscribe({
+      next: (data) => {
+        this.rawEvents = this.parseCsvData(data);
+        this.processEventsForDisplay();
+      },
+      error: (err) => {
+        console.error(`Eroare CSV: ${path}`, err);
+        this.rawEvents = [];
+        this.displayEvents = [];
+      }
+    });
+  }
+
+  private processEventsForDisplay() {
+
+    const filteredEvents = this.rawEvents.filter(ev => {
+
+      // filtrare tip
+      if (ev.type === 'curs' && !this.activeFilters.curs) return false;
+      if (ev.type === 'sem' && !this.activeFilters.sem) return false;
+      if (ev.type === 'lab' && !this.activeFilters.lab) return false;
+
+      // filtrare optionale
+
+      const isOptionalSubject = KNOWN_OPTIONALS.includes(ev.title);
+
+      if (isOptionalSubject) {
+        // verificare bifare materie
+        const isSelected = this.optionals.includes(ev.title);
+
+        // debugging
+        if (!isSelected) {
+          console.log(`Ascund materia: "${ev.title}" (Nu am gasit-o in lista bifata)`);
+          this.optionals.forEach(opt => {
+            if (opt.includes(ev.title.substring(0, 5))) {
+              console.log(`   -> ATENTIE: Ai selectat "${opt}", dar in CSV este "${ev.title}". NU SUNT IDENTICE!`);
+              console.log(`   -> Lungime CSV: ${ev.title.length}, Lungime Sidebar: ${opt.length}`);
+            }
+          });
+        }
+        // ------------------------------------------
+
+        return isSelected;
+      }
+
+      // Daca nu e in lista KNOWN_OPTIONALS, inseamna ca e materie obligatorie
+      return true;
+    });
+
+    this.calculateOverlaps(filteredEvents);
+  }
+
   private parseCsvData(csvText: string): CalendarEvent[] {
     const lines = csvText.split('\n');
     const events: CalendarEvent[] = [];
@@ -68,47 +138,42 @@ export class TimetableGridComponent implements OnInit {
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i].trim();
       if (line) {
-        const cols = line.split(',');
-        const newEvent: CalendarEvent = {
+        const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        const clean = (txt: string) => txt ? txt.replace(/^"|"$/g, '').trim() : '';
+
+        if (cols.length < 8) continue;
+
+        const title = clean(cols[1]);
+
+        events.push({
           id: parseInt(cols[0]),
-          title: cols[1],
-          type: cols[2] as 'lab' | 'curs' | 'sem', // Casting simplu
-          professor: cols[3],
-          room: cols[4],
+          title: title,
+          type: clean(cols[2]) as 'lab' | 'curs' | 'sem',
+          professor: clean(cols[3]),
+          room: clean(cols[4]),
           dayIndex: parseInt(cols[5]),
           startRow: parseInt(cols[6]),
           span: parseInt(cols[7]),
-          weeklyNotes: {}
-        };
-        events.push(newEvent);
+          weeklyNotes: {},
+          width: 100,
+          marginLeft: 0
+        });
       }
     }
     return events;
   }
 
-  calculateOverlaps() {
-    let events = [...this.rawEvents];
-
-    // resetare
-    events.forEach(e => {
-      e.width = 100;
-      e.marginLeft = 0;
-    });
-
+  calculateOverlaps(eventsToProcess: CalendarEvent[]) {
+    let events = eventsToProcess.map(e => ({ ...e, width: 100, marginLeft: 0 }));
     for (let i = 0; i < events.length; i++) {
       for (let j = i + 1; j < events.length; j++) {
         const ev1 = events[i];
         const ev2 = events[j];
-
         if (ev1.dayIndex === ev2.dayIndex) {
           const ev1End = ev1.startRow + ev1.span;
           const ev2End = ev2.startRow + ev2.span;
-
           if (ev1.startRow < ev2End && ev2.startRow < ev1End) {
-            ev1.width = 50;
-            ev2.width = 50;
-            ev1.marginLeft = 0;
-            ev2.marginLeft = 50;
+            ev1.width = 50; ev2.width = 50; ev1.marginLeft = 0; ev2.marginLeft = 50;
           }
         }
       }
@@ -116,24 +181,21 @@ export class TimetableGridComponent implements OnInit {
     this.displayEvents = events;
   }
 
-  openLink(url: string) {
-    window.open(url, "_blank");
+  openLink(url: string) { if(url) window.open(url, "_blank"); }
+  toggleAttendance(event: CalendarEvent) { event.isAttendanceOpen = !event.isAttendanceOpen; }
+  onEventClick(event: CalendarEvent) { this.eventClicked.emit(event); }
+  updateAttendance(event: CalendarEvent, newCount: number) { event.attendanceCount = newCount; }
+  onGradesClick(event: CalendarEvent) { this.gradesOpenRequested.emit(event); }
+  handleGradesClick(event: CalendarEvent) { this.triggerGrades.emit(event); }
+  toggleDayFocus(dayIndex: number) { this.focusedDayIndex = this.focusedDayIndex === dayIndex ? null : dayIndex; }
+  toggleHourFocus(rowIndex: number) { this.focusedRow = this.focusedRow === rowIndex ? null : rowIndex; }
+  isEventDimmed(event: CalendarEvent): boolean {
+    if (this.focusedDayIndex !== null && event.dayIndex !== this.focusedDayIndex) return true;
+    if (this.focusedRow !== null) {
+      const eventEndRow = event.startRow + event.span;
+      const coversSelectedHour = (this.focusedRow >= event.startRow && this.focusedRow < eventEndRow);
+      if (!coversSelectedHour) return true;
+    }
+    return false;
   }
-
-  toggleAttendance(event: CalendarEvent) {
-    event.isAttendanceOpen = !event.isAttendanceOpen;
-  }
-
-  onEventClick(event: CalendarEvent) {
-    this.eventClicked.emit(event);
-  }
-
-
-  updateAttendance(event: CalendarEvent, newCount: number) {
-    event.attendanceCount = newCount;
-    // apelare pe viitor la backend
-    console.log(`prezenta modificata la ${event.title}: ${newCount}/14`);
-  }
-
-
 }

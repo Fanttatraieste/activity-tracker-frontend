@@ -3,7 +3,7 @@
 
   <div class="my-schedule-block">
     <div class="label">Orarul Meu</div>
-    <button class="my-schedule-btn">📘</button>
+    <button class="my-schedule-btn" (click)="triggerMySchedule()">📘</button>
   </div>
 
   <div class="filter-block">
@@ -35,5 +35,14 @@
       </button>
 
     </div>
+  </div>
+
+  <div class="weather">
+    <div class="label">Vremea</div>
+    <button class="weather-btn"
+            [class.active]="isWeatherActive"
+            (click)="toggleWeather()">
+      ⛅
+    </button>
   </div>
 </div>

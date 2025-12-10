@@ -1,29 +1,41 @@
 <div class="page-container">
-  <app-sidebar></app-sidebar>
+  <app-sidebar (optionaleSchimbate)="onOptionalsChanged($event)"></app-sidebar>
 
   <div class="content-wrapper">
     <app-header
       [groups]="groups"
-      [specializations]="specializations"
       [selectedGroup]="selectedGroup"
-      [selectedSpecialization]="selectedSpecialization"
       [selectedWeek]="selectedWeek"
       (groupChange)="selectGroup($event)"
-      (specializationChange)="selectSpecialization($event)"
       (weekChange)="selectWeek($event)"
-    ></app-header>
+      (filtersChange)="onFiltersChanged($event)"
+      (weatherToggle)="onWeatherToggle($event)">
+    </app-header>
 
     <app-timetable-grid
+      [selectedGroup]="selectedGroup"
+      [selectedWeek]="selectedWeek"
+      [activeFilters]="currentFilters"
       [currentDayIndex]="currentDayIndex"
+      [optionals]="currentOptionals"
       [currentLinePosition]="currentLinePosition"
+      [showWeather]="weatherEnabled"
       (eventClicked)="onEventSelected($event)"
-    ></app-timetable-grid>
+      (triggerGrades)="openGrades($event)">
+
+    </app-timetable-grid>
   </div>
 
-  <app-right-panel
+  <app-notes-panel
     *ngIf="selectedEvent"
     [event]="selectedEvent"
     (closePanel)="closeNotes()">
-  </app-right-panel>
+  </app-notes-panel>
+
+  <app-grades-panel
+    *ngIf="currentGradeEvent"
+    [event]="currentGradeEvent"
+    (closePanel)="closeGrades()">
+  </app-grades-panel>
 
 </div>

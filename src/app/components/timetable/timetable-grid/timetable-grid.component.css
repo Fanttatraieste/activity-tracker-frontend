@@ -5,7 +5,6 @@
   font-family: 'Roboto', sans-serif;
 }
 
-
 .timetable-wrapper-2 {
   display: flex;
   gap: 15px;
@@ -19,7 +18,7 @@
 }
 
 .hour {
-  height: 48px;
+  height: 46px;
   background: #dbefff;
   color: #2a5a7f;
   border-radius: 8px;
@@ -27,7 +26,24 @@
   justify-content: center;
   align-items: center;
   font-weight: 700;
-  border: 1px solid #818181;
+  border: 2px solid #d3dff0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.hour:hover {
+  background: #cceeff;
+  border-color: #2a5a7f;
+}
+
+.active-hour {
+  background: #2a5a7f;
+  color: white;
+  border-color: #1a3a5f;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transform: scale(1.05);
+  font-weight: 900;
+  z-index: 20;
 }
 
 .grid-area {
@@ -48,23 +64,108 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #818181;
+  border: 2px solid #d3dff0;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  user-select: none;
 }
 
+.day:hover {
+  background: #cceeff;
+}
+
+.day.active-header {
+  background: #2a5a7f;
+  color: white;
+  border-color: #1a3a5f;
+  transform: scale(1.05);
+  z-index: 20;
+}
+
+/* stil celule goale */
 .cell {
-  position: relative;
-  overflow: visible;
   background: #fafafa;
   border: 1px solid #e1e1e1;
   border-radius: 6px;
 }
 
-.event {
+.event-wrapper {
+  display: flex;
+  gap: 5px;
+  align-items: stretch;
   z-index: 5;
-  width: 100%;
+  pointer-events: none;
+
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.event-wrapper > * {
+  pointer-events: auto;
+}
+
+.event-wrapper.dimmed {
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
+
+/* vreme */
+.weather-cell {
+  width: 48px;
+  min-width: 48px;
+  flex-shrink: 0;
+
+  background-color: #eef6ff;
+
+  border: 1px solid #b8d0e8;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(42, 90, 127, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+  margin-right: 4px;
+}
+
+.weather-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(42, 90, 127, 0.15);
+  border-color: #b5cae3;
+}
+
+.weather-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+  margin-bottom: 2px;
+}
+
+.weather-temp {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a4a75;
+  line-height: 1;
+}
+
+.weather-temp span {
+  font-weight: 500;
+  font-size: 12px;
+  vertical-align: top;
+  margin-left: 1px;
+}
+
+/* eveniment card */
+.event {
+  flex: 1;
+
+  width: auto !important;
+  height: 100%;
+
   font-weight: 700;
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -72,51 +173,41 @@
   border: 1px solid #818181;
   text-shadow: 0px 1px 5px rgba(0,0,0,0.35);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  align-self: start;
-  height: 100%;
   box-sizing: border-box;
 }
 
 .event:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: 0 12px 24px rgba(0,0,0,0.28);
 }
 
-
-.event.lab {
-  background-color: #E0C600;
-  color: white;
-  z-index: 10;
-}
-
-.event.curs {
-  background-color: #FF2C2C;
-  color: white;
-}
-
-.event.sem {
-  background-color: #56B900;
-  color: white;
-}
+.event.lab { background-color: #E0C600; color: white; z-index: 10; }
+.event.curs { background-color: #FF2C2C; color: white; }
+.event.sem { background-color: #56B900; color: white; }
 
 .event-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
+  cursor: pointer;
+  line-height: 1.2;
 }
 
 .event-professor {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   opacity: 0.9;
-  margin-bottom: 18px;
+  margin-bottom: auto;
+  cursor: pointer;
+  margin-top: 4px;
 }
 
 .event-room {
   position: absolute;
-  right: 3px;
+  right: 6px;
   bottom: 6px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
+  cursor: pointer;
 }
 
 .time-line {
@@ -126,77 +217,5 @@
   height: 3px;
   background: darkorange;
   border-radius: 4px;
-}
-
-.current-time-line {
-  position: absolute;
-  top: 50px;
-  bottom: 0;
-  width: 3px;
-  background: red;
-  z-index: 50;
-  border-radius: 2px;
-  pointer-events: none;
-  transition: left 0.2s ease-in-out;
-}
-
-.current-time-dot {
-  position: absolute;
-  top: 42px;
-  width: 12px;
-  height: 12px;
-  background: red;
-  border-radius: 50%;
-  z-index: 60;
-  transform: translateX(-5px);
-  transition: left 0.2s ease-in-out;
-}
-
-.event.past {
-  opacity: 0.45;
-  filter: grayscale(30%);
-  transition: 0.4s ease;
-}
-
-.time-indicator {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: red;
-  z-index: 999;
-  box-shadow: 0 0 6px rgba(255,0,0,0.7);
-}
-
-.time-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: darkorange;
-  z-index: 10;
-  border-radius: 4px;
-  pointer-events: none;
-}
-
-.event-title {
-  cursor: pointer;
-}
-
-.event-room {
-  cursor: pointer;
-}
-
-.event-professor {
-  cursor: pointer;
-}
-
-.prof-link {
-  color: white;
-  text-decoration: underline;
-  cursor: pointer;
-  font-weight: 600;
-}
-.prof-link:hover {
-  opacity: 0.8;
+  z-index: 2;
 }

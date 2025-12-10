@@ -10,7 +10,7 @@ describe('TimetableComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TimetableComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(TimetableComponent);
     component = fixture.componentInstance;

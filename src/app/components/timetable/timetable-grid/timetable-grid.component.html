@@ -2,19 +2,20 @@
 
   <div class="hours-column">
     <div class="hour"></div>
-    <div class="hour">8 AM</div>
-    <div class="hour">9 AM</div>
-    <div class="hour">10 AM</div>
-    <div class="hour">11 AM</div>
-    <div class="hour">12 PM</div>
-    <div class="hour">1 PM</div>
-    <div class="hour">2 PM</div>
-    <div class="hour">3 PM</div>
-    <div class="hour">4 PM</div>
-    <div class="hour">5 PM</div>
-    <div class="hour">6 PM</div>
-    <div class="hour">7 PM</div>
-    <div class="hour">8 PM</div>
+
+    <div class="hour" (click)="toggleHourFocus(2)" [class.active-hour]="focusedRow === 2">8 AM</div>
+    <div class="hour" (click)="toggleHourFocus(3)" [class.active-hour]="focusedRow === 3">9 AM</div>
+    <div class="hour" (click)="toggleHourFocus(4)" [class.active-hour]="focusedRow === 4">10 AM</div>
+    <div class="hour" (click)="toggleHourFocus(5)" [class.active-hour]="focusedRow === 5">11 AM</div>
+    <div class="hour" (click)="toggleHourFocus(6)" [class.active-hour]="focusedRow === 6">12 PM</div>
+    <div class="hour" (click)="toggleHourFocus(7)" [class.active-hour]="focusedRow === 7">1 PM</div>
+    <div class="hour" (click)="toggleHourFocus(8)" [class.active-hour]="focusedRow === 8">2 PM</div>
+    <div class="hour" (click)="toggleHourFocus(9)" [class.active-hour]="focusedRow === 9">3 PM</div>
+    <div class="hour" (click)="toggleHourFocus(10)" [class.active-hour]="focusedRow === 10">4 PM</div>
+    <div class="hour" (click)="toggleHourFocus(11)" [class.active-hour]="focusedRow === 11">5 PM</div>
+    <div class="hour" (click)="toggleHourFocus(12)" [class.active-hour]="focusedRow === 12">6 PM</div>
+    <div class="hour" (click)="toggleHourFocus(13)" [class.active-hour]="focusedRow === 13">7 PM</div>
+    <div class="hour" (click)="toggleHourFocus(14)" [class.active-hour]="focusedRow === 14">8 PM</div>
   </div>
 
   <div class="grid-area">
@@ -25,57 +26,73 @@
          [style.top.px]="currentLinePosition">
     </div>
 
-    <div class="day">Luni</div>
-    <div class="day">Marti</div>
-    <div class="day">Miercuri</div>
-    <div class="day">Joi</div>
-    <div class="day">Vineri</div>
+    <div class="day" (click)="toggleDayFocus(1)" [class.active-header]="focusedDayIndex === 1">Luni</div>
+    <div class="day" (click)="toggleDayFocus(2)" [class.active-header]="focusedDayIndex === 2">Marti</div>
+    <div class="day" (click)="toggleDayFocus(3)" [class.active-header]="focusedDayIndex === 3">Miercuri</div>
+    <div class="day" (click)="toggleDayFocus(4)" [class.active-header]="focusedDayIndex === 4">Joi</div>
+    <div class="day" (click)="toggleDayFocus(5)" [class.active-header]="focusedDayIndex === 5">Vineri</div>
 
     <!-- CELULELE -->
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
 
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
     <div *ngFor="let event of displayEvents"
-         class="event"
-         [ngClass]="event.type"
+         class="event-wrapper"
+         [class.dimmed]="isEventDimmed(event)"
          [style.gridColumn]="event.dayIndex"
          [style.gridRow]="event.startRow + ' / span ' + event.span"
          [style.width.%]="event.width"
-         [style.marginLeft.%]="event.marginLeft"
-         (click)="onEventClick(event)">
+         [style.marginLeft.%]="event.marginLeft">
 
-      <div class="event-title"
-           (click)="openLink('https://www.google.com/search?q=UBB fisa disciplinei pdf +' + event.title + '&btnI=1')">
-        {{ event.title }}
+      <div class="weather-cell"
+           *ngIf="showWeather && (!event.marginLeft || event.marginLeft == 0)">
+
+        <img src="weather-icon.png" class="weather-icon">
+
+        <span class="weather-temp">22°</span>
+      </div>
+      <div class="event"
+           [ngClass]="event.type"
+           (click)="onEventClick(event)">
+
+        <div class="event-title"
+             (click)="openLink('https://www.google.com/search?q=UBB fisa disciplinei pdf +' + event.title + '&btnI=1'); $event.stopPropagation()">
+          {{ event.title }}
+        </div>
+
+        <div class="event-professor"
+             (click)="openLink('https://www.google.com/search?q=UBB+' + event.professor + '&btnI=1'); $event.stopPropagation()">
+          {{ event.professor }}
+        </div>
+
+        <div class="event-room"
+             (click)="openLink('https://maps.google.com/?q=Universitatea Babes Bolyai Cluj ' + event.room); $event.stopPropagation()">
+          {{ event.room }}
+        </div>
+
+        <app-event-grades
+          [ngClass]="event.type"
+          (openGrades)="handleGradesClick(event)">
+        </app-event-grades>
+        <app-event-attendance
+          [present]="event.attendanceCount || 0"
+          [total]="14"
+          [isOpen]="event.isAttendanceOpen || false"
+          (attendanceChange)="updateAttendance(event, $event)"
+          (toggle)="toggleAttendance(event)">
+        </app-event-attendance>
       </div>
 
-      <div class="event-professor"
-           (click)="openLink('https://www.google.com/search?q=UBB+' + event.professor + '&btnI=1')">
-        {{ event.professor }}
-      </div>
-
-      <div class="event-room"
-           (click)="openLink('https://maps.google.com/?q=Universitatea Babes Bolyai Cluj ' + event.room)">
-        {{ event.room }}
-      </div>
-
-      <app-event-attendance
-        [present]="event.attendanceCount || 0"
-        [total]="14"
-        [isOpen]="event.isAttendanceOpen || false"
-        (attendanceChange)="updateAttendance(event, $event)"
-        (toggle)="toggleAttendance(event)">
-      </app-event-attendance>
     </div>
 
 

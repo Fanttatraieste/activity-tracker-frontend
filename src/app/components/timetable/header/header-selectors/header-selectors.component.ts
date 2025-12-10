@@ -9,14 +9,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./header-selectors.component.css']
 })
 export class HeaderSelectorsComponent {
-  // Primim datele de la Părinte
   @Input() groups!: number[];
   @Input() selectedGroup!: number;
   @Input() specializations!: string[];
   @Input() selectedSpecialization!: string;
   @Input() selectedWeek!: 1 | 2;
 
-  // Trimitem schimbările către Părinte
   @Output() groupChange = new EventEmitter<number>();
   @Output() specializationChange = new EventEmitter<string>();
   @Output() weekChange = new EventEmitter<1 | 2>();

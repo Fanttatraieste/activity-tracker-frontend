@@ -1,5 +1,6 @@
 /* ——— contorizarea prezentelor ——————————————————— */
 .event-attendance-box {
+  margin-left: 35px;
   position: absolute;
   left: 6px;
   bottom: 6px;

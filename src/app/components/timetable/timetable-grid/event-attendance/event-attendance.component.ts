@@ -10,18 +10,16 @@ import { CommonModule } from '@angular/common';
 })
 export class EventAttendanceComponent {
 
-  @Input() present: number = 0; // Câte prezențe are studentul
-  @Input() total: number = 14;  // Total (default 14)
-  @Input() isOpen: boolean = false; // Dacă meniul e deschis sau nu
+  @Input() present: number = 0;
+  @Input() total: number = 14;
+  @Input() isOpen: boolean = false;
 
-  // Output pentru când se schimbă numărul (+ sau -)
   @Output() attendanceChange = new EventEmitter<number>();
 
-  // Output pentru când deschidem/închidem cutiuța
   @Output() toggle = new EventEmitter<void>();
 
   onToggle(e: Event) {
-    e.stopPropagation(); // Oprim click-ul să ajungă la Event (să nu deschidă notițele)
+    e.stopPropagation();
     this.toggle.emit();
   }
 

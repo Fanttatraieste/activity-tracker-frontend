@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+* { font-family: 'Roboto', sans-serif; box-sizing: border-box; }
+
+.panel-container {
+  width: 320px;
+  flex-shrink: 0;
+  min-height: 500px;
+  color: white;
+  margin-top: 60px;
+
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+}
+
+/* animatia de aparitie */
+@keyframes slideIn {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* culori dinamice */
+.panel-container.curs { background-color: #FF2C2C; border: 1px solid #d61c1c; }
+.panel-container.sem  { background-color: #56B900; border: 1px solid #459600; }
+.panel-container.lab  { background-color: #E0C600; border: 1px solid #c2ac00; }
+
+/* controale header */
+.panel-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0px 1px 5px rgba(0,0,0,0.35);
+  margin-bottom: 5px;
+}
+
+.close-btn {
+  width: 32px; height: 32px; font-size: 24px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%; border: none; color: white;
+  cursor: pointer;
+  display: flex; justify-content: center; align-items: center;
+  transition: background 0.2s;
+}
+.close-btn:hover { background: rgba(255,255,255,0.45); }
+
+.divider {
+  border: 0; height: 1px; background: rgba(255,255,255,0.4); margin: 15px 0 25px 0; width: 100%;
+}
+
+/* --- sectiune tabel note --- */
+
+.grades-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grades-header {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1.5fr;
+  gap: 10px;
+  padding: 0 5px;
+  margin-bottom: 5px;
+}
+
+.col-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.col-label:not(:first-child) {
+  text-align: center;
+}
+
+.grade-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1.5fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-box {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  outline: none;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.input-box.type {
+  text-align: left;
+}
+.input-box.grade, .input-box.percent {
+  text-align: center;
+  font-weight: 700;
+}
+
+.input-box::placeholder {
+  color: #888;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.input-box:focus {
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}

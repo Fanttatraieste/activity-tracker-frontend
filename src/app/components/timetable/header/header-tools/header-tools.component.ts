@@ -9,18 +9,33 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./header-tools.component.css']
 })
 export class HeaderToolsComponent {
-  // Emitem starea filtrelor către părinte
   @Output() filtersChange = new EventEmitter<{curs: boolean, sem: boolean, lab: boolean}>();
-
-  // Starea internă a filtrelor
+  @Output() myScheduleClick = new EventEmitter<void>();
+  @Output() weatherToggle = new EventEmitter<boolean>();
   filters = {
     curs: true,
     sem: true,
     lab: true
   };
 
+  isWeatherActive = false;
+
   toggleFilter(type: 'curs' | 'sem' | 'lab') {
-    this.filters[type] = !this.filters[type];
+
+    this.filters = {
+      ...this.filters,
+      [type]: !this.filters[type]
+    };
+
     this.filtersChange.emit(this.filters);
+  }
+  // my schedule button
+  triggerMySchedule() {
+    this.myScheduleClick.emit();
+  }
+  // weather button
+  toggleWeather() {
+    this.isWeatherActive = !this.isWeatherActive;
+    this.weatherToggle.emit(this.isWeatherActive);
   }
 }

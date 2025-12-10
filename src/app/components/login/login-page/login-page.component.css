@@ -1,0 +1,183 @@
+/* ——— FONT GLOBAL —————————————— */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+
+* {
+  font-family: 'Nunito', sans-serif;
+}
+
+.login-page-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #ecd8c0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transition: background-image 0.45s ease-in-out, background-position 0.3s ease;
+  position: relative;
+}
+
+/* Controls to choose background (located above, centered) */
+.bg-controls {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 10px;
+  background: rgb(255, 255, 255, 0.85);
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+  font-size: 14px;
+}
+
+/*
+.bg-controls label {
+  color: #5a3318;
+  font-weight: 600;
+}
+*/
+
+.bg-controls select {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #d9cbb8;
+  background: transparent;
+  outline: none;
+}
+
+.reset-bg {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #d8a26c;
+  color: #4b2b15;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.reset-bg:hover {
+  color: #000;
+  background: #c96d24;
+}
+
+.login-content-wrapper {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  z-index: 10;
+}
+
+/*Title*/
+.login-title {
+  font-size: 44px;
+  font-weight: 700;
+  color:#5a3318;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+/*Google Login Button*/
+.google-login-box{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-radius: 50px;
+}
+
+.google-btn {
+  background: white;
+  padding: 12px 20px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  font-size: 18px;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.google-btn img {
+  width: 22px;
+  border-radius: 50px;
+}
+
+.google-btn:hover {
+  transform: translateY(-3px);
+}
+
+.login-card {
+  width: 100%;
+  background-color: #fff7ec;
+  border-radius: 18px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.input{
+  border: none;
+  border-bottom: 2px solid #c7b7a3;
+  padding: 10px 6px;
+  font-size: 17px;
+  background: transparent;
+  outline: none;
+  transition: 0.2s ease-in-out;
+}
+
+.input:focus {
+  border-bottom-color: #a67a58;
+}
+
+.login-btn {
+  width: 100%;
+  background: #d8a26c;
+  color: #4b2b15;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 14px;
+  border-radius: 14px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.login-btn:hover {
+  background: #c48e56;
+  transform: translateY(-3px);
+}
+
+.error-message {
+  color: #b4442a;
+  font-size: 15px;
+  margin-top: -8px;
+  margin-bottom: -5px;
+}
+
+/* ——— SIGNUP LINK —————————————— */
+.signup-link {
+  color: #6f4b2b;
+  text-decoration: none;
+  font-size: 17px;
+  margin-top: 4px;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}

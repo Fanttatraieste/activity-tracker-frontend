@@ -1,1 +1,54 @@
-<p>login-page works!</p>
+<div class="login-page-container" [style.background-image]="backgroundStyle">
+  <div class="bg-controls">
+    <select id="bg-selector" [(ngModel)]="selectedBackground" (change)="onBackgroundChange()">
+      <option value="">Implicit (culoare)</option>
+      <option value="assets/login-background-images/sketch-1.jpg">Fundal 1</option>
+      <option value="assets/login-background-images/sketch-2.jpg">Fundal 2</option>
+      <option value="assets/login-background-images/sketch-3.jpg">Fundal 3</option>
+      <option value="assets/login-background-images/sketch-4.jpg">Fundal 4</option>
+    </select>
+
+    <button class="reset-bg" (click)="resetBackground()" type="button">Resetează</button>
+  </div>
+
+  <div class="login-content-wrapper">
+    <!--Ctrl + / -for making comment  -->
+    <!-- Title -->
+    <h1 class="login-title">Login</h1>
+
+    <!--Google Login -->
+
+    <div class="google-login-box">
+      <button class="google-btn" (click)="onGoogleLogin()">
+        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" />
+        Continua cu Google
+      </button>
+    </div>
+
+    <!--Login -->
+    <div class="login-card">
+      <input
+        [(ngModel)]="email"
+        type="email"
+        placeholder="E-mail"
+        class="input"
+      />
+
+      <input
+        [(ngModel)]="password"
+        type="password"
+        placeholder="Parolă"
+        class="input"
+      />
+    </div>
+
+    <p class="error-message" *ngIf="loginError">{{ loginError }}</p>
+
+    <!--Login button-->
+    <button class="login-btn" (click)="onLogin()">LOGIN</button>
+
+    <!-- Register-Button-->
+    <a class="signup-link" routerLink="/register">Creeaza cont nou</a>
+  </div>
+
+</div>
