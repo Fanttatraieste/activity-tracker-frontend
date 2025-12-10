@@ -21,7 +21,6 @@ export class SignUpComponent implements OnInit {
 
   signupError: string | null = null;
 
-  // Background handling (same pattern as login)
   selectedBackground: string | null = null;
 
   constructor(private router: Router) {}
@@ -69,7 +68,6 @@ export class SignUpComponent implements OnInit {
 
     localStorage.setItem('userName', `${this.name} ${this.surname}`);
     localStorage.setItem('userEmail', this.email);
-    // Salvam si separat pentru pagina de setari
     localStorage.setItem('userFirstName', this.surname);
     localStorage.setItem('userLastName', this.name);
 

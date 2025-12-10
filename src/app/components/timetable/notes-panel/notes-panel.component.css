@@ -79,7 +79,7 @@
 }
 .week-select option { color: #333; background: white; }
 
-/* Textarea */
+/* textarea */
 .notes-label {
   font-size: 14px; font-weight: 700; margin-bottom: 8px; display: block;
   opacity: 0.9; text-shadow: 0px 1px 5px rgba(0,0,0,0.35);

@@ -10,8 +10,7 @@ export const routes: Routes = [
   // Ruta Login
   { path: 'login', component: LoginPageComponent },
 
-  // Ruta Sign Up (Aici facem legatura)
-  // Folosim 'register' pentru ca in Login Page ai pus routerLink="/register"
+  // Ruta Sign Up
   { path: 'register', component: SignUpComponent },
 
   // Ruta App

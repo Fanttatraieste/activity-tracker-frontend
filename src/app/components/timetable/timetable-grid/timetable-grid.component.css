@@ -37,7 +37,7 @@
 }
 
 .active-hour {
-  background: #2a5a7f; /* Albastru inchis */
+  background: #2a5a7f;
   color: white;
   border-color: #1a3a5f;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -65,85 +65,68 @@
   justify-content: center;
   align-items: center;
   border: 2px solid #d3dff0;
-  cursor: pointer; /* Arată mânuța la hover */
+  cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
-  user-select: none; /* Să nu se selecteze textul la dublu click */
+  user-select: none;
 }
 
 .day:hover {
-  background: #cceeff; /* Un mic efect de hover */
+  background: #cceeff;
 }
 
 .day.active-header {
   background: #2a5a7f;
   color: white;
   border-color: #1a3a5f;
-  transform: scale(1.05); /* O facem puțin mai mare */
+  transform: scale(1.05);
   z-index: 20;
 }
 
-/* Stil pentru celulele goale din spate */
+/* stil celule goale */
 .cell {
   background: #fafafa;
   border: 1px solid #e1e1e1;
   border-radius: 6px;
 }
 
-/* --- WRAPPER EVENIMENT --- */
 .event-wrapper {
-  display: flex;        /* Pune Vremea + Evenimentul pe orizontală */
-  gap: 5px;             /* Spațiu între vreme și card */
-  align-items: stretch; /* Se întind pe toată înălțimea */
+  display: flex;
+  gap: 5px;
+  align-items: stretch;
   z-index: 5;
-  pointer-events: none; /* Permite click prin spațiile goale ale wrapperului */
+  pointer-events: none;
 
-  /* Când weather-cell dispare (la al 2-lea event), flex va face ca
-     .event să ocupe tot spațiul automat */
   transition: filter 0.3s ease, opacity 0.3s ease;
 }
 
-/* Reactivăm click-ul pe elementele interne */
 .event-wrapper > * {
   pointer-events: auto;
 }
 
 .event-wrapper.dimmed {
-  /* Aici controlezi "puterea" efectului */
-
-  /* Varianta 1: Exact 30% alb-negru (dar e un efect subtil) */
-  /* filter: grayscale(30%); */
-
-  /* Varianta 2 (Recomandată): Alb-negru complet și puțin transparent
-     pentru a scoate în evidență ziua colorată */
   filter: grayscale(100%);
-  opacity: 0.4; /* Evenimentele inactive devin mai șterse */
+  opacity: 0.4;
 }
 
-/* --- CELULA VREME --- */
+/* vreme */
 .weather-cell {
-  width: 48px; /* O idee mai lat pentru a nu părea înghesuit */
+  width: 48px;
   min-width: 48px;
   flex-shrink: 0;
 
-  /* SCHIMBARE MAJORĂ: Fundal mai vizibil, nu alb simplu */
   background-color: #eef6ff;
-  /* Un albastru foarte deschis, dar saturat, să se distingă de fundalul paginii */
 
-  /* Bordură mai accentuată */
   border: 1px solid #b8d0e8;
-  border-radius: 10px; /* Puțin mai rotund */
-
-  /* Umbră și dispunere */
+  border-radius: 10px;
   box-shadow: 0 2px 4px rgba(42, 90, 127, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 5px 0;
-  margin-right: 4px; /* Un pic de spațiu față de cursul de lângă */
+  margin-right: 4px;
 }
 
-/* Efect opțional de plutire la mouse over */
 .weather-cell:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(42, 90, 127, 0.15);
@@ -151,10 +134,9 @@
 }
 
 .weather-icon {
-  width: 28px; /* Un pic mai mare pentru vizibilitate */
+  width: 28px;
   height: 28px;
   object-fit: contain;
-  /* Această linie ajută dacă iconițele tale sunt png-uri simple */
   filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
   margin-bottom: 2px;
 }
@@ -162,29 +144,28 @@
 .weather-temp {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  font-weight: 800; /* Bold puternic */
-  color: #1a4a75; /* Albastru închis (Navy) - mult mai vizibil decât gri-ul */
+  font-weight: 800;
+  color: #1a4a75;
   line-height: 1;
 }
 
-/* Mic detaliu pentru simbolul de grad */
 .weather-temp span {
   font-weight: 500;
   font-size: 12px;
-  vertical-align: top; /* Ridică simbolul puțin */
+  vertical-align: top;
   margin-left: 1px;
 }
 
-/* --- CARD EVENIMENT --- */
+/* eveniment card */
 .event {
-  flex: 1; /* Ocupă tot spațiul disponibil în wrapper */
+  flex: 1;
 
-  width: auto !important; /* Suprascrie width-ul inline pentru a lucra cu flex */
+  width: auto !important;
   height: 100%;
 
   font-weight: 700;
   border-radius: 12px;
-  padding: 8px 10px; /* Padding puțin mai mic pentru a încăpea conținutul */
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -200,14 +181,12 @@
   box-shadow: 0 12px 24px rgba(0,0,0,0.28);
 }
 
-/* Culori Evenimente */
 .event.lab { background-color: #E0C600; color: white; z-index: 10; }
 .event.curs { background-color: #FF2C2C; color: white; }
 .event.sem { background-color: #56B900; color: white; }
 
-/* Typography intern eveniment */
 .event-title {
-  font-size: 14px; /* Ajustat ușor */
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   line-height: 1.2;
@@ -217,7 +196,7 @@
   font-size: 11px;
   font-weight: 500;
   opacity: 0.9;
-  margin-bottom: auto; /* Împinge camera jos dacă e spațiu */
+  margin-bottom: auto;
   cursor: pointer;
   margin-top: 4px;
 }
@@ -231,7 +210,6 @@
   cursor: pointer;
 }
 
-/* Linii de timp */
 .time-line {
   position: absolute;
   left: 0;

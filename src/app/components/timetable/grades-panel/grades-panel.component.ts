@@ -20,7 +20,6 @@ export class GradesPanelComponent implements OnChanges {
 
   }
 
-  // Emitem un semnal când userul vrea să închidă panoul
   @Output() closePanel = new EventEmitter<void>();
 
   onClose() {

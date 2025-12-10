@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 })
 export class SettingsPageComponent {
 
-  // --- Datele Utilizatorului Extinse ---
+  // --- date utilizator ---
   userData = {
     nume: 'Priala',
     prenume: 'Radu',

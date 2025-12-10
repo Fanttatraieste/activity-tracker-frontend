@@ -68,8 +68,6 @@ export class TimetableComponent implements OnInit {
   onFiltersChanged(newFilters: {curs: boolean, sem: boolean, lab: boolean}) {
     console.log('Filtre primite in parinte:', newFilters);
 
-    // Actualizăm variabila locală
-    // Deoarece HeaderTools trimite deja un obiect nou, e suficient:
     this.currentFilters = newFilters;
   }
 
@@ -82,10 +80,10 @@ export class TimetableComponent implements OnInit {
     this.weatherEnabled = isActive;
   }
   openGrades(event: CalendarEvent) {
-    this.currentGradeEvent = event; // Asta va face panel-ul să apară
+    this.currentGradeEvent = event;
   }
 
   closeGrades() {
-    this.currentGradeEvent = null; // Asta va ascunde panel-ul
+    this.currentGradeEvent = null;
   }
 }

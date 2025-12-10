@@ -30,15 +30,11 @@ export class HeaderComponent {
     this.filtersChange.emit(filters);
   }
   onMyScheduleClicked() {
-    // Emitem grupa ta preferată (331 sau 331.1, cum ai definit folderul)
-    // Deoarece în CSV-uri folderele erau "assets/331/...", presupun că ID-ul e 331
     this.groupChange.emit(333.1);
   }
   weatherEnabled = false;
 
-  // 2. Modificăm funcția să emită valoarea, nu doar să o salveze local
   onWeatherToggle(isActive: boolean) {
-    // this.weatherEnabled = isActive; // Asta nu ajută cu nimic aici
-    this.weatherToggle.emit(isActive); // TRIMITE MAI DEPARTE!
+    this.weatherToggle.emit(isActive);
   }
 }

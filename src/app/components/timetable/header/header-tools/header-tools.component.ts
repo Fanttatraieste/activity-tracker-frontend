@@ -9,11 +9,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./header-tools.component.css']
 })
 export class HeaderToolsComponent {
-  // Emitem starea filtrelor către părinte
   @Output() filtersChange = new EventEmitter<{curs: boolean, sem: boolean, lab: boolean}>();
   @Output() myScheduleClick = new EventEmitter<void>();
   @Output() weatherToggle = new EventEmitter<boolean>();
-  // Starea internă a filtrelor
   filters = {
     curs: true,
     sem: true,
@@ -23,12 +21,7 @@ export class HeaderToolsComponent {
   isWeatherActive = false;
 
   toggleFilter(type: 'curs' | 'sem' | 'lab') {
-    // VARIANTA VECHE (GREȘITĂ pentru change detection):
-    // this.filters[type] = !this.filters[type];
 
-    // VARIANTA CORECTĂ:
-    // Creăm un obiect NOU folosind {...} (spread operator)
-    // Astfel Angular vede că s-a schimbat adresa din memorie a obiectului
     this.filters = {
       ...this.filters,
       [type]: !this.filters[type]
@@ -36,11 +29,11 @@ export class HeaderToolsComponent {
 
     this.filtersChange.emit(this.filters);
   }
-  // 3. Funcția apelată când dai click pe cartea albastră
+  // my schedule button
   triggerMySchedule() {
     this.myScheduleClick.emit();
   }
-  // 3. Funcția pentru butonul de vreme
+  // weather button
   toggleWeather() {
     this.isWeatherActive = !this.isWeatherActive;
     this.weatherToggle.emit(this.isWeatherActive);

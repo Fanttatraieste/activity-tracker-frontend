@@ -1,16 +1,16 @@
-/* ——— FONT GLOBAL —————————————— */
+/* font global */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 * {
   font-family: 'Roboto', sans-serif;
-  box-sizing: border-box; /* Esențial pentru layout corect */
+  box-sizing: border-box;
 }
 
-/* ——— SIDEBAR CONTAINER —————————————— */
+/* sidebar container */
 .sidebar {
-  width: 250px; /* Putin mai lat pentru a incapea emailurile lungi */
+  width: 250px;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f8fbff 0%, #eef6fc 100%); /* Gradient subtil */
+  background: linear-gradient(180deg, #f8fbff 0%, #eef6fc 100%);
   border-right: 1px solid #dae4f0;
   padding: 30px 20px;
   display: flex;
@@ -19,11 +19,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.02); /* Umbra fina in dreapta */
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.02);
   z-index: 1000;
 }
 
-/* ——— USER PROFILE —————————————— */
+/* user profile */
 .user-profile {
   display: flex;
   flex-direction: column;
@@ -40,8 +40,8 @@
   height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #ffffff; /* Bordura alba pentru contrast */
-  box-shadow: 0 4px 10px rgba(42, 90, 127, 0.15); /* Umbra avatar */
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(42, 90, 127, 0.15);
 }
 
 .user-info {
@@ -51,7 +51,7 @@
 .user-name {
   font-size: 18px;
   font-weight: 700;
-  color: #1a3c5a; /* Albastru inchis elegant */
+  color: #1a3c5a;
   margin-bottom: 4px;
 }
 
@@ -61,14 +61,14 @@
   font-weight: 500;
 }
 
-/* ——— SEPARATOR —————————————— */
+/*separator */
 .sidebar-separator {
   height: 1px;
   background: linear-gradient(90deg, transparent, #d3dff0, transparent);
   width: 100%;
 }
 
-/* ——— MENU —————————————— */
+/* menu */
 .sidebar-menu {
   display: flex;
   flex-direction: column;
@@ -85,12 +85,11 @@
   padding-left: 5px;
 }
 
-/* ——— BUTTON STYLE —————————————— */
 .menu-item {
   width: 100%;
   padding: 14px 16px;
   background: #ffffff;
-  border: 1px solid transparent; /* Transparent default */
+  border: 1px solid transparent;
   border-radius: 12px;
   text-align: left;
   cursor: pointer;
@@ -101,7 +100,7 @@
   align-items: center;
   gap: 10px;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02); /* Umbra foarte fina */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
 .menu-icon {
@@ -135,16 +134,16 @@
   color: #007bff;
 }
 
-/* ——— INFO BOX (Sub-meniu) —————————————— */
+/* info box */
 .info-box {
   width: 100%;
   background: transparent;
-  padding: 5px 0 10px 20px; /* Indentare spre dreapta */
+  padding: 5px 0 10px 20px;
   margin-top: 0;
   box-sizing: border-box;
-  animation: slideDown 0.3s ease-out; /* Animatie de aparitie */
-  border-left: 2px solid #e1eaf5; /* Linie verticala ghidaj */
-  margin-left: 15px; /* Aliniere cu textul butonului */
+  animation: slideDown 0.3s ease-out;
+  border-left: 2px solid #e1eaf5;
+  margin-left: 15px;
 }
 
 @keyframes slideDown {
@@ -152,7 +151,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ——— LISTA MATERII & CHECKBOX —————————————— */
+/* lista materii */
 .materii-list {
   display: flex;
   flex-direction: column;
@@ -181,7 +180,7 @@
 }
 
 .checkbox-container input[type="checkbox"] {
-  appearance: none; /* Ascunde checkbox-ul default */
+  appearance: none;
   width: 18px;
   height: 18px;
   border: 2px solid #cbd5e1;
@@ -190,16 +189,15 @@
   cursor: pointer;
   position: relative;
   transition: all 0.2s;
-  flex-shrink: 0; /* Sa nu se turteasca */
+  flex-shrink: 0;
 }
 
-/* Cand e bifat */
+
 .checkbox-container input[type="checkbox"]:checked {
   background: #2a5a7f;
   border-color: #2a5a7f;
 }
 
-/* Bifa alba (folosind pseudo-element) */
 .checkbox-container input[type="checkbox"]:checked::after {
   content: '✔';
   font-size: 12px;
@@ -218,7 +216,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-right: 10px; /* Putin spatiu in dreapta */
+  padding-right: 10px;
 }
 
 .form-group {
@@ -227,7 +225,6 @@
   gap: 4px;
 }
 
-/* Etichetele mici de deasupra dropdown-urilor */
 .form-group label {
   font-size: 11px;
   color: #8fa6b8;
@@ -236,7 +233,6 @@
   margin-left: 2px;
 }
 
-/* Stilul Dropdown-urilor (SELECT) */
 .form-group select {
   width: 100%;
   padding: 8px 10px;
@@ -249,7 +245,6 @@
   outline: none;
   transition: all 0.2s ease;
 
-  /* Resetare stil default browser pentru a arata clean */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -268,12 +263,11 @@
   box-shadow: 0 0 0 3px rgba(42, 90, 127, 0.1);
 }
 
-/* Butonul 'Schimba Ora' */
 .btn-action {
   margin-top: 5px;
   width: 100%;
   padding: 10px;
-  background-color: #2a5a7f; /* Albastru principal */
+  background-color: #2a5a7f;
   color: white;
   border: none;
   border-radius: 8px;
@@ -286,7 +280,7 @@
 }
 
 .btn-action:hover {
-  background-color: #1a3c5a; /* Putin mai inchis la hover */
+  background-color: #1a3c5a;
   transform: translateY(-1px);
 }
 

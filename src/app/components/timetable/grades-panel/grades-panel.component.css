@@ -3,9 +3,9 @@
 * { font-family: 'Roboto', sans-serif; box-sizing: border-box; }
 
 .panel-container {
-  width: 320px; /* Am marit putin latimea pt a incapea inputurile bine */
+  width: 320px;
   flex-shrink: 0;
-  min-height: 500px; /* Ajustat inaltimea minima */
+  min-height: 500px;
   color: white;
   margin-top: 60px;
 
@@ -33,7 +33,7 @@
 /* controale header */
 .panel-controls {
   display: flex;
-  justify-content: flex-end; /* Butonul X doar in dreapta */
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 5px;
 }
@@ -61,7 +61,7 @@
   border: 0; height: 1px; background: rgba(255,255,255,0.4); margin: 15px 0 25px 0; width: 100%;
 }
 
-/* --- SECTIUNEA NOUA PENTRU TABEL NOTE --- */
+/* --- sectiune tabel note --- */
 
 .grades-wrapper {
   display: flex;
@@ -71,7 +71,6 @@
 
 .grades-header {
   display: grid;
-  /* Definim proportiile coloanelor: Mult loc pt Tip, putin pt Nota si Procent */
   grid-template-columns: 3fr 1fr 1.5fr;
   gap: 10px;
   padding: 0 5px;
@@ -86,7 +85,6 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-/* Aliniem la centru etichetele pentru nota si procent */
 .col-label:not(:first-child) {
   text-align: center;
 }
@@ -111,7 +109,6 @@
   transition: all 0.2s;
 }
 
-/* Stiluri specifice pe coloane */
 .input-box.type {
   text-align: left;
 }
