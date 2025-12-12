@@ -83,6 +83,7 @@
   color: white;
   margin-bottom: 8px;
   text-align: center;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
 }
 
 /*Google Login Button*/
@@ -172,12 +173,15 @@
 
 /* ——— SIGNUP LINK —————————————— */
 .signup-link {
-  color: #6f4b2b;
+  color: white;
   text-decoration: none;
   font-size: 17px;
-  margin-top: 4px;
+  margin-top: 10px;
+  font-weight: 600;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
 }
 
 .signup-link:hover {
   text-decoration: underline;
+  color: #fff7ec;
 }
