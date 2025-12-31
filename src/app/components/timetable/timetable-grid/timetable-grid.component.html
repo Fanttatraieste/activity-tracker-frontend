@@ -76,7 +76,7 @@
         </div>
 
         <div class="event-room"
-             (click)="openLink('https://maps.app.goo.gl/cFiJ9NEA7Keap92L6'); $event.stopPropagation()">
+             (click)="handleRoomClick(event.room, $event)">
           {{ event.room }}
         </div>
 

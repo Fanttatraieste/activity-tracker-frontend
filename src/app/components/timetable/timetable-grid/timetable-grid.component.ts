@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { EventAttendanceComponent } from './event-attendance/event-attendance.component';
 import { EventGradesComponent } from './event-grades/event-grades.component';
 import { WeatherResponse, WeatherService } from '../../../services/weather.service';
@@ -16,8 +15,18 @@ const KNOWN_OPTIONALS = [
   'Interactiunea om-calculator'
 ];
 
+const MAP_URLS = {
+  CENTRAL: 'https://www.google.com/maps/place/Facultatea+De+Matematic%C4%83+%C8%99i+Informatic%C4%83/@46.7675377,23.5892532,387m/data=!3m1!1e3!4m10!1m2!2m1!1subb+mate+info!3m6!1s0x47490c28706c8277:0xc25e4a8111c461b7!8m2!3d46.7675377!4d23.5914419!15sCg11YmIgbWF0ZSBpbmZvIgOIAQFaDyINdWJiIG1hdGUgaW5mb5IBFXVuaXZlcnNpdHlfZGVwYXJ0bWVudJoBI0NoWkRTVWhOTUc5blMwVkpRMEZuU1VOUE5XSlhaazFSRUFF4AEA-gEECAAQDA!16s%2Fg%2F1hc5k1l59?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
+  FSEGA:   'https://www.google.com/maps/place/Facultatea+de+%C5%9Etiin%C5%A3e+Economice+%C5%9Fi+Gestiunea+Afacerilor/@46.7731783,23.6188137,774m/data=!3m2!1e3!4b1!4m6!3m5!1s0x47490c15a18e8af9:0xcc357d4dedcf12a0!8m2!3d46.7731747!4d23.621394!16s%2Fg%2F1yglpxyfs?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
+  DPPD:    'https://www.google.com/maps/place/Departamentul+pentru+Preg%C4%83tirea+Personalului+Didactic/@46.7672894,23.5828267,774m/data=!3m2!1e3!5s0x47490e8347715173:0xd813e9947cab537b!4m6!3m5!1s0x47490e9cb6a00ee5:0x50c71d6442164675!8m2!3d46.7680794!4d23.5839371!16s%2Fg%2F11c1rsdn5b?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
+  DREPT:   'https://www.google.com/maps/place/Str.+Avram+Iancu+11,+Cluj-Napoca+400089/@46.7665355,23.5896221,112m/data=!3m1!1e3!4m6!3m5!1s0x47490c28386a5071:0x2e24722fdca7a1f5!8m2!3d46.7664594!4d23.5898308!16s%2Fg%2F11b8vdm_4h?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
+  OBS:     'https://www.google.com/maps/place/Observatorul+Astronomic/@46.7579158,23.5764862,3096m/data=!3m1!1e3!4m10!1m2!2m1!1sobservator+astronomic!3m6!1s0x47490dd4bdea1097:0x2e061bcaad43ed42!8m2!3d46.7579158!4d23.5865796!15sChVvYnNlcnZhdG9yIGFzdHJvbm9taWOSAQtvYnNlcnZhdG9yeeABAA!16s%2Fg%2F1tf14nmb?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
+  ST_EUR:  'https://www.google.com/maps/place/Facultatea+de+Studii+Europene/@46.7680571,23.5898281,774m/data=!3m2!1e3!4b1!4m6!3m5!1s0x47490c27d9eaaf8b:0x464443d1dbcdea9e!8m2!3d46.7680535!4d23.5924084!16s%2Fg%2F1hf2pn_2r?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
+  DEFAULT: 'https://maps.app.goo.gl/cFiJ9NEA7Keap92L6'
+};
+
 export interface CalendarEvent {
-  id: any; // Schimbat in any pentru a suporta UUID-uri din DB
+  id: any;
   title: string;
   type: 'lab' | 'curs' | 'sem';
   professor: string;
@@ -52,17 +61,12 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   @Input() selectedWeek: 1 | 2 = 1;
   @Input() activeFilters = { curs: true, sem: true, lab: true };
   @Input() optionals: string[] = [];
-
   @Input() currentDayIndex!: number;
   @Input() currentLinePosition!: number;
-
   @Input() showWeather: boolean = false;
-
-  @Input() swapRequest: { grupa: string, materie: string, tip: string } | null = null;
 
   private weatherService = inject(WeatherService);
   private timetableService = inject(TimetableService);
-  private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
 
   @Output() triggerGrades = new EventEmitter<CalendarEvent>();
@@ -71,14 +75,46 @@ export class TimetableGridComponent implements OnInit, OnChanges {
 
   rawEvents: CalendarEvent[] = [];
   displayEvents: CalendarEvent[] = [];
-  externalEvents: CalendarEvent[] = [];
+
   focusedDayIndex: number | null = null;
   focusedRow: number | null = null;
 
-  // Mapping actualizat pentru a corespunde cu formatul de pe Backend (capitalize)
   private dayMapping: { [key: string]: number } = {
     'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5,
     'Saturday': 6, 'Sunday': 0
+  };
+
+  private readonly roomToMapUrl: { [key: string]: string } = {
+    // centrala
+    'MOS-S15': MAP_URLS.CENTRAL,
+    'MOS-S16': MAP_URLS.CENTRAL,
+    '6/II':    MAP_URLS.CENTRAL,
+    '7/I':     MAP_URLS.CENTRAL,
+    'Fizica-233': MAP_URLS.CENTRAL,
+    'Fizica-215': MAP_URLS.CENTRAL,
+    '9/I':     MAP_URLS.CENTRAL,
+    '5/I':     MAP_URLS.CENTRAL,
+
+    // fsega
+    'C310':    MAP_URLS.FSEGA,
+    'C335':    MAP_URLS.FSEGA,
+    'L320':    MAP_URLS.FSEGA,
+    'L001':    MAP_URLS.FSEGA,
+    'L439':    MAP_URLS.FSEGA,
+    'L404':    MAP_URLS.FSEGA,
+
+    // dppd
+    'DPPD-205':        MAP_URLS.DPPD,
+
+    // drept
+    'A312':            MAP_URLS.DREPT,
+    'A313':            MAP_URLS.DREPT,
+
+    //observator
+    'Obs':             MAP_URLS.OBS,
+
+    //studii europene
+    'StEur-Ferdinand': MAP_URLS.ST_EUR
   };
 
   ngOnInit() {
@@ -89,6 +125,7 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     if (changes['selectedGroup'] || changes['selectedWeek']) {
       this.loadEventsFromBackend();
     }
+
     if (changes['activeFilters'] || changes['optionals']) {
       if (this.rawEvents.length > 0) {
         this.processEventsForDisplay();
@@ -102,31 +139,29 @@ export class TimetableGridComponent implements OnInit, OnChanges {
         this.displayEvents.forEach(ev => ev.weatherInfo = undefined);
       }
     }
-
-    if (changes['swapRequest'] && this.swapRequest) {
-      this.loadExternalEvent(this.swapRequest);
-    }
   }
 
+  /**
+   * Fetches schedule data from the Spring Boot API
+   */
   loadEventsFromBackend() {
     const frequency = this.selectedWeek === 1 ? 'Week1' : 'Week2';
 
     this.timetableService.getScheduleFromApi(undefined, frequency).subscribe({
       next: (data: any[]) => {
-        // 1. Filtrare după grupă (331.1 -> 3311)
+        // Filter by group (e.g., UI 331.1 becomes 3311 for DB)
         const uiGroupStr = String(this.selectedGroup).replace('.', '').trim();
 
         const filteredByGroup = data.filter(item =>
           item.groups?.some((g: any) => String(g.number).trim() === uiGroupStr)
         );
 
-        // 2. Mapare sigură a datelor
+        // Map API objects to CalendarEvent interface
         this.rawEvents = filteredByGroup.map(item => {
-          // Încercăm toate variantele posibile de nume din JSON-ul de Backend
-          const finalTitle = item.subjectName || item.subject?.name || item.name || "Materie Lipsă";
+          const finalTitle = item.subjectName || item.subject?.name || "Materie Lipsă";
 
           return {
-            id: item.uuid || Math.random().toString(),
+            id: item.uuid,
             title: finalTitle.trim(),
             type: this.mapType(item.classType),
             professor: item.location || "Profesor nespecificat",
@@ -139,29 +174,19 @@ export class TimetableGridComponent implements OnInit, OnChanges {
           };
         });
 
-        console.log(`Afișez ${this.rawEvents.length} cursuri pentru grupa ${uiGroupStr}`);
         this.processEventsForDisplay();
       },
-      error: (err) => console.error("Eroare API:", err)
+      error: (err) => console.error("API Error:", err)
     });
   }
+
   private mapType(apiType: string): 'curs' | 'sem' | 'lab' {
     if (!apiType) return 'curs';
-
     const t = apiType.toLowerCase();
-
-    // Verificăm toate variantele posibile care pot veni din DB/Enum
-    if (t.includes('course') || t === 'curs') {
-      return 'curs';
-    }
-    if (t.includes('seminar') || t === 'sem') {
-      return 'sem';
-    }
-    if (t.includes('lab') || t.includes('laborator')) {
-      return 'lab';
-    }
-
-    return 'curs'; // fallback default
+    if (t.includes('course') || t === 'curs') return 'curs';
+    if (t.includes('seminar') || t === 'sem') return 'sem';
+    if (t.includes('lab')) return 'lab';
+    return 'curs';
   }
 
   private capitalize(s: string) {
@@ -169,23 +194,17 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   }
 
+  /**
+   * Filters events based on UI toggles (curs/sem/lab) and chosen optionals
+   */
   private processEventsForDisplay() {
-    const allPotentialEvents = [...this.rawEvents, ...this.externalEvents];
-
-    const filteredEvents = allPotentialEvents.filter(ev => {
-      const isExternal = this.externalEvents.some(ext => ext.id === ev.id);
-      if (isExternal) return true;
-
-      const aFostInlocuit = this.externalEvents.some(ext =>
-        ext.title.trim().toLowerCase() === ev.title.trim().toLowerCase() &&
-        ext.type === ev.type
-      );
-      if (aFostInlocuit) return false;
-
+    const filteredEvents = this.rawEvents.filter(ev => {
+      // 1. Filter by type
       if (ev.type === 'curs' && !this.activeFilters.curs) return false;
       if (ev.type === 'sem' && !this.activeFilters.sem) return false;
       if (ev.type === 'lab' && !this.activeFilters.lab) return false;
 
+      // 2. Filter by optional subjects
       if (KNOWN_OPTIONALS.includes(ev.title)) {
         return this.optionals.includes(ev.title);
       }
@@ -196,13 +215,14 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     this.calculateOverlaps(filteredEvents);
   }
 
+  // --- WEATHER LOGIC ---
   fetchAndMapWeather() {
     this.weatherService.getWeather().subscribe({
       next: (data: WeatherResponse) => {
         this.mapWeatherToEvents(data);
         this.cdr.markForCheck();
       },
-      error: (err) => console.error('Eroare weather:', err)
+      error: (err) => console.error('Weather error:', err)
     });
   }
 
@@ -239,71 +259,14 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   private getIconForCondition(condition: string): string {
     const cond = condition.toLowerCase();
     if (cond.includes('sun') || cond.includes('clear')) return 'assets/icons/sunny.png';
-    if (cond.includes('cloud') || cond.includes('overcast')) return 'assets/icons/cloudy.png';
-    if (cond.includes('rain') || cond.includes('drizzle')) return 'assets/icons/rain.png';
-    if (cond.includes('snow')) return 'assets/icons/snow.png';
-    if (cond.includes('thunder')) return 'assets/icons/storm.png';
-    if (cond.includes('fog') || cond.includes('mist')) return 'assets/icons/fog.png';
+    if (cond.includes('cloud')) return 'assets/icons/cloudy.png';
+    if (cond.includes('rain')) return 'assets/icons/rain.png';
     return 'assets/icons/cloudy.png';
   }
 
-  // --- LOGICA PENTRU SWAP (CSV-urile altor grupe raman momentan pe CSV) ---
-  loadExternalEvent(request: { grupa: string, materie: string, tip: string }) {
-    const parity = this.selectedWeek === 1 ? 'impar' : 'par';
-    let groupFolder = request.grupa.replace('Grupa ', '').trim().replace('-', '.');
-    const path = `assets/${groupFolder}/${parity}.csv`;
-
-    this.http.get(path, { responseType: 'text' }).subscribe({
-      next: (data) => {
-        const eventsFromOtherGroup = this.parseCsvData(data);
-        let tipCautat = request.tip.toLowerCase();
-        if (tipCautat.includes('laborator')) tipCautat = 'lab';
-        if (tipCautat.includes('seminar')) tipCautat = 'sem';
-        if (tipCautat.includes('curs')) tipCautat = 'curs';
-
-        const foundEvent = eventsFromOtherGroup.find(ev => {
-          const titluCSV = ev.title.trim().toLowerCase();
-          const titluCautat = request.materie.trim().toLowerCase();
-          return (titluCSV.includes(titluCautat) || titluCautat.includes(titluCSV)) && ev.type === tipCautat;
-        });
-
-        if (foundEvent) {
-          foundEvent.id = 'ext-' + Math.random();
-          foundEvent.notes = `(Oaspete - ${request.grupa})`;
-          this.externalEvents = [foundEvent];
-          this.processEventsForDisplay();
-        }
-      }
-    });
-  }
-
-  private parseCsvData(csvText: string): CalendarEvent[] {
-    const lines = csvText.split('\n');
-    const events: CalendarEvent[] = [];
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (line) {
-        const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-        const clean = (txt: string) => txt ? txt.replace(/^"|"$/g, '').trim() : '';
-        if (cols.length < 8) continue;
-        events.push({
-          id: cols[0],
-          title: clean(cols[1]),
-          type: clean(cols[2]) as 'lab' | 'curs' | 'sem',
-          professor: clean(cols[3]),
-          room: clean(cols[4]),
-          dayIndex: parseInt(cols[5]),
-          startRow: parseInt(cols[6]),
-          span: parseInt(cols[7]),
-          weeklyNotes: {},
-          width: 100,
-          marginLeft: 0
-        });
-      }
-    }
-    return events;
-  }
-
+  /**
+   * Calculates visual layout if two events happen at the same time
+   */
   calculateOverlaps(eventsToProcess: CalendarEvent[]) {
     let events = eventsToProcess.map(e => ({ ...e, width: 100, marginLeft: 0 }));
     for (let i = 0; i < events.length; i++) {
@@ -323,14 +286,25 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     this.displayEvents = events;
   }
 
+  // --- UI HELPERS ---
   openLink(url: string) { if(url) window.open(url, "_blank"); }
   toggleAttendance(event: CalendarEvent) { event.isAttendanceOpen = !event.isAttendanceOpen; }
   onEventClick(event: CalendarEvent) { this.eventClicked.emit(event); }
   updateAttendance(event: CalendarEvent, newCount: number) { event.attendanceCount = newCount; }
   onGradesClick(event: CalendarEvent) { this.gradesOpenRequested.emit(event); }
   handleGradesClick(event: CalendarEvent) { this.triggerGrades.emit(event); }
+
+  handleRoomClick(room: string, event: MouseEvent) {
+    event.stopPropagation();
+
+    const mapUrl = this.roomToMapUrl[room] || `${MAP_URLS.DEFAULT}${room}`;
+
+    window.open(mapUrl, '_blank');
+  }
+
   toggleDayFocus(dayIndex: number) { this.focusedDayIndex = this.focusedDayIndex === dayIndex ? null : dayIndex; }
   toggleHourFocus(rowIndex: number) { this.focusedRow = this.focusedRow === rowIndex ? null : rowIndex; }
+
   isEventDimmed(event: CalendarEvent): boolean {
     if (this.focusedDayIndex !== null && event.dayIndex !== this.focusedDayIndex) return true;
     if (this.focusedRow !== null) {
