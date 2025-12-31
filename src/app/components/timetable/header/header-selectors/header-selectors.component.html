@@ -3,9 +3,11 @@
   <div class="info-block">
     <div class="label">Specializare</div>
     <select (change)="onSpecializationChange($event)">
-      <option *ngFor="let s of specializations" [value]="s" [selected]="s === selectedSpecialization">
-        {{ s }}
-      </option>
+      <option value="Matematica Informatica Romana An 3">Matematica Informatica Romana An 3</option>
+
+      <option value="Matematica Informatica Romana An 2">Matematica Informatica Romana An 2</option>
+
+      <option value="Matematica Informatica Romana An 1">Matematica Informatica Romana An 1</option>
     </select>
   </div>
 

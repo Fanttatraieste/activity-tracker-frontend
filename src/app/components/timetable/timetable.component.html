@@ -1,5 +1,7 @@
 <div class="page-container">
-  <app-sidebar (optionaleSchimbate)="onOptionalsChanged($event)"></app-sidebar>
+  <app-sidebar
+    (optionaleSchimbate)="onOptionalsChanged($event)"
+    (cerereSchimbareOra)="onRequestSwap($event)"></app-sidebar>
 
   <div class="content-wrapper">
     <app-header
@@ -20,6 +22,7 @@
       [optionals]="currentOptionals"
       [currentLinePosition]="currentLinePosition"
       [showWeather]="weatherEnabled"
+      [swapRequest]="currentSwapRequest"
       (eventClicked)="onEventSelected($event)"
       (triggerGrades)="openGrades($event)">
 

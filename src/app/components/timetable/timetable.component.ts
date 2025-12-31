@@ -25,6 +25,7 @@ import { GradesPanelComponent } from './grades-panel/grades-panel.component';
 export class TimetableComponent implements OnInit {
 
 
+  currentSwapRequest: { grupa: string, materie: string, tip: string } | null = null;
   selectedWeek: 1 | 2 = 1;
   groups = [331.1, 331.2, 332.1, 332.2, 333.1, 333.2];
   selectedGroup = 333;
@@ -74,6 +75,11 @@ export class TimetableComponent implements OnInit {
   onOptionalsChanged(selectedMaterii: string[]) {
     console.log('Materii opționale selectate:', selectedMaterii);
     this.currentOptionals = selectedMaterii;
+  }
+  onRequestSwap(request: { grupa: string, materie: string, tip: string }) {
+    console.log('Parinte a primit cererea:', request);
+    // Actualizam variabila, ceea ce va declansa ngOnChanges in Grid
+    this.currentSwapRequest = { ...request };
   }
 
   onWeatherToggle(isActive: boolean) {
