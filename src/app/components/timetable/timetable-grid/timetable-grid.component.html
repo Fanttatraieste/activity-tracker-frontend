@@ -81,7 +81,7 @@
         </div>
 
         <app-event-grades
-          [ngClass]="event.type"
+          [event]="event"
           (openGrades)="handleGradesClick(event)">
         </app-event-grades>
 

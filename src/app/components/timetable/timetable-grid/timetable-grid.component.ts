@@ -1,11 +1,13 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventAttendanceComponent } from './event-attendance/event-attendance.component';
-import { EventGradesComponent } from './event-grades/event-grades.component';
 import { WeatherResponse, WeatherService } from '../../../services/weather.service';
 import { TimetableService } from '../../../services/timetable.service';
 import { AttendanceService } from '../../../services/attendance.service';
 import { AuthService } from '../../../services/auth.service';
+import { GradeService } from '../../../services/grade.service';
+import { FormsModule } from '@angular/forms';
+import { EventGradesComponent } from './event-grades/event-grades.component';
+import { EventAttendanceComponent } from './event-attendance/event-attendance.component';
 
 const KNOWN_OPTIONALS = [
   'Instruire asistata de calculator',
@@ -43,6 +45,7 @@ export interface CalendarEvent {
   weeklyNotes: { [week: number]: string };
   attendanceCount?: number;
   totalRequired: number;
+  grades?: any[];
 
   weatherInfo?: {
     temp: number;
@@ -54,7 +57,12 @@ export interface CalendarEvent {
 @Component({
   selector: 'app-timetable-grid',
   standalone: true,
-  imports: [CommonModule, EventAttendanceComponent, EventGradesComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    EventGradesComponent,
+    EventAttendanceComponent
+  ],
   templateUrl: './timetable-grid.component.html',
   styleUrls: ['./timetable-grid.component.css']
 })
@@ -74,6 +82,7 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   private attendanceService = inject(AttendanceService);
   private currentUserUuid = 'UUID-UL-TAU-DE-TEST';
   private authService = inject(AuthService);
+  private gradeService = inject(GradeService);
 
   @Output() triggerGrades = new EventEmitter<CalendarEvent>();
   @Output() eventClicked = new EventEmitter<CalendarEvent>();
@@ -176,9 +185,14 @@ export class TimetableGridComponent implements OnInit, OnChanges {
             (a: any) => a.userUuid === this.currentUserUuid
           ) || [];
 
+          const myGrades = item.grades?.filter(
+            (g: any) => g.userUuid === this.currentUserUuid
+          ) || [];
+
+
           return {
             id: item.uuid,
-            title: finalTitle.trim(),
+            title: item.subjectName,
             type: this.mapType(item.classType),
             professor: item.location || "Profesor",
             room: item.roomName || "Fără sală",
@@ -186,6 +200,7 @@ export class TimetableGridComponent implements OnInit, OnChanges {
             startRow: (item.startingHour || 8) - 6,
             span: item.duration || 2,
             weeklyNotes: {},
+            grades: myGrades, // Legăm notele filtrate de obiectul CalendarEvent
             attendanceCount: myAttendances.length,
             totalRequired: item.attendancesRequired || 14
           };
@@ -229,6 +244,7 @@ export class TimetableGridComponent implements OnInit, OnChanges {
 
     this.calculateOverlaps(filteredEvents);
   }
+
 
   // --- WEATHER LOGIC ---
   fetchAndMapWeather() {
@@ -349,7 +365,9 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     }
   }
   onGradesClick(event: CalendarEvent) { this.gradesOpenRequested.emit(event); }
-  handleGradesClick(event: CalendarEvent) { this.triggerGrades.emit(event); }
+  handleGradesClick(event: CalendarEvent) {
+    this.triggerGrades.emit(event);
+  }
 
   handleRoomClick(room: string, event: MouseEvent) {
     event.stopPropagation();
