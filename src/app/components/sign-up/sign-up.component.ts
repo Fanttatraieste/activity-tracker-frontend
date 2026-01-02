@@ -27,11 +27,13 @@ export class SignUpComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('signup_bg');
+    // Folosim aceeasi cheie ca la login pentru consistenta
+    const saved = localStorage.getItem('selected_bg');
     if (saved) {
       this.selectedBackground = saved;
     } else {
-      this.selectedBackground = "public/Winter_Project.jpg";
+      // CALE CORECTA: Fără "public/", direct din assets
+      this.selectedBackground = "assets/sign-up-background-images/Autumn_Project.jpg";
     }
   }
 
@@ -43,15 +45,14 @@ export class SignUpComponent implements OnInit {
 
   onBackgroundChange() {
     if (this.selectedBackground) {
-      localStorage.setItem('signup_bg', this.selectedBackground);
-    } else {
-      localStorage.removeItem('signup_bg');
+      localStorage.setItem('selected_bg', this.selectedBackground); // Cheie unica
     }
   }
 
   resetBackground() {
+    // Resetam la o imagine default existenta
     this.selectedBackground = "assets/sign-up-background-images/Autumn_Project.jpg";
-    localStorage.setItem('signup_bg', this.selectedBackground);
+    localStorage.setItem('selected_bg', this.selectedBackground);
   }
 
   onSignup() {
@@ -66,8 +67,6 @@ export class SignUpComponent implements OnInit {
       return;
     }
 
-    // Construim obiectul pentru Java
-    // Nota: Java UserRequestDto nu are nume/prenume, deci le salvam doar local
     const registerData = {
       email: this.email,
       password: this.password,
@@ -81,11 +80,8 @@ export class SignUpComponent implements OnInit {
       next: (response) => {
         console.log("Inregistrare reusita:", response);
 
-        // Salvam numele local pentru UI (Sidebar)
         localStorage.setItem('userName', `${this.name} ${this.surname}`);
 
-        // Putem loga userul automat sau il trimitem la login
-        // Varianta 1: Trimite la Login
         alert('Cont creat! Te rugăm să te autentifici.');
         this.router.navigate(['/login']);
       },

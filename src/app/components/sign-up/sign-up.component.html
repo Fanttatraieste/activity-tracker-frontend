@@ -1,11 +1,10 @@
 <div class="signup-page-container" [style.background-image]="backgroundStyle">
   <div class="bg-controls">
-    <label for="bg-selector"></label>
     <select id="bg-selector" [(ngModel)]="selectedBackground" (change)="onBackgroundChange()">
-      <option value="assets/sign-up-background-images/Autumn_Project.jpg">Autumn</option>
       <option value="assets/sign-up-background-images/Winter_Project.jpg">Winter</option>
       <option value="assets/sign-up-background-images/Spring_Project.jpg">Spring</option>
       <option value="assets/sign-up-background-images/Summer_Project.jpg">Summer</option>
+      <option value="assets/sign-up-background-images/Autumn_Project.jpg">Autumn</option>
     </select>
 
     <button class="reset-bg" (click)="resetBackground()" type="button">Resetează</button>

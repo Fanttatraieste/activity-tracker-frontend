@@ -2,6 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
+export interface UserPayload {
+  uuid: string;
+  sub: string; // De obicei email-ul/username-ul
+  role: string;
+}
+
 export interface AuthRequest {
   email: string;
   password: string;
@@ -30,6 +36,37 @@ export class AuthService {
           localStorage.setItem('authToken', token);
         })
       );
+  }
+
+  getCurrentUser(): UserPayload | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+
+      const decoded = JSON.parse(jsonPayload);
+
+      // --- ADAUGĂ ACEST LOG ---
+      console.log("JWT Payload decodat complet:", decoded);
+
+      // Verificăm dacă UUID-ul este pe alt nume (uneori e 'id' sau 'userId')
+      const userUuid = decoded.uuid || decoded.id || decoded.userId;
+
+      return {
+        uuid: decoded.uuid || decoded.id || decoded.userId, // Încearcă toate variantele posibile
+        sub: decoded.sub,
+        role: decoded.role
+      } as UserPayload;
+
+    } catch (e) {
+      console.error("Eroare la decodarea token-ului", e);
+      return null;
+    }
   }
 
   // --- REGISTER ---

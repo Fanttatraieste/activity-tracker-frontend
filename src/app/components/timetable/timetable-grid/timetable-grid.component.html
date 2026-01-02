@@ -87,10 +87,10 @@
 
         <app-event-attendance
           [present]="event.attendanceCount || 0"
-          [total]="14"
+          [total]="event.totalRequired || 14"
           [isOpen]="event.isAttendanceOpen || false"
-          (attendanceChange)="updateAttendance(event, $event)"
-          (toggle)="toggleAttendance(event)">
+          (toggle)="toggleAttendance(event)"
+          (attendanceChange)="updateAttendance(event, $event)">
         </app-event-attendance>
       </div>
 

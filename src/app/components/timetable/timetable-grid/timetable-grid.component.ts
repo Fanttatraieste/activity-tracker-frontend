@@ -4,6 +4,8 @@ import { EventAttendanceComponent } from './event-attendance/event-attendance.co
 import { EventGradesComponent } from './event-grades/event-grades.component';
 import { WeatherResponse, WeatherService } from '../../../services/weather.service';
 import { TimetableService } from '../../../services/timetable.service';
+import { AttendanceService } from '../../../services/attendance.service';
+import { AuthService } from '../../../services/auth.service';
 
 const KNOWN_OPTIONALS = [
   'Instruire asistata de calculator',
@@ -40,6 +42,7 @@ export interface CalendarEvent {
   notes?: string;
   weeklyNotes: { [week: number]: string };
   attendanceCount?: number;
+  totalRequired: number;
 
   weatherInfo?: {
     temp: number;
@@ -68,6 +71,9 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   private weatherService = inject(WeatherService);
   private timetableService = inject(TimetableService);
   private cdr = inject(ChangeDetectorRef);
+  private attendanceService = inject(AttendanceService);
+  private currentUserUuid = 'UUID-UL-TAU-DE-TEST';
+  private authService = inject(AuthService);
 
   @Output() triggerGrades = new EventEmitter<CalendarEvent>();
   @Output() eventClicked = new EventEmitter<CalendarEvent>();
@@ -117,7 +123,18 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     'StEur-Ferdinand': MAP_URLS.ST_EUR
   };
 
+
+
   ngOnInit() {
+    const user = this.authService.getCurrentUser();
+
+    if (user && user.uuid) {
+      this.currentUserUuid = user.uuid;
+    } else {
+      this.currentUserUuid = '0a52ca35-4fb5-488a-aafe-cc1432b682f1';
+      console.warn("UUID forțat manual deoarece lipsește din Token!");
+    }
+
     this.loadEventsFromBackend();
   }
 
@@ -141,36 +158,36 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     }
   }
 
-  /**
-   * Fetches schedule data from the Spring Boot API
-   */
   loadEventsFromBackend() {
     const frequency = this.selectedWeek === 1 ? 'Week1' : 'Week2';
 
     this.timetableService.getScheduleFromApi(undefined, frequency).subscribe({
       next: (data: any[]) => {
-        // Filter by group (e.g., UI 331.1 becomes 3311 for DB)
         const uiGroupStr = String(this.selectedGroup).replace('.', '').trim();
 
         const filteredByGroup = data.filter(item =>
           item.groups?.some((g: any) => String(g.number).trim() === uiGroupStr)
         );
 
-        // Map API objects to CalendarEvent interface
         this.rawEvents = filteredByGroup.map(item => {
           const finalTitle = item.subjectName || item.subject?.name || "Materie Lipsă";
+
+          const myAttendances = item.attendances?.filter(
+            (a: any) => a.userUuid === this.currentUserUuid
+          ) || [];
 
           return {
             id: item.uuid,
             title: finalTitle.trim(),
             type: this.mapType(item.classType),
-            professor: item.location || "Profesor nespecificat",
+            professor: item.location || "Profesor",
             room: item.roomName || "Fără sală",
             dayIndex: this.dayMapping[this.capitalize(item.dayOfWeek)] || 1,
             startRow: (item.startingHour || 8) - 6,
             span: item.duration || 2,
             weeklyNotes: {},
-            attendanceCount: item.attendances?.length || 0
+            attendanceCount: myAttendances.length,
+            totalRequired: item.attendancesRequired || 14
           };
         });
 
@@ -194,9 +211,7 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   }
 
-  /**
-   * Filters events based on UI toggles (curs/sem/lab) and chosen optionals
-   */
+
   private processEventsForDisplay() {
     const filteredEvents = this.rawEvents.filter(ev => {
       // 1. Filter by type
@@ -290,7 +305,49 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   openLink(url: string) { if(url) window.open(url, "_blank"); }
   toggleAttendance(event: CalendarEvent) { event.isAttendanceOpen = !event.isAttendanceOpen; }
   onEventClick(event: CalendarEvent) { this.eventClicked.emit(event); }
-  updateAttendance(event: CalendarEvent, newCount: number) { event.attendanceCount = newCount; }
+  updateAttendance(event: CalendarEvent, newCount: number) {
+    const scheduleUuid = event.id;
+    const isIncrement = newCount > (event.attendanceCount || 0);
+
+    if (isIncrement) {
+      this.attendanceService.createAttendance({
+        userUuid: this.currentUserUuid,
+        classScheduleUuid: scheduleUuid
+      }).subscribe({
+        next: () => {
+          event.attendanceCount = newCount;
+          this.displayEvents = [...this.displayEvents];
+          this.cdr.detectChanges();
+
+          setTimeout(() => this.loadEventsFromBackend(), 300);
+        },
+        error: (err) => alert("Serverul nu a putut salva prezența. Verifică log-urile Java.")
+      });
+    }else {
+      this.timetableService.getScheduleFromApi(undefined, this.selectedWeek === 1 ? 'Week1' : 'Week2')
+        .subscribe(data => {
+          const currentCourse = data.find((item: any) => item.uuid === scheduleUuid);
+          const userAttendance = currentCourse?.attendances?.find((a: any) => a.userUuid === this.currentUserUuid);
+
+          if (userAttendance) {
+            this.attendanceService.deleteAttendance(userAttendance.uuid).subscribe({
+              next: () => {
+                console.log("Prezență ștearsă pe server");
+                setTimeout(() => {
+                  this.loadEventsFromBackend();
+                }, 300);
+              },
+              error: (err) => {
+                console.error("Eroare la ștergere:", err);
+                event.attendanceCount = newCount + 1; // Rollback
+                this.displayEvents = [...this.displayEvents];
+                this.cdr.detectChanges();
+              }
+            });
+          }
+        });
+    }
+  }
   onGradesClick(event: CalendarEvent) { this.gradesOpenRequested.emit(event); }
   handleGradesClick(event: CalendarEvent) { this.triggerGrades.emit(event); }
 

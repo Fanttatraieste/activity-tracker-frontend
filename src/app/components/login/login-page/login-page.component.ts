@@ -26,17 +26,17 @@ export class LoginPageComponent implements OnInit {
   selectedBackground: string | null = null;
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('signup_bg');
+    const saved = localStorage.getItem('selected_bg');
     if (saved) {
       this.selectedBackground = saved;
     } else {
-      this.selectedBackground = "public/Winter_Project.jpg";
+      this.selectedBackground = "assets/sign-up-background-images/Winter_Project.jpg";
     }
   }
 
-  // getter returns style for the binding [style.background-image]
   get backgroundStyle(): string | null {
     if (this.selectedBackground) {
+      // Adăugăm un mic fix pentru URL
       return `url('${this.selectedBackground}')`;
     }
     return null;
@@ -44,18 +44,16 @@ export class LoginPageComponent implements OnInit {
 
   onBackgroundChange() {
     if (this.selectedBackground) {
-      localStorage.setItem('login_bg', this.selectedBackground);
+      localStorage.setItem('selected_bg', this.selectedBackground);
     } else {
-      localStorage.removeItem('login_bg');
+      localStorage.removeItem('selected_bg');
     }
-    // If you want to do other actions when changing, add them here.
   }
 
   resetBackground() {
-    this.selectedBackground = null;
-    localStorage.removeItem('login_bg');
+    this.selectedBackground = "assets/sign-up-background-images/Winter_Project.jpg";
+    localStorage.setItem('selected_bg', this.selectedBackground);
   }
-
   onLogin() {
     this.loginError = null;
 
@@ -70,9 +68,7 @@ export class LoginPageComponent implements OnInit {
         next: (token) => {
           console.log("Login reusit! Token:", token);
 
-          // Salvam email-ul pentru UI (Sidebar/Settings)
           localStorage.setItem('userEmail', this.email);
-          // Putem seta un nume generic pana cand Backend-ul va returna si numele userului
           localStorage.setItem('userName', 'Utilizator');
 
           this.router.navigate(['/timetable']);
