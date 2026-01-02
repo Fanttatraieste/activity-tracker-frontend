@@ -1,7 +1,9 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService } from '../../../services/user.service'; // Asigură-lea calea corectă
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,6 +14,8 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
   private router = inject(Router);
+  private userService = inject(UserService);
+  private authService = inject(AuthService);
 
   @Output() optionaleSchimbate = new EventEmitter<string[]>();
   activeMenu: string | null = null;
@@ -21,6 +25,8 @@ export class SidebarComponent {
     materie: string,
     tip: string
   }>();
+  displayName: string = 'Utilizator';
+  displayEmail: string = '';
 
   // --- Date pentru "Alege materie" ---
   materii = [
@@ -56,7 +62,31 @@ export class SidebarComponent {
   selectedTip: string = '';
 
   ngOnInit(): void {
+    this.loadUserData();
     this.onMaterieToggle();
+  }
+
+  loadUserData(): void {
+    const user = this.authService.getCurrentUser();
+    if (user && user.uuid) {
+      this.userService.getProfile(user.uuid).subscribe({
+        next: (data) => {
+          // Dacă avem nume și prenume în DB, le concatenăm
+          if (data.nume || data.prenume) {
+            this.displayName = `${data.nume} ${data.prenume}`.trim();
+          } else {
+            this.displayName = 'Student'; // Fallback
+          }
+
+          // Afișăm email-ul academic (cel din DB sau cel din Token)
+          this.displayEmail = data.emailAcademic || user.sub;
+        },
+        error: (err) => {
+          console.error("Eroare la încărcarea datelor în sidebar:", err);
+          this.displayEmail = user.sub; // Fallback la email-ul din token
+        }
+      });
+    }
   }
 
   toggleMenu(menuName: string): void {

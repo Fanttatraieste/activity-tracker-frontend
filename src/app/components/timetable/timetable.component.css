@@ -6,7 +6,8 @@
 }
 
 .page-container {
-  margin-left: 232px;
+  margin-top: 10px;
+  margin-left: 245px;
   display: flex;
   flex-direction: row;
   gap: 20px;

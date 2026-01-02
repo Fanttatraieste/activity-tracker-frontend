@@ -95,10 +95,22 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   focusedRow: number | null = null;
 
   private dayMapping: { [key: string]: number } = {
-    'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5,
-    'Saturday': 6, 'Sunday': 0
-  };
+    'Monday': 1,
+    'Tuesday': 2,
+    'Wednesday': 3,
+    'Thursday': 4,
+    'Friday': 5,
+    'Saturday': 6,
+    'Sunday': 0,
 
+    'Luni': 1,
+    'Marti': 2,
+    'Miercuri': 3,
+    'Joi': 4,
+    'Vineri': 5,
+    'Sambata': 6,
+    'Duminica': 0
+  };
   private readonly roomToMapUrl: { [key: string]: string } = {
     // centrala
     'MOS-S15': MAP_URLS.CENTRAL,
@@ -260,12 +272,16 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   private mapWeatherToEvents(weatherData: WeatherResponse) {
     const weatherLookup = new Map<string, { temp: number, condition: string }>();
 
+    // weatherData este un obiect unde cheile sunt date calendaristice (ex: "2026-01-02")
     Object.keys(weatherData).forEach(dateKey => {
       const dayData = weatherData[dateKey];
-      const dayIdx = this.dayMapping[this.capitalize(dayData.day_name)];
+
+      // Luăm indexul zilei folosind numele în română primit de la backend
+      const dayIdx = this.dayMapping[dayData.day_name];
 
       if (dayIdx !== undefined) {
-        dayData.hours.forEach(h => {
+        dayData.hours.forEach((h: any) => {
+          // Cheia trebuie să fie identică cu cea folosită la căutare mai jos
           const key = `${dayIdx}-${h.hour}`;
           weatherLookup.set(key, { temp: h.temp, condition: h.condition });
         });
@@ -273,7 +289,7 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     });
 
     this.displayEvents.forEach(event => {
-      const eventHour = event.startRow + 6;
+      const eventHour = event.startRow + 6; // startRow 2 + 6 = ora 8
       const lookupKey = `${event.dayIndex}-${eventHour}`;
       const weather = weatherLookup.get(lookupKey);
 

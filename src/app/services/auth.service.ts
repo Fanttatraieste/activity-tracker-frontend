@@ -4,7 +4,7 @@ import { Observable, tap } from 'rxjs';
 
 export interface UserPayload {
   uuid: string;
-  sub: string; // De obicei email-ul/username-ul
+  sub: string;
   role: string;
 }
 
@@ -26,9 +26,8 @@ export interface RegisterRequest {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = 'http://localhost:8080/api/auth'; // Am adăugat prefixul aici pentru simplitate
 
-  // --- LOGIN ---
   login(data: AuthRequest): Observable<string> {
     return this.http.post(`${this.apiUrl}/login`, data, { responseType: 'text' })
       .pipe(
@@ -38,6 +37,10 @@ export class AuthService {
       );
   }
 
+  register(data: RegisterRequest): Observable<string> {
+    return this.http.post(`${this.apiUrl}/register`, data, { responseType: 'text' });
+  }
+
   getCurrentUser(): UserPayload | null {
     const token = this.getToken();
     if (!token) return null;
@@ -45,36 +48,26 @@ export class AuthService {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join(''));
 
       const decoded = JSON.parse(jsonPayload);
-
-      // --- ADAUGĂ ACEST LOG ---
-      console.log("JWT Payload decodat complet:", decoded);
-
-      // Verificăm dacă UUID-ul este pe alt nume (uneori e 'id' sau 'userId')
-      const userUuid = decoded.uuid || decoded.id || decoded.userId;
-
       return {
-        uuid: decoded.uuid || decoded.id || decoded.userId, // Încearcă toate variantele posibile
+        uuid: decoded.uuid,
         sub: decoded.sub,
         role: decoded.role
       } as UserPayload;
-
     } catch (e) {
-      console.error("Eroare la decodarea token-ului", e);
       return null;
     }
   }
 
-  // --- REGISTER ---
-  register(data: RegisterRequest): Observable<string> {
-    return this.http.post(`${this.apiUrl}/register`, data, { responseType: 'text' });
-  }
-
   getToken() {
     return localStorage.getItem('authToken');
+  }
+
+  logout() {
+    localStorage.removeItem('authToken');
   }
 }
