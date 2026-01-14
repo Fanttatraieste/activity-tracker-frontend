@@ -1,9 +1,7 @@
 <div class="timetable-wrapper-2">
 
   <div class="hours-column">
-    <div class="hour"></div>
-
-    <div class="hour" (click)="toggleHourFocus(2)" [class.active-hour]="focusedRow === 2">8 AM</div>
+    <div class="hour"></div> <div class="hour" (click)="toggleHourFocus(2)" [class.active-hour]="focusedRow === 2">8 AM</div>
     <div class="hour" (click)="toggleHourFocus(3)" [class.active-hour]="focusedRow === 3">9 AM</div>
     <div class="hour" (click)="toggleHourFocus(4)" [class.active-hour]="focusedRow === 4">10 AM</div>
     <div class="hour" (click)="toggleHourFocus(5)" [class.active-hour]="focusedRow === 5">11 AM</div>
@@ -32,20 +30,8 @@
     <div class="day" (click)="toggleDayFocus(4)" [class.active-header]="focusedDayIndex === 4">Joi</div>
     <div class="day" (click)="toggleDayFocus(5)" [class.active-header]="focusedDayIndex === 5">Vineri</div>
 
-    <!-- CELULELE -->
+    <div class="cell" *ngFor="let i of [].constructor(65)"></div>
 
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-    <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
     <div *ngFor="let event of displayEvents"
          class="event-wrapper"
          [class.dimmed]="isEventDimmed(event)"
@@ -55,12 +41,12 @@
          [style.marginLeft.%]="event.marginLeft">
 
       <div class="weather-cell"
-           *ngIf="showWeather && (!event.marginLeft || event.marginLeft == 0)">
-
-        <img src="weather-icon.png" class="weather-icon">
-
-        <span class="weather-temp">22°</span>
+           *ngIf="showWeather && event.weatherInfo && event.marginLeft === 0"
+           [title]="event.weatherInfo.condition">
+        <img [src]="event.weatherInfo.iconUrl" class="weather-icon" alt="weather">
+        <span class="weather-temp">{{ event.weatherInfo.temp }}°</span>
       </div>
+
       <div class="event"
            [ngClass]="event.type"
            (click)="onEventClick(event)">
@@ -76,25 +62,24 @@
         </div>
 
         <div class="event-room"
-             (click)="openLink('https://maps.google.com/?q=Universitatea Babes Bolyai Cluj ' + event.room); $event.stopPropagation()">
+             (click)="handleRoomClick(event.room, $event)">
           {{ event.room }}
         </div>
 
         <app-event-grades
-          [ngClass]="event.type"
+          [event]="event"
           (openGrades)="handleGradesClick(event)">
         </app-event-grades>
+
         <app-event-attendance
           [present]="event.attendanceCount || 0"
-          [total]="14"
+          [total]="event.totalRequired || 14"
           [isOpen]="event.isAttendanceOpen || false"
-          (attendanceChange)="updateAttendance(event, $event)"
-          (toggle)="toggleAttendance(event)">
+          (toggle)="toggleAttendance(event)"
+          (attendanceChange)="updateAttendance(event, $event)">
         </app-event-attendance>
       </div>
 
     </div>
-
-
   </div>
 </div>

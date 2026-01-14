@@ -3,9 +3,9 @@
   <div class="info-block">
     <div class="label">Specializare</div>
     <select (change)="onSpecializationChange($event)">
-      <option *ngFor="let s of specializations" [value]="s" [selected]="s === selectedSpecialization">
-        {{ s }}
-      </option>
+      <option value="Matematica Informatica Romana An 3">Matematica Informatica Romana An 3</option>
+      <option value="Matematica Informatica Romana An 2">Matematica Informatica Romana An 2</option>
+      <option value="Matematica Informatica Romana An 1">Matematica Informatica Romana An 1</option>
     </select>
   </div>
 
@@ -19,7 +19,7 @@
   </div>
 
   <div class="info-block">
-    <div class="label">Săptămâna</div>
+    <div class="label">Saptamana</div>
     <div class="switch-container">
       <button class="switch-btn" [class.active]="selectedWeek === 1" (click)="onWeekChange(1)">P</button>
       <button class="switch-btn" [class.active]="selectedWeek === 2" (click)="onWeekChange(2)">I</button>

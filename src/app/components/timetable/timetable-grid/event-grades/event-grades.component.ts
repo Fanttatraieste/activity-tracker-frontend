@@ -1,5 +1,6 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CalendarEvent } from '../timetable-grid.component';
 
 @Component({
   selector: 'app-event-grades',
@@ -9,12 +10,18 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./event-grades.component.css']
 })
 export class EventGradesComponent {
-  // Emitem semnalul către părinte
+  // Primeste obiectul evenimentului curent pentru a sti carui curs ii apartin notele
+  @Input() event?: CalendarEvent;
+
+  // Eveniment emis catre parinte (grid-ul orarului) pentru a deschide panoul lateral de note
   @Output() openGrades = new EventEmitter<void>();
 
-  onToggle(event: MouseEvent) {
-    // Oprim propagarea pentru a nu deschide și Notițele (evenimentul părintelui)
-    event.stopPropagation();
+  /**
+   * Gestioneaza click-ul pe iconita de catalog.
+   * stopPropagation() este critic pentru a preveni activarea click-ului pe intreaga celula de orar.
+   */
+  handleClick(e: MouseEvent) {
+    e.stopPropagation();
     this.openGrades.emit();
   }
 }

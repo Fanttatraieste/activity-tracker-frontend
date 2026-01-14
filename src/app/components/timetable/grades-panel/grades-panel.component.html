@@ -1,40 +1,29 @@
 <div class="panel-container" [ngClass]="event.type">
-
   <div class="panel-controls">
     <button class="close-btn" (click)="onClose()">×</button>
   </div>
 
   <h2 class="panel-title">{{ event.title }}</h2>
-
   <hr class="divider">
 
   <div class="grades-wrapper">
-
     <div class="grades-header">
-      <span class="col-label">Tip Notă</span>
-      <span class="col-label">Notă</span>
+      <span class="col-label">Tip Nota</span>
+      <span class="col-label">Nota</span>
       <span class="col-label">Procent</span>
     </div>
 
-    <div class="grade-row">
-      <input type="text" class="input-box type" placeholder="Ex: Examen">
-      <input type="text" class="input-box grade" placeholder="10">
-      <input type="text" class="input-box percent" placeholder="40%">
+    <div class="grade-row" *ngFor="let row of rows; let i = index">
+      <input type="text" class="input-box type" [(ngModel)]="row.type" [placeholder]="i===0?'Examen':(i===1?'Lab':'Seminar')">
+
+      <input type="text" class="input-box grade" [(ngModel)]="row.value" placeholder="-">
+
+      <input type="text" class="input-box percent" [(ngModel)]="row.weight" placeholder="33%">
     </div>
 
-    <div class="grade-row">
-      <input type="text" class="input-box type" placeholder="Ex: Laborator">
-      <input type="text" class="input-box grade" placeholder="-">
-      <input type="text" class="input-box percent" placeholder="20%">
-    </div>
-
-    <div class="grade-row">
-      <input type="text" class="input-box type" placeholder="Ex: Seminar">
-      <input type="text" class="input-box grade" placeholder="-">
-      <input type="text" class="input-box percent" placeholder="40%">
-    </div>
-
+    <button (click)="saveAllGrades()" class="input-box"
+            style="margin-top: 20px; background: rgba(255,255,255,0.2); color: white; cursor: pointer;">
+      Salveaza Notele in Catalog
+    </button>
   </div>
-
 </div>
-

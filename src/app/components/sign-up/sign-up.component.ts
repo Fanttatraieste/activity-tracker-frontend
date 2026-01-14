@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,90 +12,65 @@ import { Router, RouterLink } from '@angular/router';
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
-
+  // Definirea variabilelor care stocheaza datele introduse in formular
   name = '';
   surname = '';
   email = '';
   password = '';
   confirmPassword = '';
-
-
   signupError: string | null = null;
+  selectedBackground: string = '';
 
-  selectedBackground: string | null = null;
-
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('signup_bg');
-    if (saved) {
-      this.selectedBackground = saved;
-    } else {
-      this.selectedBackground = "public/Winter_Project.jpg";
-    }
+    this.setAutoBackground();
   }
 
-  get backgroundStyle(): string | null {
-    return this.selectedBackground
-      ? `url('${this.selectedBackground}')`
-      : null;
+  // Seteaza imaginea de fundal in functie de luna curenta (similar cu logica de Login)
+  private setAutoBackground(): void {
+    const month = new Date().getMonth();
+    if (month >= 2 && month <= 4) this.selectedBackground = "assets/sign-up-background-images/Spring_Project.jpg";
+    else if (month >= 5 && month <= 7) this.selectedBackground = "assets/sign-up-background-images/Summer_Project.jpg";
+    else if (month >= 8 && month <= 10) this.selectedBackground = "assets/sign-up-background-images/Autumn_Project.jpg";
+    else this.selectedBackground = "assets/sign-up-background-images/Winter_Project.jpg";
   }
 
-  onBackgroundChange() {
-    if (this.selectedBackground) {
-      localStorage.setItem('signup_bg', this.selectedBackground);
-    } else {
-      localStorage.removeItem('signup_bg');
-    }
+  get backgroundStyle(): string {
+    return `url('${this.selectedBackground}')`;
   }
 
-  resetBackground() {
-    this.selectedBackground = "assets/sign-up-background-images/Autumn_Project.jpg";
-    localStorage.setItem('signup_bg', this.selectedBackground);
-  }
-
+  // Logica principala de inregistrare a utilizatorului
   onSignup() {
     this.signupError = null;
 
-    if (!this.name || !this.surname || !this.email || !this.password) {
-      this.signupError = "Te rugăm să completezi toate câmpurile.";
+    // Verificare pentru campuri goale (Validare Frontend)
+    if (!this.email || !this.password || !this.name) {
+      this.signupError = "Toate campurile sunt obligatorii.";
       return;
     }
 
-    if (!this.email.includes('@')) {
-      this.signupError = "Adresa de e-mail nu este validă.";
+    // Verificare pentru confirmarea corecta a parolei
+    if (this.password !== this.confirmPassword) {
+      this.signupError = "Parolele nu coincid.";
       return;
     }
 
-    localStorage.setItem('userName', `${this.name} ${this.surname}`);
-    localStorage.setItem('userEmail', this.email);
-    localStorage.setItem('userFirstName', this.surname);
-    localStorage.setItem('userLastName', this.name);
-
-    alert('Cont creat cu succes!');
-
-    // Temporary redirect (matching login behavior)
-    this.router.navigate(['/timetable']);
+    // Apelul catre serviciul de autentificare pentru crearea contului in Backend (Java)
+    this.authService.register({
+      email: this.email,
+      password: this.password,
+      userType: 'Student' // Seteaza automat rolul de Student la inregistrare
+    }).subscribe({
+      next: () => {
+        alert('Cont creat!');
+        this.router.navigate(['/login']); // Redirectionare la Login dupa succes
+      },
+      error: () => this.signupError = "Eroare la inregistrare."
+    });
   }
 
   onGoogleSignup() {
-    const clientId = "295063293016-gb5su3e8r9607m4ivbl8hqipth5n5d8t.apps.googleusercontent.com";
-    const redirectUri = "http://localhost:4200";
-
-    const googleAuthUrl =
-      "https://accounts.google.com/o/oauth2/v2/auth" +
-      "?response_type=token" +
-      "&client_id=" + clientId +
-      "&redirect_uri=" + encodeURIComponent(redirectUri) +
-      "&scope=email%20profile" +
-      "&prompt=select_account";
-
-    window.location.href = googleAuthUrl;
-
-    this.router.navigate(['/timetable']);
-  }
-
-  goToLogin() {
-    this.router.navigate(['/login']);
+    alert("Inregistrarea cu Google este momentan indisponibila.");
   }
 }

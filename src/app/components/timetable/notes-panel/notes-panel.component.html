@@ -1,12 +1,10 @@
 <div class="panel-container" [ngClass]="event.type">
-
   <div class="panel-controls">
+
     <div class="week-select-wrapper">
       <span class="week-icon">📅</span>
-      <select class="week-select" [(ngModel)]="currentNoteWeek">
-        <option *ngFor="let w of weeksList" [value]="w">
-          Sapt {{ w }}
-        </option>
+      <select class="week-select" [(ngModel)]="currentNoteWeek" (change)="onWeekChange()">
+        <option *ngFor="let w of weeksList" [value]="w">Sapt {{ w }}</option>
       </select>
     </div>
 
@@ -14,16 +12,17 @@
   </div>
 
   <h2 class="panel-title">{{ event.title }}</h2>
-
   <hr class="divider">
 
-  <label class="notes-label">
-    Notițe pentru Săptămâna {{ currentNoteWeek }}:
-  </label>
+  <label class="notes-label">Notite pentru Saptamana {{ currentNoteWeek }}:</label>
 
   <textarea
     class="notes-area"
     [(ngModel)]="event.weeklyNotes[currentNoteWeek]"
-    placeholder="Scrie notițele pentru saptamana {{currentNoteWeek}} aici..."></textarea>
+    placeholder="...">
+</textarea>
 
+  <button (click)="saveNote()" class="save-btn-notes">
+    💾 Salveaza Notita
+  </button>
 </div>

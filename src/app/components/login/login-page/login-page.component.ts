@@ -1,95 +1,65 @@
 import { Component, OnInit } from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import {FormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink
-  ],
-  standalone: true
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterLink]
 })
 export class LoginPageComponent implements OnInit {
-  constructor(private router: Router) {}
+  // Injectarea dependintelor: Router pentru navigare si AuthService pentru apeluri API
+  constructor(private router: Router, private authService: AuthService) {}
+
   email: string = "";
   password: string = "";
-
   loginError: string | null = null;
-
-  // background selector
-  selectedBackground: string | null = null;
+  selectedBackground: string = "";
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('signup_bg');
-    if (saved) {
-      this.selectedBackground = saved;
-    } else {
-      this.selectedBackground = "public/Winter_Project.jpg";
-    }
+    // Initializarea automata a fundalului la incarcarea componentei
+    this.setAutoBackground();
   }
 
-  // getter returns style for the binding [style.background-image]
-  get backgroundStyle(): string | null {
-    if (this.selectedBackground) {
-      return `url('${this.selectedBackground}')`;
-    }
-    return null;
+  // Logica pentru selectarea imaginii de fundal in functie de anotimpul curent
+  private setAutoBackground(): void {
+    const month = new Date().getMonth(); // 0 = Ianuarie, 11 = Decembrie
+    if (month >= 2 && month <= 4) this.selectedBackground = "assets/sign-up-background-images/Spring_Project.jpg";
+    else if (month >= 5 && month <= 7) this.selectedBackground = "assets/sign-up-background-images/Summer_Project.jpg";
+    else if (month >= 8 && month <= 10) this.selectedBackground = "assets/sign-up-background-images/Autumn_Project.jpg";
+    else this.selectedBackground = "assets/sign-up-background-images/Winter_Project.jpg";
   }
 
-  onBackgroundChange() {
-    if (this.selectedBackground) {
-      localStorage.setItem('login_bg', this.selectedBackground);
-    } else {
-      localStorage.removeItem('login_bg');
-    }
-    // If you want to do other actions when changing, add them here.
+  // Getter folosit de HTML pentru a seta stilul CSS inline (background-image)
+  get backgroundStyle(): string {
+    return `url('${this.selectedBackground}')`;
   }
 
-  resetBackground() {
-    this.selectedBackground = null;
-    localStorage.removeItem('login_bg');
-  }
-
+  // Gestionarea procesului de autentificare
   onLogin() {
     this.loginError = null;
 
-    // Simulare validare simplă
-    if (!this.email.includes("@")) {
-      this.loginError = "Adresa de email nu este validă.";
+    // Validare primara pe partea de client
+    if (!this.email || !this.password) {
+      this.loginError = "Introdu email si parola.";
       return;
     }
 
-    // AICI SALVĂM EMAILUL (Optional - ca sa il vedem in Settings mai tarziu)
-    // Putem folosi un Service sau localStorage pentru simplitate acum
-    localStorage.setItem('userEmail', this.email);
-    localStorage.setItem('userName', 'Utilizator Logat'); // Nume placeholder
-
-    // NAVIGARE CATRE ORAR
-    this.router.navigate(['/timetable']);
+    // Apelarea serviciului de autentificare si gestionarea raspunsului prin Observable
+    this.authService.login({ email: this.email, password: this.password })
+      .subscribe({
+        // Daca login-ul reuseste, redirectionam utilizatorul catre pagina orarului
+        next: () => this.router.navigate(['/timetable']),
+        // In caz de eroare (ex: date incorecte), afisam mesajul corespunzator
+        error: () => this.loginError = "Email sau parola incorecta!"
+      });
   }
 
   onGoogleLogin() {
-    // const clientId = "295063293016-gb5su3e8r9607m4ivbl8hqipth5n5d8t.apps.googleusercontent.com";
-    // const redirectUri = "http://localhost:4200";
-    //
-    // const googleAuthUrl =
-    //   "https://accounts.google.com/o/oauth2/v2/auth" +
-    //   "?response_type=token" +
-    //   "&client_id=" + clientId +
-    //   "&redirect_uri=" + encodeURIComponent(redirectUri) +
-    //   "&scope=email%20profile" +
-    //   "&prompt=select_account";
-    //
-    // window.location.href = googleAuthUrl;
-    // this.router.navigate(['/timetable']);
-    localStorage.setItem('userEmail', 'google.user@gmail.com');
-    localStorage.setItem('userName', 'Google User');
-    this.router.navigate(['/timetable']);
-
+    alert("Autentificarea cu Google este momentan indisponibila.");
   }
 }

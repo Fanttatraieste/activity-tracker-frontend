@@ -1,15 +1,17 @@
-/* font global Roboto */
+/* --- FONT & RESET --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 * {
   font-family: 'Roboto', sans-serif;
 }
 
+/* Containerul principal care aliniaza coloana de ore cu grid-ul de cursuri */
 .timetable-wrapper-2 {
   display: flex;
   gap: 15px;
 }
 
+/* Coloana din stanga care afiseaza intervalele orare */
 .hours-column {
   width: 90px;
   display: flex;
@@ -29,32 +31,32 @@
   border: 2px solid #d3dff0;
   cursor: pointer;
   transition: all 0.2s ease;
-  user-select: none;
-}
-.hour:hover {
-  background: #cceeff;
-  border-color: #2a5a7f;
+  user-select: none; /* Previne selectarea accidentala a textului la click */
 }
 
+/* Stil pentru ora curenta (evidentiata in functie de timp) */
 .active-hour {
   background: #2a5a7f;
   color: white;
   border-color: #1a3a5f;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   transform: scale(1.05);
   font-weight: 900;
   z-index: 20;
 }
 
+/* --- GRID-UL CENTRAL --- */
 .grid-area {
   flex: 1;
   display: grid;
+  /* 5 coloane egale (Luni-Vineri) */
   grid-template-columns: repeat(5, 1fr);
+  /* 1 rand pentru antet + 13 randuri pentru intervalele orare (08:00 - 20:00) */
   grid-template-rows: 50px repeat(13, 50px);
   gap: 10px;
-  position: relative;
+  position: relative; /* Necesar pentru pozitionarea liniei de timp real */
 }
 
+/* Antetul pentru zilele saptamanii */
 .day {
   background: #dbefff;
   color: #2a5a7f;
@@ -66,103 +68,66 @@
   align-items: center;
   border: 2px solid #d3dff0;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
-  user-select: none;
-}
-
-.day:hover {
-  background: #cceeff;
+  transition: all 0.2s;
 }
 
 .day.active-header {
   background: #2a5a7f;
   color: white;
-  border-color: #1a3a5f;
   transform: scale(1.05);
-  z-index: 20;
 }
 
-/* stil celule goale */
+/* Celulele de fundal goale ale orarului */
 .cell {
   background: #fafafa;
   border: 1px solid #e1e1e1;
   border-radius: 6px;
 }
 
+/* Container pentru un curs (poate include cardul meteo + cardul de curs) */
 .event-wrapper {
   display: flex;
   gap: 5px;
   align-items: stretch;
   z-index: 5;
-  pointer-events: none;
-
+  pointer-events: none; /* Permite click-ul sa treaca prin wrapper catre elementele interne */
   transition: filter 0.3s ease, opacity 0.3s ease;
 }
 
 .event-wrapper > * {
-  pointer-events: auto;
+  pointer-events: auto; /* Reactiveaza interactiunea pentru continutul propriu-zis */
 }
 
+/* Efect de "dimming" pentru cursurile care nu corespund filtrelor active */
 .event-wrapper.dimmed {
   filter: grayscale(100%);
   opacity: 0.4;
 }
 
-/* vreme */
+/* --- WIDGET METEO PE CELULA --- */
 .weather-cell {
   width: 48px;
   min-width: 48px;
-  flex-shrink: 0;
-
   background-color: #eef6ff;
-
   border: 1px solid #b8d0e8;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(42, 90, 127, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 5px 0;
-  margin-right: 4px;
-}
-
-.weather-cell:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(42, 90, 127, 0.15);
-  border-color: #b5cae3;
-}
-
-.weather-icon {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
-  margin-bottom: 2px;
 }
 
 .weather-temp {
-  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 800;
   color: #1a4a75;
-  line-height: 1;
 }
 
-.weather-temp span {
-  font-weight: 500;
-  font-size: 12px;
-  vertical-align: top;
-  margin-left: 1px;
-}
-
-/* eveniment card */
+/* --- CARDUL DE EVENIMENT (CURS/LAB/SEM) --- */
 .event {
   flex: 1;
-
-  width: auto !important;
   height: 100%;
-
   font-weight: 700;
   border-radius: 12px;
   padding: 8px 10px;
@@ -173,7 +138,6 @@
   border: 1px solid #818181;
   text-shadow: 0px 1px 5px rgba(0,0,0,0.35);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-sizing: border-box;
 }
 
 .event:hover {
@@ -181,24 +145,14 @@
   box-shadow: 0 12px 24px rgba(0,0,0,0.28);
 }
 
-.event.lab { background-color: #E0C600; color: white; z-index: 10; }
+/* Culori tematice pentru tipurile de activitati */
+.event.lab  { background-color: #E0C600; color: white; }
 .event.curs { background-color: #FF2C2C; color: white; }
-.event.sem { background-color: #56B900; color: white; }
+.event.sem  { background-color: #56B900; color: white; }
 
 .event-title {
   font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
   line-height: 1.2;
-}
-
-.event-professor {
-  font-size: 11px;
-  font-weight: 500;
-  opacity: 0.9;
-  margin-bottom: auto;
-  cursor: pointer;
-  margin-top: 4px;
 }
 
 .event-room {
@@ -206,10 +160,9 @@
   right: 6px;
   bottom: 6px;
   font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
 }
 
+/* Linia orizontala care indica ora curenta pe orar */
 .time-line {
   position: absolute;
   left: 0;

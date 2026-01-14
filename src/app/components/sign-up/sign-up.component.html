@@ -1,76 +1,20 @@
 <div class="signup-page-container" [style.background-image]="backgroundStyle">
-  <div class="bg-controls">
-    <label for="bg-selector"></label>
-    <select id="bg-selector" [(ngModel)]="selectedBackground" (change)="onBackgroundChange()">
-      <option value="assets/sign-up-background-images/Autumn_Project.jpg">Autumn</option>
-      <option value="assets/sign-up-background-images/Winter_Project.jpg">Winter</option>
-      <option value="assets/sign-up-background-images/Spring_Project.jpg">Spring</option>
-      <option value="assets/sign-up-background-images/Summer_Project.jpg">Summer</option>
-    </select>
-
-    <button class="reset-bg" (click)="resetBackground()" type="button">Resetează</button>
-  </div>
-
 
   <div class="signup-content-wrapper">
+    <h1 class="signup-title">Creeaza Cont</h1>
 
-    <!-- Title -->
-    <h1 class="signup-title">Creează Cont</h1>
-
-    <!-- Google Register -->
-    <div class="google-signup-box">
-      <button class="google-btn" (click)="onGoogleSignup()">
-        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" />
-        Continuă cu Google
-      </button>
-    </div>
-
-    <!-- Sign-up Form -->
     <div class="signup-card">
-      <input
-        [(ngModel)]="name"
-        type="text"
-        placeholder="Nume"
-        class="input"
-      />
-
-      <input
-        [(ngModel)]="surname"
-        type="text"
-        placeholder="Prenume"
-        class="input"
-      />
-
-      <input
-        [(ngModel)]="email"
-        type="email"
-        placeholder="E-mail"
-        class="input"
-      />
-
-      <input
-        [(ngModel)]="password"
-        type="password"
-        placeholder="Parolă"
-        class="input"
-      />
-      <input
-        [(ngModel)]="confirmPassword"
-        type="password"
-        placeholder="Confirmă Parola"
-        class="input"
-      />
-
+      <input [(ngModel)]="name" type="text" placeholder="Nume" class="input" />
+      <input [(ngModel)]="surname" type="text" placeholder="Prenume" class="input" />
+      <input [(ngModel)]="email" type="email" placeholder="E-mail" class="input" />
+      <input [(ngModel)]="password" type="password" placeholder="Parola" class="input" />
+      <input [(ngModel)]="confirmPassword" type="password" placeholder="Confirma Parola" class="input" />
     </div>
 
-    <!-- Error message -->
     <p class="error-message" *ngIf="signupError">{{ signupError }}</p>
 
-    <!-- Submit -->
-    <button class="signup-btn" (click)="onSignup()">Creează Cont</button>
+    <button class="signup-btn" (click)="onSignup()">Creeaza Cont</button>
 
-    <!-- Login link -->
-    <a class="login-link" routerLink="/login">Ai deja cont? Autentifică-te</a>
+    <a class="login-link" routerLink="/login">Ai deja cont? Autentifica-te</a>
   </div>
-
 </div>

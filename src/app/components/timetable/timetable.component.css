@@ -1,26 +1,33 @@
-/* ——— FONT GLOBAL —————————————— */
+/* --- FONT GLOBAL ROBOTO --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 * {
   font-family: 'Roboto', sans-serif;
 }
 
+/* Containerul principal al paginii care gazduieste Sidebar-ul si Grid-ul */
 .page-container {
-  margin-left: 232px;
+  margin-top: 10px;
+  /* Margin-left de 245px creeaza spatiul necesar pentru Sidebar-ul fixat la stanga */
+  margin-left: 245px;
   display: flex;
   flex-direction: row;
   gap: 20px;
   align-items: flex-start;
   max-width: 100%;
   padding-right: 20px;
+  /* Inaltime fixa egala cu ecranul pentru a controla scroll-ul intern */
   height: 100vh;
-  overflow: hidden;
+  overflow: hidden; /* Previne scroll-ul pe intreaga pagina (body) */
 }
 
+/* Zona care contine Header-ul si Grid-ul orarului */
 .content-wrapper {
-  flex: 1;
+  flex: 1; /* Ocupa tot spatiul ramas liber in dreapta Sidebar-ului */
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  min-width: 0; /* Important pentru flexbox sa nu depaseasca latimea parintelui */
+
+  /* Permite scroll doar in aceasta zona, mentinand Sidebar-ul si Header-ul vizibile */
   overflow-y: auto;
 }

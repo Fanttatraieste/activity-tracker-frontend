@@ -6,12 +6,12 @@
     <span class="mini-count">{{ present }}</span>
   </div>
 
-  <div class="att-controls" *ngIf="isOpen">
+  <div class="att-controls" *ngIf="isOpen" (click)="$event.stopPropagation()">
+
     <button class="att-btn minus" (click)="onDecrease($event)">−</button>
 
     <div class="att-count">{{ present }}/{{ total }}</div>
 
     <button class="att-btn plus" (click)="onIncrease($event)">+</button>
   </div>
-
 </div>
