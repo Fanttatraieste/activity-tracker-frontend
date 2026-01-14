@@ -2,7 +2,7 @@
 
 [![Angular](https://img.shields.io/badge/Angular-17%2B-DD0031?style=for-the-badge&logo=angular)](https://angular.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
 
 Acesta este modulul de **Frontend** pentru aplicația **Activity Tracker**, un ecosistem digital destinat studenților pentru gestionarea eficientă a programului academic. Aplicația oferă o experiență interactivă pentru vizualizarea orarului, monitorizarea progresului și organizarea notițelor.
 
