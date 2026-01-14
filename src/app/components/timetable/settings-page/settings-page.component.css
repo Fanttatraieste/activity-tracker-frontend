@@ -1,4 +1,4 @@
-/* font global */
+/* --- FONT GLOBAL --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 * {
@@ -6,15 +6,14 @@
   box-sizing: border-box;
 }
 
-/* container principal */
+/* Container principal care asigura fundalul intregii pagini de setari */
 .settings-section {
   background: #f8fbff;
   padding: 40px;
   min-height: 100vh;
-
 }
 
-/* header profil */
+/* Header-ul de profil: contine poza si datele sumare ale utilizatorului */
 .profile-header {
   display: flex;
   align-items: center;
@@ -23,20 +22,22 @@
   background: #fff;
   padding: 20px;
   border-radius: 16px;
+  /* Umbra discreta pentru efect de profunzime (elevation) */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   border: 1px solid #e1eaf5;
 }
 
+/* Stil pentru fotografia de profil circulara */
 .profile-picture img {
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: cover; /* Previne distorsionarea imaginii indiferent de proportii */
   border: 4px solid #ffffff;
   box-shadow: 0 4px 12px rgba(42, 90, 127, 0.15);
 }
 
-/* sectiuni */
+/* Stil general pentru sectiunile de setari (Informatii Personale, Securitate etc.) */
 .section {
   margin-top: 30px;
   background: #fff;
@@ -60,15 +61,17 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 500px;
+  max-width: 500px; /* Limiteaza latimea campurilor pentru o citire mai usoara */
 }
 
+/* Stil pentru campurile de input si etichetele lor */
 .field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
+/* Eticheta mica, scrisa cu majuscule pentru un aspect profesional de formular */
 .field label {
   font-size: 11px;
   color: #8fa6b8;
@@ -91,10 +94,12 @@
   transition: all 0.2s ease;
 }
 
+/* Stil personalizat pentru dropdown (select), eliminand sageata nativa a browserului */
 .field select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  /* Adaugarea unei sageti personalizate via SVG pentru consistenta vizuala */
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a657e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 14px center;
@@ -107,13 +112,14 @@
   border-color: #a0b4cc;
 }
 
+/* Efect de focus cu un "glow" albastru pentru a indica utilizatorului campul activ */
 .field input:focus,
 .field select:focus {
   border-color: #2a5a7f;
-  box-shadow: 0 0 0 3px rgba(42, 90, 127, 0.1); /* Glow albastru */
+  box-shadow: 0 0 0 3px rgba(42, 90, 127, 0.1);
 }
 
-/* buton de salvare */
+/* Butonul de salvare a modificarilor */
 .save-btn {
   margin-top: 20px;
   padding: 12px 24px;

@@ -1,4 +1,4 @@
-/* ——— contorizarea prezentelor ——————————————————— */
+/* --- CONTORIZAREA PREZENTELOR --- */
 .event-attendance-box {
   margin-left: 35px;
   position: absolute;
@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Efect de sticla mata (Glassmorphism) */
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255,255,255,0.4);
@@ -19,16 +20,17 @@
   cursor: pointer;
   z-index: 20;
 
+  /* Tranzitie lina pentru expandarea butonului */
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
 }
 
-/* cand e deschis butonul */
+/* Starea expandata: apare la click pentru a afisa controalele de + si - */
 .event-attendance-box.expanded {
   padding: 0 4px;
   background: rgba(255, 255, 255, 0.45);
   border-color: rgba(255,255,255,0.8);
-  min-width: 90px;
+  min-width: 90px; /* Se lateste pentru a face loc butoanelor */
 }
 
 .event-attendance-box:hover {
@@ -36,7 +38,7 @@
   transform: scale(1.05);
 }
 
-/* 1) starea inchisa */
+/* 1) STAREA INCHISA (Doar iconita si numarul) */
 .att-icon-trigger {
   font-size: 14px;
   display: flex;
@@ -54,15 +56,16 @@
   margin-left: -2px;
 }
 
-/* 2) starea deschisa */
+/* 2) STAREA DESCHISA (Controalele de editare) */
 .att-controls {
   display: flex;
   align-items: center;
   gap: 6px;
+  /* Animatie de tip fade-in la deschidere */
   animation: fadeIn 0.3s ease forwards;
 }
 
-/* butoanele + si - */
+/* Stilul butoanelor circulare de incrementare/decrementare */
 .att-btn {
   width: 20px;
   height: 20px;
@@ -95,7 +98,7 @@
   text-align: center;
 }
 
-/* animatie aparitie */
+/* Animatie pentru aparitia lina a controalelor */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(2px); }
   to { opacity: 1; transform: translateY(0); }

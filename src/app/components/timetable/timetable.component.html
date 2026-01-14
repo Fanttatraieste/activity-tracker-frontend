@@ -1,7 +1,9 @@
 <div class="page-container">
+
   <app-sidebar
     (optionaleSchimbate)="onOptionalsChanged($event)"
-    (cerereSchimbareOra)="onRequestSwap($event)"></app-sidebar>
+    (cerereSchimbareOra)="onRequestSwap($event)">
+  </app-sidebar>
 
   <div class="content-wrapper">
     <app-header
@@ -24,7 +26,6 @@
       [showWeather]="weatherEnabled"
       (eventClicked)="onEventSelected($event)"
       (triggerGrades)="openGrades($event)">
-
     </app-timetable-grid>
   </div>
 

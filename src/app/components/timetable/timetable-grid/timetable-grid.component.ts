@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { EventGradesComponent } from './event-grades/event-grades.component';
 import { EventAttendanceComponent } from './event-attendance/event-attendance.component';
 
+// Liste de materii care necesita filtrare speciala (nu apar automat pentru toata grupa)
 const KNOWN_OPTIONALS = [
   'Instruire asistata de calculator',
   'Software matematic',
@@ -19,6 +20,7 @@ const KNOWN_OPTIONALS = [
   'Interactiunea om-calculator'
 ];
 
+// Mapare completa a locatiilor catre coordonate Google Maps (Mock URLs)
 const MAP_URLS = {
   CENTRAL: 'https://www.google.com/maps/place/Facultatea+De+Matematic%C4%83+%C8%99i+Informatic%C4%83/@46.7675377,23.5892532,387m/data=!3m1!1e3!4m10!1m2!2m1!1subb+mate+info!3m6!1s0x47490c28706c8277:0xc25e4a8111c461b7!8m2!3d46.7675377!4d23.5914419!15sCg11YmIgbWF0ZSBpbmZvIgOIAQFaDyINdWJiIG1hdGUgaW5mb5IBFXVuaXZlcnNpdHlfZGVwYXJ0bWVudJoBI0NoWkRTVWhOTUc5blMwVkpRMEZuU1VOUE5XSlhaazFSRUFF4AEA-gEECAAQDA!16s%2Fg%2F1hc5k1l59?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
   FSEGA:   'https://www.google.com/maps/place/Facultatea+de+%C5%9Etiin%C5%A3e+Economice+%C5%9Fi+Gestiunea+Afacerilor/@46.7731783,23.6188137,774m/data=!3m2!1e3!4b1!4m6!3m5!1s0x47490c15a18e8af9:0xcc357d4dedcf12a0!8m2!3d46.7731747!4d23.621394!16s%2Fg%2F1yglpxyfs?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D',
@@ -46,7 +48,6 @@ export interface CalendarEvent {
   attendanceCount?: number;
   totalRequired: number;
   grades?: any[];
-
   weatherInfo?: {
     temp: number;
     condition: string;
@@ -80,9 +81,10 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   private timetableService = inject(TimetableService);
   private cdr = inject(ChangeDetectorRef);
   private attendanceService = inject(AttendanceService);
-  private currentUserUuid = 'UUID-UL-TAU-DE-TEST';
   private authService = inject(AuthService);
   private gradeService = inject(GradeService);
+
+  private currentUserUuid = '';
 
   @Output() triggerGrades = new EventEmitter<CalendarEvent>();
   @Output() eventClicked = new EventEmitter<CalendarEvent>();
@@ -94,68 +96,29 @@ export class TimetableGridComponent implements OnInit, OnChanges {
   focusedDayIndex: number | null = null;
   focusedRow: number | null = null;
 
+  // Mapare nume zi -> Index coloana Grid
   private dayMapping: { [key: string]: number } = {
-    'Monday': 1,
-    'Tuesday': 2,
-    'Wednesday': 3,
-    'Thursday': 4,
-    'Friday': 5,
-    'Saturday': 6,
-    'Sunday': 0,
-
-    'Luni': 1,
-    'Marti': 2,
-    'Miercuri': 3,
-    'Joi': 4,
-    'Vineri': 5,
-    'Sambata': 6,
-    'Duminica': 0
+    'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5,
+    'Luni': 1, 'Marti': 2, 'Miercuri': 3, 'Joi': 4, 'Vineri': 5
   };
+
+  // Asociere Sali -> Locatii pe harta
   private readonly roomToMapUrl: { [key: string]: string } = {
-    // centrala
-    'MOS-S15': MAP_URLS.CENTRAL,
-    'MOS-S16': MAP_URLS.CENTRAL,
-    '6/II':    MAP_URLS.CENTRAL,
-    '7/I':     MAP_URLS.CENTRAL,
-    'Fizica-233': MAP_URLS.CENTRAL,
-    'Fizica-215': MAP_URLS.CENTRAL,
-    '9/I':     MAP_URLS.CENTRAL,
-    '5/I':     MAP_URLS.CENTRAL,
-
-    // fsega
-    'C310':    MAP_URLS.FSEGA,
-    'C335':    MAP_URLS.FSEGA,
-    'L320':    MAP_URLS.FSEGA,
-    'L001':    MAP_URLS.FSEGA,
-    'L439':    MAP_URLS.FSEGA,
-    'L404':    MAP_URLS.FSEGA,
-
-    // dppd
-    'DPPD-205':        MAP_URLS.DPPD,
-
-    // drept
-    'A312':            MAP_URLS.DREPT,
-    'A313':            MAP_URLS.DREPT,
-
-    //observator
-    'Obs':             MAP_URLS.OBS,
-
-    //studii europene
+    'MOS-S15': MAP_URLS.CENTRAL, 'MOS-S16': MAP_URLS.CENTRAL,
+    '6/II': MAP_URLS.CENTRAL, '7/I': MAP_URLS.CENTRAL,
+    'Fizica-233': MAP_URLS.CENTRAL, 'Fizica-215': MAP_URLS.CENTRAL,
+    '9/I': MAP_URLS.CENTRAL, '5/I': MAP_URLS.CENTRAL,
+    'C310': MAP_URLS.FSEGA, 'C335': MAP_URLS.FSEGA,
+    'L320': MAP_URLS.FSEGA, 'L001': MAP_URLS.FSEGA,
+    'L439': MAP_URLS.FSEGA, 'L404': MAP_URLS.FSEGA,
+    'DPPD-205': MAP_URLS.DPPD, 'A312': MAP_URLS.DREPT,
+    'A313': MAP_URLS.DREPT, 'Obs': MAP_URLS.OBS,
     'StEur-Ferdinand': MAP_URLS.ST_EUR
   };
 
-
-
   ngOnInit() {
     const user = this.authService.getCurrentUser();
-
-    if (user && user.uuid) {
-      this.currentUserUuid = user.uuid;
-    } else {
-      this.currentUserUuid = '0a52ca35-4fb5-488a-aafe-cc1432b682f1';
-      console.warn("UUID forțat manual deoarece lipsește din Token!");
-    }
-
+    this.currentUserUuid = user?.uuid || '0a52ca35-4fb5-488a-aafe-cc1432b682f1';
     this.loadEventsFromBackend();
   }
 
@@ -163,157 +126,58 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     if (changes['selectedGroup'] || changes['selectedWeek']) {
       this.loadEventsFromBackend();
     }
-
     if (changes['activeFilters'] || changes['optionals']) {
-      if (this.rawEvents.length > 0) {
-        this.processEventsForDisplay();
-      }
+      if (this.rawEvents.length > 0) this.processEventsForDisplay();
     }
-
     if (changes['showWeather']) {
-      if (this.showWeather) {
-        this.fetchAndMapWeather();
-      } else {
-        this.displayEvents.forEach(ev => ev.weatherInfo = undefined);
-      }
+      this.showWeather ? this.fetchAndMapWeather() : this.displayEvents.forEach(ev => ev.weatherInfo = undefined);
     }
   }
 
   loadEventsFromBackend() {
     const frequency = this.selectedWeek === 1 ? 'Week1' : 'Week2';
-
     this.timetableService.getScheduleFromApi(undefined, frequency).subscribe({
       next: (data: any[]) => {
         const uiGroupStr = String(this.selectedGroup).replace('.', '').trim();
-
         const filteredByGroup = data.filter(item =>
           item.groups?.some((g: any) => String(g.number).trim() === uiGroupStr)
         );
 
         this.rawEvents = filteredByGroup.map(item => {
-          const finalTitle = item.subjectName || item.subject?.name || "Materie Lipsă";
-
-          const myAttendances = item.attendances?.filter(
-            (a: any) => a.userUuid === this.currentUserUuid
-          ) || [];
-
-          const myGrades = item.grades?.filter(
-            (g: any) => g.userUuid === this.currentUserUuid
-          ) || [];
-
+          const myAttendances = item.attendances?.filter((a: any) => a.userUuid === this.currentUserUuid) || [];
+          const myGrades = item.grades?.filter((g: any) => g.userUuid === this.currentUserUuid) || [];
 
           return {
             id: item.uuid,
             title: item.subjectName,
             type: this.mapType(item.classType),
             professor: item.location || "Profesor",
-            room: item.roomName || "Fără sală",
+            room: item.roomName || "Fara sala",
             dayIndex: this.dayMapping[this.capitalize(item.dayOfWeek)] || 1,
             startRow: (item.startingHour || 8) - 6,
             span: item.duration || 2,
             weeklyNotes: {},
-            grades: myGrades, // Legăm notele filtrate de obiectul CalendarEvent
+            grades: myGrades,
             attendanceCount: myAttendances.length,
             totalRequired: item.attendancesRequired || 14
           };
         });
-
         this.processEventsForDisplay();
-      },
-      error: (err) => console.error("API Error:", err)
+      }
     });
   }
-
-  private mapType(apiType: string): 'curs' | 'sem' | 'lab' {
-    if (!apiType) return 'curs';
-    const t = apiType.toLowerCase();
-    if (t.includes('course') || t === 'curs') return 'curs';
-    if (t.includes('seminar') || t === 'sem') return 'sem';
-    if (t.includes('lab')) return 'lab';
-    return 'curs';
-  }
-
-  private capitalize(s: string) {
-    if (!s) return '';
-    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-  }
-
 
   private processEventsForDisplay() {
     const filteredEvents = this.rawEvents.filter(ev => {
-      // 1. Filter by type
       if (ev.type === 'curs' && !this.activeFilters.curs) return false;
       if (ev.type === 'sem' && !this.activeFilters.sem) return false;
       if (ev.type === 'lab' && !this.activeFilters.lab) return false;
-
-      // 2. Filter by optional subjects
-      if (KNOWN_OPTIONALS.includes(ev.title)) {
-        return this.optionals.includes(ev.title);
-      }
-
+      if (KNOWN_OPTIONALS.includes(ev.title)) return this.optionals.includes(ev.title);
       return true;
     });
-
     this.calculateOverlaps(filteredEvents);
   }
 
-
-  // --- WEATHER LOGIC ---
-  fetchAndMapWeather() {
-    this.weatherService.getWeather().subscribe({
-      next: (data: WeatherResponse) => {
-        this.mapWeatherToEvents(data);
-        this.cdr.markForCheck();
-      },
-      error: (err) => console.error('Weather error:', err)
-    });
-  }
-
-  private mapWeatherToEvents(weatherData: WeatherResponse) {
-    const weatherLookup = new Map<string, { temp: number, condition: string }>();
-
-    // weatherData este un obiect unde cheile sunt date calendaristice (ex: "2026-01-02")
-    Object.keys(weatherData).forEach(dateKey => {
-      const dayData = weatherData[dateKey];
-
-      // Luăm indexul zilei folosind numele în română primit de la backend
-      const dayIdx = this.dayMapping[dayData.day_name];
-
-      if (dayIdx !== undefined) {
-        dayData.hours.forEach((h: any) => {
-          // Cheia trebuie să fie identică cu cea folosită la căutare mai jos
-          const key = `${dayIdx}-${h.hour}`;
-          weatherLookup.set(key, { temp: h.temp, condition: h.condition });
-        });
-      }
-    });
-
-    this.displayEvents.forEach(event => {
-      const eventHour = event.startRow + 6; // startRow 2 + 6 = ora 8
-      const lookupKey = `${event.dayIndex}-${eventHour}`;
-      const weather = weatherLookup.get(lookupKey);
-
-      if (weather) {
-        event.weatherInfo = {
-          temp: Math.round(weather.temp),
-          condition: weather.condition,
-          iconUrl: this.getIconForCondition(weather.condition)
-        };
-      }
-    });
-  }
-
-  private getIconForCondition(condition: string): string {
-    const cond = condition.toLowerCase();
-    if (cond.includes('sun') || cond.includes('clear')) return 'assets/icons/sunny.png';
-    if (cond.includes('cloud')) return 'assets/icons/cloudy.png';
-    if (cond.includes('rain')) return 'assets/icons/rain.png';
-    return 'assets/icons/cloudy.png';
-  }
-
-  /**
-   * Calculates visual layout if two events happen at the same time
-   */
   calculateOverlaps(eventsToProcess: CalendarEvent[]) {
     let events = eventsToProcess.map(e => ({ ...e, width: 100, marginLeft: 0 }));
     for (let i = 0; i < events.length; i++) {
@@ -333,75 +197,75 @@ export class TimetableGridComponent implements OnInit, OnChanges {
     this.displayEvents = events;
   }
 
-  // --- UI HELPERS ---
-  openLink(url: string) { if(url) window.open(url, "_blank"); }
-  toggleAttendance(event: CalendarEvent) { event.isAttendanceOpen = !event.isAttendanceOpen; }
-  onEventClick(event: CalendarEvent) { this.eventClicked.emit(event); }
-  updateAttendance(event: CalendarEvent, newCount: number) {
-    const scheduleUuid = event.id;
-    const isIncrement = newCount > (event.attendanceCount || 0);
-
-    if (isIncrement) {
-      this.attendanceService.createAttendance({
-        userUuid: this.currentUserUuid,
-        classScheduleUuid: scheduleUuid
-      }).subscribe({
-        next: () => {
-          event.attendanceCount = newCount;
-          this.displayEvents = [...this.displayEvents];
-          this.cdr.detectChanges();
-
-          setTimeout(() => this.loadEventsFromBackend(), 300);
-        },
-        error: (err) => alert("Serverul nu a putut salva prezența. Verifică log-urile Java.")
-      });
-    }else {
-      this.timetableService.getScheduleFromApi(undefined, this.selectedWeek === 1 ? 'Week1' : 'Week2')
-        .subscribe(data => {
-          const currentCourse = data.find((item: any) => item.uuid === scheduleUuid);
-          const userAttendance = currentCourse?.attendances?.find((a: any) => a.userUuid === this.currentUserUuid);
-
-          if (userAttendance) {
-            this.attendanceService.deleteAttendance(userAttendance.uuid).subscribe({
-              next: () => {
-                console.log("Prezență ștearsă pe server");
-                setTimeout(() => {
-                  this.loadEventsFromBackend();
-                }, 300);
-              },
-              error: (err) => {
-                console.error("Eroare la ștergere:", err);
-                event.attendanceCount = newCount + 1; // Rollback
-                this.displayEvents = [...this.displayEvents];
-                this.cdr.detectChanges();
-              }
+  fetchAndMapWeather() {
+    this.weatherService.getWeather().subscribe({
+      next: (data: WeatherResponse) => {
+        const weatherLookup = new Map<string, { temp: number, condition: string }>();
+        Object.keys(data).forEach(dateKey => {
+          const dayData = data[dateKey];
+          const dayIdx = this.dayMapping[dayData.day_name];
+          if (dayIdx !== undefined) {
+            dayData.hours.forEach((h: any) => {
+              weatherLookup.set(`${dayIdx}-${h.hour}`, { temp: h.temp, condition: h.condition });
             });
           }
         });
-    }
+        this.displayEvents.forEach(event => {
+          const weather = weatherLookup.get(`${event.dayIndex}-${event.startRow + 6}`);
+          if (weather) {
+            event.weatherInfo = {
+              temp: Math.round(weather.temp),
+              condition: weather.condition,
+              iconUrl: this.getIconForCondition(weather.condition)
+            };
+          }
+        });
+        this.cdr.markForCheck();
+      }
+    });
   }
-  onGradesClick(event: CalendarEvent) { this.gradesOpenRequested.emit(event); }
-  handleGradesClick(event: CalendarEvent) {
-    this.triggerGrades.emit(event);
+
+  private getIconForCondition(condition: string): string {
+    const cond = condition.toLowerCase();
+    if (cond.includes('sun') || cond.includes('clear')) return 'assets/icons/sunny.png';
+    if (cond.includes('rain')) return 'assets/icons/rain.png';
+    return 'assets/icons/cloudy.png';
+  }
+
+  updateAttendance(event: CalendarEvent, newCount: number) {
+    const isIncrement = newCount > (event.attendanceCount || 0);
+    if (isIncrement) {
+      this.attendanceService.createAttendance({ userUuid: this.currentUserUuid, classScheduleUuid: event.id })
+        .subscribe(() => { event.attendanceCount = newCount; this.loadEventsFromBackend(); });
+    } else {
+      this.timetableService.getScheduleFromApi(undefined, this.selectedWeek === 1 ? 'Week1' : 'Week2').subscribe(data => {
+        const attendance = data.find((item: any) => item.uuid === event.id)?.attendances?.find((a: any) => a.userUuid === this.currentUserUuid);
+        if (attendance) this.attendanceService.deleteAttendance(attendance.uuid).subscribe(() => this.loadEventsFromBackend());
+      });
+    }
   }
 
   handleRoomClick(room: string, event: MouseEvent) {
     event.stopPropagation();
-
-    const mapUrl = this.roomToMapUrl[room] || `${MAP_URLS.DEFAULT}${room}`;
-
-    window.open(mapUrl, '_blank');
+    window.open(this.roomToMapUrl[room] || `${MAP_URLS.DEFAULT}${room}`, '_blank');
   }
 
+  // Helperi simpli
+  private mapType(apiType: string): 'curs' | 'sem' | 'lab' {
+    const t = apiType?.toLowerCase() || 'curs';
+    return t.includes('lab') ? 'lab' : t.includes('sem') ? 'sem' : 'curs';
+  }
+  private capitalize(s: string) { return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : ''; }
+  openLink(url: string) { window.open(url, "_blank"); }
+  toggleAttendance(event: CalendarEvent) { event.isAttendanceOpen = !event.isAttendanceOpen; }
+  onEventClick(event: CalendarEvent) { this.eventClicked.emit(event); }
+  handleGradesClick(event: CalendarEvent) { this.triggerGrades.emit(event); }
   toggleDayFocus(dayIndex: number) { this.focusedDayIndex = this.focusedDayIndex === dayIndex ? null : dayIndex; }
   toggleHourFocus(rowIndex: number) { this.focusedRow = this.focusedRow === rowIndex ? null : rowIndex; }
 
   isEventDimmed(event: CalendarEvent): boolean {
     if (this.focusedDayIndex !== null && event.dayIndex !== this.focusedDayIndex) return true;
-    if (this.focusedRow !== null) {
-      const eventEndRow = event.startRow + event.span;
-      return !(this.focusedRow >= event.startRow && this.focusedRow < eventEndRow);
-    }
+    if (this.focusedRow !== null) return !(this.focusedRow >= event.startRow && this.focusedRow < (event.startRow + event.span));
     return false;
   }
 }

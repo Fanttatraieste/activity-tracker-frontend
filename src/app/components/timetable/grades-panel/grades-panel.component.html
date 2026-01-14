@@ -8,20 +8,22 @@
 
   <div class="grades-wrapper">
     <div class="grades-header">
-      <span class="col-label">Tip Notă</span>
-      <span class="col-label">Notă</span>
+      <span class="col-label">Tip Nota</span>
+      <span class="col-label">Nota</span>
       <span class="col-label">Procent</span>
     </div>
 
     <div class="grade-row" *ngFor="let row of rows; let i = index">
       <input type="text" class="input-box type" [(ngModel)]="row.type" [placeholder]="i===0?'Examen':(i===1?'Lab':'Seminar')">
+
       <input type="text" class="input-box grade" [(ngModel)]="row.value" placeholder="-">
+
       <input type="text" class="input-box percent" [(ngModel)]="row.weight" placeholder="33%">
     </div>
 
     <button (click)="saveAllGrades()" class="input-box"
             style="margin-top: 20px; background: rgba(255,255,255,0.2); color: white; cursor: pointer;">
-      Salvează Notele în Catalog
+      Salveaza Notele in Catalog
     </button>
   </div>
 </div>

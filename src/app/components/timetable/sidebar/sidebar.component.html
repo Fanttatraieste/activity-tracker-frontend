@@ -13,12 +13,12 @@
   <div class="sidebar-separator"></div>
 
   <div class="sidebar-menu">
-    <div class="menu-title">FUNCȚIONALITĂȚI</div>
+    <div class="menu-title">FUNCTIONALITATI</div>
 
     <button class="menu-item"
             [class.active]="activeMenu === 'materie'"
             (click)="toggleMenu('materie')">
-      <span class="menu-icon">⦿</span> Alege materie opțională
+      <span class="menu-icon">⦿</span> Alege materie optionala
     </button>
 
     <div class="info-box" *ngIf="activeMenu === 'materie'">
@@ -35,7 +35,7 @@
     <button class="menu-item"
             [class.active]="activeMenu === 'orar'"
             (click)="toggleMenu('orar')">
-      <span class="menu-icon">⦿</span> Schimbă ora cu alta grupă
+      <span class="menu-icon">⦿</span> Schimba ora cu alta grupa
     </button>
 
     <div class="info-box" *ngIf="activeMenu === 'orar'">
@@ -44,7 +44,7 @@
         <div class="form-group">
           <label>Alege Grupa</label>
           <select [(ngModel)]="selectedGrupa">
-            <option value="" disabled selected>Selectează grupa</option>
+            <option value="" disabled selected>Selecteaza grupa</option>
             <option *ngFor="let g of grupe" [value]="g">{{ g }}</option>
           </select>
         </div>
@@ -52,21 +52,21 @@
         <div class="form-group">
           <label>Alege Materia</label>
           <select [(ngModel)]="selectedMaterie">
-            <option value="" disabled selected>Selectează materia</option>
+            <option value="" disabled selected>Selecteaza materia</option>
             <option *ngFor="let m of materiiOrar" [value]="m">{{ m }}</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Tip Oră</label>
+          <label>Tip Ora</label>
           <select [(ngModel)]="selectedTip">
-            <option value="" disabled selected>Selectează tipul</option>
+            <option value="" disabled selected>Selecteaza tipul</option>
             <option *ngFor="let t of tipuriOra" [value]="t">{{ t }}</option>
           </select>
         </div>
 
         <button class="btn-action" (click)="schimbaOra()">
-          Schimbă ora
+          Schimba ora
         </button>
 
       </div>
@@ -74,7 +74,7 @@
 
     <button class="menu-item"
             (click)="goToSettings()">
-      <span class="menu-icon">⦿</span> Setări cont
+      <span class="menu-icon">⦿</span> Setari cont
     </button>
 
   </div>

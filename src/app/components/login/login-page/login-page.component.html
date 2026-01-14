@@ -1,21 +1,8 @@
 <div class="login-page-container" [style.background-image]="backgroundStyle">
 
-
   <div class="login-content-wrapper">
-    <!--Ctrl + / -for making comment  -->
-    <!-- Title -->
     <h1 class="login-title">Login</h1>
 
-    <!--Google Login -->
-
-    <div class="google-login-box">
-      <button class="google-btn" (click)="onGoogleLogin()">
-        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" />
-        Continua cu Google
-      </button>
-    </div>
-
-    <!--Login -->
     <div class="login-card">
       <input
         [(ngModel)]="email"
@@ -27,17 +14,15 @@
       <input
         [(ngModel)]="password"
         type="password"
-        placeholder="Parolă"
+        placeholder="Parola"
         class="input"
       />
     </div>
 
     <p class="error-message" *ngIf="loginError">{{ loginError }}</p>
 
-    <!--Login button-->
     <button class="login-btn" (click)="onLogin()">LOGIN</button>
 
-    <!-- Register-Button-->
     <a class="signup-link" routerLink="/register">Creeaza cont nou</a>
   </div>
 

@@ -13,9 +13,11 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./settings-page.component.css']
 })
 export class SettingsPageComponent implements OnInit {
+  // Injectarea serviciilor necesare folosind functia inject()
   private userService = inject(UserService);
   private authService = inject(AuthService);
 
+  // Initializarea obiectului userData cu valori goale conform interfetei UserProfile
   userData: UserProfile = {
     nume: '',
     prenume: '',
@@ -28,6 +30,7 @@ export class SettingsPageComponent implements OnInit {
     emailAcademic: ''
   };
 
+  // Date statice pentru popularea meniurilor de selectie (dropdown-uri)
   specializari = [
     'Matematica Informatica Romana An 1',
     'Matematica Informatica Romana An 2',
@@ -40,15 +43,17 @@ export class SettingsPageComponent implements OnInit {
   grupe = ['331-1', '331-2', '332-1', '332-2', '333-1', '333-2'];
 
   ngOnInit(): void {
+    // Incarcarea datelor utilizatorului imediat ce componenta este creata
     this.loadUserData();
   }
 
+  // Preia datele profilului din Backend folosind UUID-ul utilizatorului logat
   loadUserData() {
     const user = this.authService.getCurrentUser();
     if (user && user.uuid) {
       this.userService.getProfile(user.uuid).subscribe({
         next: (data: any) => {
-          // Mapăm datele primite (care vin cu academicEmail din Java DTO)
+          // Maparea campurilor primite din Java DTO catre modelul local din Angular
           this.userData = {
             nume: data.nume || '',
             prenume: data.prenume || '',
@@ -58,7 +63,7 @@ export class SettingsPageComponent implements OnInit {
             grupa: data.grupa || '',
             nrMatricol: data.nrMatricol || '',
             codStudent: data.codStudent || '',
-            // Luăm valoarea din academicEmail (de la server) și o punem în emailAcademic (pentru HTML)
+            // Sincronizarea emailului academic (care este readonly in interfata)
             emailAcademic: data.academicEmail || user.sub
           };
         },
@@ -67,17 +72,19 @@ export class SettingsPageComponent implements OnInit {
     }
   }
 
+  // Trimite datele modificate catre server pentru actualizare
   saveSettings() {
     const user = this.authService.getCurrentUser();
     if (user && user.uuid) {
       this.userService.updateProfile(user.uuid, this.userData).subscribe({
         next: (response) => {
-          alert('Profile updated successfully!');
-          this.userData = response; // Refresh local data with server response
+          alert('Profil actualizat cu succes!');
+          // Actualizarea starii locale cu raspunsul oficial de la server
+          this.userData = response;
         },
         error: (err) => {
           console.error("Error saving profile:", err);
-          alert('Failed to save changes.');
+          alert('Eroare la salvarea modificarilor.');
         }
       });
     }

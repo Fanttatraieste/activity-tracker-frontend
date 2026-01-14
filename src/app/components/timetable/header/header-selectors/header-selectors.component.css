@@ -1,3 +1,4 @@
+/* --- IMPORT FONT SI RESET --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 * {
@@ -5,13 +6,14 @@
 }
 
 
-/* Layout Local */
+/* Layout pentru partea dreapta a header-ului */
 .right-header {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 40px; /* Spatiere generoasa intre grupuri (dropdown-uri, switch) */
 }
 
+/* Bloc generic pentru eticheta si control (aliniere verticala) */
 .info-block {
   display: flex;
   flex-direction: column;
@@ -25,7 +27,7 @@
   color: #444;
 }
 
-/* Dropdowns */
+/* Stil pentru meniurile derulante (Dropdowns) */
 select {
   padding: 6px 14px;
   border-radius: 12px;
@@ -35,7 +37,7 @@ select {
   cursor: pointer;
 }
 
-/* Switch saptamana */
+/* Container pentru comutatorul de saptamana (S1/S2) */
 .switch-container {
   display: flex;
   background: #eef5ff;
@@ -45,6 +47,7 @@ select {
   gap: 6px;
 }
 
+/* Butoanele individuale din switch */
 .switch-btn {
   width: 34px;
   height: 28px;
@@ -55,7 +58,8 @@ select {
   background: transparent;
 }
 
+/* Evidentierea saptamanii active (S1 sau S2) */
 .switch-btn.active {
-  background: #b8ffb8;
+  background: #b8ffb8; /* Verde pal pentru indicarea selectiei */
   color: #0a490d;
 }
