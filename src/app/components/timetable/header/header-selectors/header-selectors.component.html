@@ -9,8 +9,8 @@
 
   <div class="info-block">
     <div class="label">Grupa</div>
-    <select (change)="onGroupChange($event)">
-      <option *ngFor="let g of groups" [value]="g" [selected]="g === selectedGroup">
+    <select [value]="selectedGroup" (change)="onGroupChange($event)">
+      <option *ngFor="let g of groups" [value]="g">
         {{ g }}
       </option>
     </select>
