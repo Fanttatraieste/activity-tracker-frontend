@@ -12,7 +12,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
-  // Definirea variabilelor care stocheaza datele introduse in formular
   name = '';
   surname = '';
   email = '';
@@ -23,11 +22,8 @@ export class SignUpComponent implements OnInit {
 
   constructor(private router: Router, private authService: AuthService) {}
 
-  ngOnInit(): void {
-    this.setAutoBackground();
-  }
+  ngOnInit(): void { this.setAutoBackground(); }
 
-  // Seteaza imaginea de fundal in functie de luna curenta (similar cu logica de Login)
   private setAutoBackground(): void {
     const month = new Date().getMonth();
     if (month >= 2 && month <= 4) this.selectedBackground = "assets/sign-up-background-images/Spring_Project.jpg";
@@ -36,41 +32,33 @@ export class SignUpComponent implements OnInit {
     else this.selectedBackground = "assets/sign-up-background-images/Winter_Project.jpg";
   }
 
-  get backgroundStyle(): string {
-    return `url('${this.selectedBackground}')`;
-  }
+  get backgroundStyle(): string { return `url('${this.selectedBackground}')`; }
 
-  // Logica principala de inregistrare a utilizatorului
   onSignup() {
     this.signupError = null;
-
-    // Verificare pentru campuri goale (Validare Frontend)
     if (!this.email || !this.password || !this.name) {
-      this.signupError = "Toate campurile sunt obligatorii.";
+      this.signupError = "Toate câmpurile sunt obligatorii.";
       return;
     }
-
-    // Verificare pentru confirmarea corecta a parolei
     if (this.password !== this.confirmPassword) {
       this.signupError = "Parolele nu coincid.";
       return;
     }
 
-    // Apelul catre serviciul de autentificare pentru crearea contului in Backend (Java)
     this.authService.register({
       email: this.email,
       password: this.password,
-      userType: 'Student' // Seteaza automat rolul de Student la inregistrare
+      userType: 'Student'
     }).subscribe({
       next: () => {
         alert('Cont creat!');
-        this.router.navigate(['/login']); // Redirectionare la Login dupa succes
+        this.router.navigate(['/login']);
       },
-      error: () => this.signupError = "Eroare la inregistrare."
+      error: () => this.signupError = "Eroare la înregistrare."
     });
   }
 
   onGoogleSignup() {
-    alert("Inregistrarea cu Google este momentan indisponibila.");
+    alert("Înregistrarea cu Google este momentan indisponibilă.");
   }
 }

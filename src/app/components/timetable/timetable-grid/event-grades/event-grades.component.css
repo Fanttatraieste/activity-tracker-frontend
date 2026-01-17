@@ -1,5 +1,4 @@
-/* Stil pentru continutul interior al indicatorului de note (iconita/text) */
-.grades-icon-trigger {
+.grades-icon-trigger{
   font-size: 14px;
   display: flex;
   gap: 2px;
@@ -10,10 +9,8 @@
   height: 100%;
 }
 
-/* Containerul principal al indicatorului de note, pozitionat in coltul celulei de orar */
-.grades-box {
+.grades-box{
   position: absolute;
-  /* Plasare in coltul din stanga-jos al activitatii din orar */
   left: 6px;
   bottom: 6px;
   height: 28px;
@@ -21,22 +18,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* Efect de transparenta si blur (Glassmorphism) pentru integrare vizuala */
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(4px);
-
-  /* Bordura fina alba pentru a scoate elementul in evidenta pe fundaluri colorate */
   border: 1px solid rgba(255,255,255,0.4);
   border-radius: 20px;
   padding: 0;
 
-  /* Umbra pentru a oferi senzatia de profunzime (Z-axis) */
   box-shadow: 0 2px 5px rgba(0,0,0,0.15);
   cursor: pointer;
-  z-index: 20; /* Asigura ca butonul sta deasupra continutului celulei */
+  z-index: 20;
 
-  /* Tranzitie fluida pentru interactiuni (ex: la hover sau deschidere) */
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
 }

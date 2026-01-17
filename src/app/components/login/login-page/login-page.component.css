@@ -1,4 +1,4 @@
-/* --- FONT & RESET --- */
+/* ——— FONT & RESET —————————————— */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
 
 * {
@@ -8,7 +8,7 @@
   font-family: 'Nunito', sans-serif;
 }
 
-/* --- CONTAINER PRINCIPAL --- */
+/* ——— CONTAINER PRINCIPAL —————————————— */
 .login-page-container {
   position: relative;
   width: 100%;
@@ -19,17 +19,16 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
 
-  /* Centrare continut */
+  /* Centrare conținut */
   display: flex;
   justify-content: center;
   align-items: center;
 
-  /* Tranzitie lina intre imaginile de fundal schimbate din TS */
   transition: background-image 0.5s ease-in-out;
   overflow: hidden;
 }
 
-/* OVERLAY (Stratul care intuneca fundalul) */
+/* OVERLAY (Stratul care întunecă fundalul) */
 .login-page-container::before {
   content: "";
   position: absolute;
@@ -37,25 +36,23 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Gradient pentru a asigura contrastul textului peste imagini deschise */
+  /* Întunecăm fundalul pentru ca textele albe să fie vizibile */
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.3) 0%,
     rgba(0, 0, 0, 0.5) 100%
   );
-  /* Efect de blur aplicat doar fundalului din spatele overlay-ului */
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px); /* Blur ușor pe imaginea de fundal */
   z-index: 1;
 }
 
-/* --- CONTROALE FUNDAL (Stanga Sus) --- */
+/* ——— CONTROALE FUNDAL (Stânga Sus) —————————————— */
 .bg-controls {
   position: absolute;
   top: 25px;
   left: 25px;
   display: flex;
   gap: 12px;
-  /* Efect de sticla (Glassmorphism) pentru panoul de control */
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   padding: 10px 15px;
@@ -92,7 +89,7 @@
   transform: scale(1.05);
 }
 
-/* --- LOGIN CONTENT WRAPPER --- */
+/* ——— LOGIN CONTENT WRAPPER —————————————— */
 .login-content-wrapper {
   position: relative;
   width: 100%;
@@ -102,7 +99,7 @@
   flex-direction: column;
   align-items: center;
   gap: 25px;
-  z-index: 10; /* Plasare peste overlay-ul de fundal */
+  z-index: 10; /* Deasupra overlay-ului */
 }
 
 .login-title {
@@ -111,7 +108,6 @@
   color: white;
   text-align: center;
   letter-spacing: -1px;
-  /* Umbra pentru a scoate textul in evidenta pe fundaluri variate */
   text-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
@@ -143,10 +139,10 @@
   width: 22px;
 }
 
-/* --- LOGIN CARD (Glassmorphism) --- */
+/* ——— LOGIN CARD (Glassmorphism) —————————————— */
 .login-card {
   width: 100%;
-  background: rgba(255, 255, 255, 0.9); /* Alb aproape opac pentru lizibilitate */
+  background: rgba(255, 255, 255, 0.9); /* Alb aproape opac */
   backdrop-filter: blur(10px);
   border-radius: 24px;
   padding: 30px;
@@ -160,7 +156,6 @@
 .input {
   width: 100%;
   border: none;
-  /* Stil minimalist de input doar cu bordura jos */
   border-bottom: 2px solid #e0d5c5;
   padding: 12px 5px;
   font-size: 16px;

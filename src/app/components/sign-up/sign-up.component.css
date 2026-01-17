@@ -1,4 +1,4 @@
-/* --- FONT & RESET --- */
+/* ——— FONT & RESET —————————————— */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
 
 * {
@@ -8,26 +8,26 @@
   font-family: 'Nunito', sans-serif;
 }
 
-/* --- CONTAINER PRINCIPAL --- */
+/* ——— CONTAINER PRINCIPAL —————————————— */
 .signup-page-container {
   position: relative;
   width: 100%;
   height: 100vh;
+  /* Fundalul va fi setat din TS, aici punem setările de bază */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 
-  /* Centrare perfecta a cardului de inregistrare */
+  /* Centrare perfectă a cardului */
   display: flex;
   justify-content: center;
   align-items: center;
 
-  /* Tranzitie lina pentru schimbarea imaginilor de fundal */
   transition: background-image 0.5s ease-in-out;
   overflow: hidden;
 }
 
-/* OVERLAY (Strat protector pentru lizibilitate) */
+/* OVERLAY (Stratul protector pentru lizibilitate) */
 .signup-page-container::before {
   content: "";
   position: absolute;
@@ -35,25 +35,22 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Gradient inchis pentru a scoate in evidenta cardul de login/signup */
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.3) 0%,
     rgba(0, 0, 0, 0.5) 100%
   );
-  /* Efect de incetosare a fundalului pentru un aspect modern */
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px); /* Blur pe imaginea de fundal */
   z-index: 1;
 }
 
-/* --- CONTROALE FUNDAL --- */
+/* ——— CONTROALE FUNDAL —————————————— */
 .bg-controls {
   position: absolute;
   top: 25px;
   left: 25px;
   display: flex;
   gap: 12px;
-  /* Design de tip "Glassmorphism" (sticla mata) */
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   padding: 10px 15px;
@@ -75,7 +72,7 @@
   padding: 6px 12px;
   border-radius: 8px;
   border: none;
-  background: #d8a26c;
+  background: #d8a26c; /* Folosim culoarea de la Login pentru consistență */
   color: white;
   cursor: pointer;
   font-weight: 700;
@@ -87,13 +84,12 @@
   transform: scale(1.05);
 }
 
-/* --- SIGNUP CONTENT WRAPPER (Glassmorphism Card) --- */
+/* ——— SIGNUP CONTENT WRAPPER (Glassmorphism Card) —————————————— */
 .signup-content-wrapper {
   position: relative;
   width: 100%;
   max-width: 400px;
-  /* Card semi-transparent pentru a mentine consistenta vizuala a temei */
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.9); /* Card alb semi-transparent */
   backdrop-filter: blur(12px);
   padding: 35px;
   border-radius: 24px;
@@ -119,11 +115,10 @@
   display: flex;
   justify-content: center;
 }
-
 /* GOOGLE BUTTON */
 .google-btn {
   width: 100%;
-  max-width: 100%;
+  max-width: 100%; /* Să nu iasă din card */
   padding: 12px 20px;
   border-radius: 12px;
   border: 1px solid #ddd;
@@ -144,7 +139,6 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-
 .google-btn img {
   width: 22px !important;
   height: 22px !important;
@@ -153,7 +147,7 @@
   object-fit: contain;
 }
 
-/* --- FORM & INPUTS --- */
+/* ——— FORM & INPUTS —————————————— */
 .signup-card {
   display: flex;
   flex-direction: column;
@@ -173,7 +167,6 @@
 }
 
 .input:focus {
-  /* Evidentierea input-ului activ prin schimbarea culorii bordurii */
   border-color: #d8a26c;
 }
 
@@ -182,7 +175,7 @@
   width: 100%;
   padding: 16px;
   border-radius: 16px;
-  background: #d8a26c;
+  background: #d8a26c; /* Portocaliu cald asortat */
   color: white;
   font-size: 18px;
   font-weight: 700;
@@ -198,12 +191,11 @@
   box-shadow: 0 8px 20px rgba(216, 162, 108, 0.4);
 }
 
-/* Feedback vizual la apasarea butonului */
 .signup-btn:active {
   transform: scale(0.98);
 }
 
-/* --- LINKS --- */
+/* ——— LINKS —————————————— */
 .login-link {
   display: block;
   text-align: center;
