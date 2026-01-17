@@ -1,4 +1,3 @@
-/* --- FONT & RESET --- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 * { font-family: 'Roboto', sans-serif; box-sizing: border-box; }
@@ -16,23 +15,22 @@
   display: flex;
   flex-direction: column;
 
-  /* Animatie lina pentru intrarea panoului din partea dreapta */
   animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: -5px 0 20px rgba(0,0,0,0.1);
 }
 
-/* Definirea animatiei de aparitie (glisare si opacitate) */
+/* animatia de aparitie */
 @keyframes slideIn {
   from { transform: translateX(50px); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* Culori dinamice aplicate in functie de tipul disciplinei (Curs, Seminar, Laborator) */
+/* culori dinamice */
 .panel-container.curs { background-color: #FF2C2C; border: 1px solid #d61c1c; }
 .panel-container.sem  { background-color: #56B900; border: 1px solid #459600; }
 .panel-container.lab  { background-color: #E0C600; border: 1px solid #c2ac00; }
 
-/* Pozitionarea elementelor de control din partea de sus a panoului */
+/* controale header */
 .panel-controls {
   display: flex;
   justify-content: flex-end;
@@ -63,7 +61,7 @@
   border: 0; height: 1px; background: rgba(255,255,255,0.4); margin: 15px 0 25px 0; width: 100%;
 }
 
-/* --- SECTIUNE TABEL NOTE --- */
+/* --- sectiune tabel note --- */
 
 .grades-wrapper {
   display: flex;
@@ -71,7 +69,6 @@
   gap: 12px;
 }
 
-/* Alinierea coloanelor folosind CSS Grid pentru precizie */
 .grades-header {
   display: grid;
   grid-template-columns: 3fr 1fr 1.5fr;
@@ -99,7 +96,6 @@
   align-items: center;
 }
 
-/* Stilizarea campurilor de input pentru introducerea notelor */
 .input-box {
   background: rgba(255, 255, 255, 0.9);
   border: none;
@@ -127,7 +123,6 @@
   font-size: 12px;
 }
 
-/* Efect vizual de ridicare (elevatie) la focalizarea pe input */
 .input-box:focus {
   background: #ffffff;
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
